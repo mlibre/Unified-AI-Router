@@ -1,4 +1,6 @@
 const axios = require( "axios" );
+const pino = require( "pino" );
+const logger = pino({ transport: { target: "pino-pretty" } });
 
 class UnifiedLLMProvider
 {
@@ -15,14 +17,14 @@ class UnifiedLLMProvider
 		{
 			try
 			{
-				console.log( `Attempting with provider: ${provider.name}` );
+				logger.info( `Attempting with provider: ${provider.name}` );
 				const response = await this.callProvider( provider, messages, options );
 				return response;
 			}
 			catch ( error )
 			{
 				lastError = error;
-				console.error( `Failed with ${provider.name}:${error.message}, ${JSON.stringify( error.response?.data?.error )}` );
+				logger.error( `Failed with ${provider.name}:${error.message}, ${JSON.stringify( error.response?.data?.error )}` );
 				// Continue to next provider
 			}
 		}

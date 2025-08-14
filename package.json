@@ -12,6 +12,8 @@
   "dependencies": {
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
-    "eslint": "^9.33.0"
+    "eslint": "^9.33.0",
+    "pino": "^9.9.0",
+    "pino-pretty": "^13.1.1"
   }
 }
