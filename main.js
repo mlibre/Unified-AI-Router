@@ -15,7 +15,7 @@ class UnifiedLLMProvider {
         return response;
       } catch (error) {
         lastError = error;
-        console.error(`Failed with ${provider.name}: ${error.message}`);
+        console.error(`Failed with ${provider.name}:${error.message}, ${JSON.stringify(error.response?.data?.error)}`);
         // Continue to next provider
       }
     }
@@ -135,53 +135,4 @@ class UnifiedLLMProvider {
   }
 }
 
-// Usage example:
-const providers = [
-  {
-    name: 'openai',
-    apiKey: 'your-openai-api-key',
-    model: 'gpt-3.5-turbo'
-  },
-  {
-    name: 'google',
-    apiKey: 'your-google-api-key',
-    model: 'gemini-pro'
-  },
-  {
-    name: 'grok',
-    apiKey: 'your-grok-api-key',
-    model: 'grok-beta'
-  },
-  {
-    name: 'openrouter',
-    apiKey: 'your-openrouter-api-key',
-    model: 'openrouter/gpt-3.5-turbo'
-  },
-  {
-    name: 'z.ai',
-    apiKey: 'your-zai-api-key',
-    model: 'zai-gpt-4'
-  }
-];
-
-const llm = new UnifiedLLMProvider(providers);
-
-async function getResponse() {
-  try {
-    const messages = [
-      { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: 'Explain quantum computing in simple terms.' }
-    ];
-    
-    const response = await llm.chatCompletion(messages, {
-      temperature: 0.7,
-      maxTokens: 500
-    });
-    
-    console.log('Response:', response);
-  } catch (error) {
-    console.error('All providers failed:', error.message);
-  }
-}
-
-getResponse();
+module.exports = UnifiedLLMProvider;
