@@ -51,6 +51,45 @@ class UnifiedLLMProvider
 		}
 	}
 
+	mapRole ( role, providerName )
+	{
+		// Define role mappings for different providers
+		const roleMappings = {
+			"google": {
+				"system": "user",
+				"user": "user",
+				"assistant": "model",
+				"developer": "user"
+			},
+			"z.ai": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			},
+			"grok": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			},
+			"openai": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			},
+			"openrouter": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			}
+		};
+		const providerMapping = roleMappings[providerName.toLowerCase()] || {};
+		return providerMapping[role] || role;
+	}
+
 	async callOpenAI ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://api.openai.com/v1/chat/completions";
@@ -61,7 +100,13 @@ class UnifiedLLMProvider
 
 		const body = {
 			model: provider.model,
-			messages,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
 			...options
 		};
 
@@ -76,7 +121,7 @@ class UnifiedLLMProvider
 		const contents = messages.map( msg =>
 		{
 			return {
-				role: msg.role === "assistant" || msg.role === "system" ? "model" : "user",
+				role: this.mapRole( msg.role, provider.name ),
 				parts: [{ text: msg.content }]
 			}
 		});
@@ -108,7 +153,13 @@ class UnifiedLLMProvider
 
 		const body = {
 			model: provider.model,
-			messages,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
 			...options
 		};
 
@@ -126,7 +177,13 @@ class UnifiedLLMProvider
 
 		const body = {
 			model: provider.model,
-			messages,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
 			...options
 		};
 
@@ -145,7 +202,13 @@ class UnifiedLLMProvider
 
 		const body = {
 			model: provider.model,
-			messages,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
 			...options
 		};
 
