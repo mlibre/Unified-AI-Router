@@ -1,0 +1,80 @@
+# AIRouter
+
+A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously.
+
+## 🚀 Features
+
+- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, and Z.ai
+- **Automatic Fallback**: If one provider fails, automatically tries the next
+- **Smart Role Mapping**: Automatically translates roles between different provider formats
+- **Simple API**: Easy to use interface for all supported providers
+
+## 🛠️ Installation
+
+```bash
+git clone https://github.com/mlibre/AIRouter
+cd AIRouter
+npm install axios pino pino-pretty dotenv
+```
+
+## 📖 Usage
+
+```javascript
+const UnifiedLLMProvider = require("./main");
+require("dotenv").config();
+
+const providers = [
+  {
+    name: "openai",
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "gpt-4"
+  },
+  {
+    name: "google",
+    apiKey: process.env.GOOGLE_API_KEY,
+    model: "gemini-pro"
+  }
+];
+
+const llm = new UnifiedLLMProvider(providers);
+
+const messages = [
+  { role: "system", content: "You are a helpful assistant." },
+  { role: "user", content: "Explain quantum computing in simple terms." }
+];
+
+const response = await llm.chatCompletion(messages, {
+  temperature: 0.7
+});
+
+console.log(response);
+```
+
+## 🔧 Supported Providers
+
+- OpenAI
+- Google Gemini
+- Grok
+- OpenRouter
+- Z.ai
+
+## 🎯 Role Mapping
+
+Automatically maps standard roles to provider-specific formats:
+
+| Standard | Google | Z.ai | Others |
+|----------|--------|------|--------|
+| system   | user   | system | system |
+| user     | user   | user   | user   |
+| assistant| model  | assistant | assistant |
+| developer| user   | system | system |
+
+## 📄 License
+
+MIT
+
+## Standing with Palestine 🇵🇸
+
+This project supports Palestinian rights and stands in solidarity with Palestine. We believe in the importance of documenting and preserving Palestinian narratives, history, and struggles for justice and liberation.
+
+Free Palestine 🇵🇸
