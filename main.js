@@ -136,10 +136,11 @@ class UnifiedLLMProvider
 
 	async callZAI ( provider, messages, options )
 	{
-		const url = provider.apiUrl || "https://api.z.ai/v1/chat/completions";
+		const url = provider.apiUrl || "https://api.z.ai/api/paas/v4/chat/completions";
 		const headers = {
 			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json"
+			"Content-Type": "application/json",
+			"Accept-Language": "en-US,en"
 		};
 
 		const body = {
