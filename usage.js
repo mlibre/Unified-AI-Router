@@ -1,4 +1,4 @@
-const UnifiedLLMProvider = require( "./main" );
+const AIRouter = require( "./main" );
 require( "dotenv" ).config();
 
 const providers = [
@@ -34,7 +34,7 @@ const providers = [
 	}
 ];
 
-const llm = new UnifiedLLMProvider( providers );
+const llm = new AIRouter( providers );
 
 async function getResponse ()
 {

@@ -2,7 +2,7 @@ const axios = require( "axios" );
 const pino = require( "pino" );
 const logger = pino({ transport: { target: "pino-pretty" } });
 
-class UnifiedLLMProvider
+class AIRouter
 {
 	constructor ( providers )
 	{
@@ -217,4 +217,4 @@ class UnifiedLLMProvider
 	}
 }
 
-module.exports = UnifiedLLMProvider;
+module.exports = AIRouter;

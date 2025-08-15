@@ -20,7 +20,7 @@ npm install axios pino pino-pretty dotenv
 ## 📖 Usage
 
 ```javascript
-const UnifiedLLMProvider = require("./main");
+const AIRouter = require("./main");
 require("dotenv").config();
 
 const providers = [
@@ -36,7 +36,7 @@ const providers = [
   }
 ];
 
-const llm = new UnifiedLLMProvider(providers);
+const llm = new AIRouter(providers);
 
 const messages = [
   { role: "system", content: "You are a helpful assistant." },

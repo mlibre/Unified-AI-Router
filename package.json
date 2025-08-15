@@ -1,5 +1,5 @@
 {
-  "name": "UnifiedLLMProvider",
+  "name": "ai-router",
   "version": "1.0.1",
   "description": "",
   "license": "ISC",
@@ -15,5 +15,8 @@
     "eslint": "^9.33.0",
     "pino": "^9.9.0",
     "pino-pretty": "^13.1.1"
+  },
+  "devDependencies": {
+    "vercel": "^45.0.9"
   }
 }
