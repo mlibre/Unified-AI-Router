@@ -122,8 +122,6 @@ class UnifiedLLMProvider
 		const headers = {
 			"Authorization": `Bearer ${provider.apiKey}`,
 			"Content-Type": "application/json",
-			"HTTP-Referer": "https://your-app.com", // Replace with your app URL
-			"X-Title": "Your App Name" // Replace with your app name
 		};
 
 		const body = {
