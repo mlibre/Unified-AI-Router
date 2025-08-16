@@ -69,6 +69,39 @@ Automatically maps standard roles to provider-specific formats:
 | assistant| model  | assistant | assistant |
 | developer| user   | system | system |
 
+## Vercel
+
+
+```bash
+
+# Create the vercel project: vercel.com
+# name: tebiane-vercel
+
+npm i -g vercel
+vercel login
+
+nano .env
+GOOGLE_API_KEY=TOKEN
+OPENROUTER_API_KEY=TOKEN
+ZAI_API_KEY=TOKEN
+VERCEL_URL=VERCEL_URL
+
+vercel env add GOOGLE_API_KEY
+vercel env add OPENROUTER_API_KEY
+vercel env add ZAI_API_KEY
+vercel env add VERCEL_URL
+
+# vercel dev
+vercel
+vercel --prod
+vercel logs https://ai-router-flame.vercel.app
+
+# https://ai-router-flame.vercel.app/api?register_webhook=true
+curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
+
+```
+
+
 ## 📄 License
 
 MIT
