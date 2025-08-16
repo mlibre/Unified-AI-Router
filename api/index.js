@@ -1,10 +1,9 @@
 const TelegramClient = require( "../src/telegram" );
 const { productionUrl } = require( "../src/config" );
+const telegramClient = new TelegramClient();
 
 module.exports = async ( req, res ) =>
 {
-	const telegramClient = new TelegramClient();
-
 	if ( req.query.register_webhook === "true" )
 	{
 		try
