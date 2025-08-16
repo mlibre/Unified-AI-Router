@@ -10,6 +10,54 @@ class TelegramClient
 		this.apiBaseUrl = `https://api.telegram.org/bot${token}`;
 		this.aiRouter = new AIRouter( providers );
 	}
+	isNetworkError ( error )
+	{
+		// TODO: check with fetch
+		return error.message.includes( "socket hang up" ) ||
+			error.message.includes( "network socket disconnected" ) ||
+			error.message.includes( "fetch failed" );
+	}
+
+	async sleep ( ms )
+	{
+		await new Promise( resolve => { return setTimeout( resolve, ms ) });
+	}
+
+	async sendMessageWithRetry ( chatId, message, options = {})
+	{
+		return await this.withRetry( () =>
+		{
+			return this.makeRequest( "sendMessage", {
+				chat_id: chatId,
+				text: message,
+				...options,
+			});
+		}, options );
+	}
+
+	async withRetry ( operation, options, retries = 10, delay = 50 )
+	{
+		for ( let i = 0; i < retries; i++ )
+		{
+			try
+			{
+				return await operation( options );
+			}
+			catch ( error )
+			{
+				if ( this.isNetworkError( error ) )
+				{
+					console.log( `Retrying... Attempts left: ${retries - i - 1}`, error.cause, error.message );
+					await this.sleep( delay );
+				}
+				else
+				{
+					throw error;
+				}
+			}
+		}
+		throw new Error( "Max retries reached" );
+	}
 
 	async makeRequest ( method, params = {})
 	{
@@ -41,10 +89,7 @@ class TelegramClient
 			const messages = [{ role: "user", content: text }];
 			const response = await this.aiRouter.chatCompletion( messages );
 
-			await this.makeRequest( "sendMessage", {
-				chat_id: chatId,
-				text: response,
-			});
+			await this.sendMessageWithRetry( chatId, response );
 		}
 	}
 
