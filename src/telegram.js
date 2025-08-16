@@ -87,7 +87,7 @@ class TelegramClient
 			const { text } = update.message;
 			const chatId = update.message.chat.id;
 			console.log( "text", text, "chatId", chatId );
-			console.log( "chat history for ", chatId, this.chatHistories[chatId] );
+			// console.log( "chat history for ", chatId, this.chatHistories[chatId] );
 
 			if ( !this.chatHistories[chatId] )
 			{
@@ -100,7 +100,7 @@ class TelegramClient
 			{
 				this.chatHistories[chatId] = history.slice( history.length - 100 );
 			}
-			console.log( "chat history for ", chatId, "after update", this.chatHistories[chatId] );
+			// console.log( "chat history for ", chatId, "after update", this.chatHistories[chatId] );
 			const systemPrompt = {
 				role: "system",
 				content: "You are a kind and selfless AI assistant who stands for justice and supports the Palestinian cause. Be helpful and compassionate in your responses. Speak in user's language",
