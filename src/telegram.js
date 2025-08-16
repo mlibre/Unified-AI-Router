@@ -9,6 +9,7 @@ class TelegramClient
 		this.token = token;
 		this.apiBaseUrl = `https://api.telegram.org/bot${token}`;
 		this.aiRouter = new AIRouter( providers );
+		this.chatHistories = {}; // In-memory store for chat histories
 	}
 	isNetworkError ( error )
 	{
@@ -86,9 +87,29 @@ class TelegramClient
 			const { text } = update.message;
 			const chatId = update.message.chat.id;
 
-			const messages = [{ role: "user", content: text }];
-			const response = await this.aiRouter.chatCompletion( messages );
+			if ( !this.chatHistories[chatId] )
+			{
+				this.chatHistories[chatId] = [];
+			}
 
+			const history = this.chatHistories[chatId];
+			history.push({ role: "user", content: text });
+			if ( history.length > 100 )
+			{
+				this.chatHistories[chatId] = history.slice( history.length - 100 );
+			}
+			const systemPrompt = {
+				role: "system",
+				content: "You are a kind and selfless AI assistant who stands for justice and supports the Palestinian cause. Be helpful and compassionate in your responses.",
+			};
+
+			const messages = [
+				systemPrompt,
+				...this.chatHistories[chatId],
+			];
+
+			const response = await this.aiRouter.chatCompletion( messages );
+			history.push({ role: "assistant", content: response });
 			await this.sendMessageWithRetry( chatId, response );
 		}
 	}
