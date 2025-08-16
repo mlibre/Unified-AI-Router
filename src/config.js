@@ -1,7 +1,6 @@
 const path = require( "path" );
 const fs = require( "fs" );
 require( "dotenv" ).config();
-const sourcesText = fs.readFileSync( path.resolve( __dirname, "../sources/sources.txt" ), "utf-8" );
 
 const appUrl = process.env.VERCEL_URL;
 const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
@@ -44,22 +43,11 @@ const markdownCodes = {
 const actionCodes = {
 	nextResult: "a",
 	prevResult: "b",
-	ansarian: "c",
-	fooladvand: "d",
-	mojtabavi: "e",
-	makarem: "f",
-	arabicText: "g",
-	arabicIrabText: "h",
 	nextVerse: "i",
 	prevVerse: "j",
-	tafsirNemooneh: ["k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w"],
 	mainPage: "x",
-	hasRead: "y",
-	hasNotRead: "z",
 	toggleRead: "A",
-	others: "B",
-	saanNuzul: "C",
-	khamenei: ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X"],
+	khamenei: ["D", "E", "F", "G", "H", "I"]
 };
 
 
@@ -70,7 +58,6 @@ module.exports = {
 	token,
 	redisUrl,
 	quranData,
-	sourcesText,
 	messageLength,
 	CACHE_TTL_SECONDS,
 	markdownCodes,
