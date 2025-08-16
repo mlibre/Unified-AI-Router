@@ -29,16 +29,6 @@ const providers = [
 		name: "z.ai",
 		apiKey: process.env.ZAI_API_KEY,
 		model: "glm-4.5-flash"
-	},
-	{
-		name: "openai",
-		apiKey: process.env.OPENAI_API_KEY,
-		model: "gpt-4.1-mini-2025-04-14"
-	},
-	{
-		name: "grok",
-		apiKey: process.env.GROK_API_KEY,
-		model: "grok-3-mini"
 	}
 ];
 
