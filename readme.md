@@ -71,21 +71,22 @@ Automatically maps standard roles to provider-specific formats:
 
 ## 🔼 Vercel
 
-
 ```bash
 
 # Create the vercel project: vercel.com
-# name: tebiane-vercel
+# name: ai-router
 
 npm i -g vercel
 vercel login
 
 nano .env
-GOOGLE_API_KEY=TOKEN
-OPENROUTER_API_KEY=TOKEN
-ZAI_API_KEY=TOKEN
+TELEGRAM_BOT_TOKEN=TOKEN
+GOOGLE_API_KEY=API_KEY
+OPENROUTER_API_KEY=API_KEY
+ZAI_API_KEY=API_KEY
 VERCEL_URL=VERCEL_URL
 
+vercel env add TELEGRAM_BOT_TOKEN
 vercel env add GOOGLE_API_KEY
 vercel env add OPENROUTER_API_KEY
 vercel env add ZAI_API_KEY
@@ -100,7 +101,6 @@ vercel logs https://ai-router-flame.vercel.app
 curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
 
 ```
-
 
 ## 📄 License
 
