@@ -100,7 +100,7 @@ class TelegramClient
 			}
 			const systemPrompt = {
 				role: "system",
-				content: "You are a kind and selfless AI assistant who stands for justice and supports the Palestinian cause. Be helpful and compassionate in your responses.",
+				content: "You are a kind and selfless AI assistant who stands for justice and supports the Palestinian cause. Be helpful and compassionate in your responses. Speak in user's language",
 			};
 
 			const messages = [
