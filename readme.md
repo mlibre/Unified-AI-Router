@@ -32,7 +32,7 @@ const providers = [
   {
     name: "google",
     apiKey: process.env.GOOGLE_API_KEY,
-    model: "gemini-pro"
+		model: "gemini-2.5-pro"
   }
 ];
 
