@@ -118,7 +118,10 @@ class AIRouter
 	{
 		const url = provider.apiUrl || `https://generativelanguage.googleapis.com/v1beta/models/${provider.model}:generateContent`;
 
-		const contents = messages.map( msg =>
+		const systemMessage = messages.find( msg => { return msg.role === "system" });
+		const otherMessages = messages.filter( msg => { return msg.role !== "system" });
+
+		const contents = otherMessages.map( msg =>
 		{
 			return {
 				role: this.mapRole( msg.role, provider.name ),
@@ -132,6 +135,17 @@ class AIRouter
 				temperature: options.temperature || 0.2,
 			}
 		};
+
+		if ( systemMessage )
+		{
+			body.system_instruction = {
+				parts: [
+					{
+						text: systemMessage.content
+					}
+				]
+			};
+		}
 
 		const response = await axios.post( url, body, {
 			headers: {
