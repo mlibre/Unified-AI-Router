@@ -14,7 +14,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 ```bash
 git clone https://github.com/mlibre/AIRouter
 cd AIRouter
-npm install axios pino pino-pretty dotenv
+npm install axios pino dotenv
 ```
 
 ## 📖 Usage
