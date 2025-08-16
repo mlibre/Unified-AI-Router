@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "",
   "license": "ISC",
-  "author": "",
+  "author": "mlibre",
   "type": "commonjs",
   "main": "main.js",
   "scripts": {

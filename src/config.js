@@ -1,7 +1,6 @@
 const path = require( "path" );
 const fs = require( "fs" );
 require( "dotenv" ).config();
-const quranData = require( "../sources/quran.json" );
 const sourcesText = fs.readFileSync( path.resolve( __dirname, "../sources/sources.txt" ), "utf-8" );
 
 const appUrl = process.env.VERCEL_URL;

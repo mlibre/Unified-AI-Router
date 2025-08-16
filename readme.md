@@ -69,7 +69,7 @@ Automatically maps standard roles to provider-specific formats:
 | assistant| model  | assistant | assistant |
 | developer| user   | system | system |
 
-## Vercel
+## 🔼 Vercel
 
 
 ```bash
