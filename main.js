@@ -56,7 +56,7 @@ class AIRouter
 		// Define role mappings for different providers
 		const roleMappings = {
 			"google": {
-				"system": "user",
+				"system": "system",
 				"user": "user",
 				"assistant": "model",
 				"developer": "user"
