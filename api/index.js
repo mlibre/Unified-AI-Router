@@ -1,20 +1,15 @@
 const TelegramClient = require( "../src/telegram" );
-const path = require( "path" );
-const fs = require( "fs" );
-const util = require( "node:util" );
-
-const { sourcesText, quranData } = require( "../src/config" );
+const { productionUrl } = require( "../src/config" );
 
 module.exports = async ( req, res ) =>
 {
-	log( "Incomming request:", req.body, req.params, req.query );
 	const telegramClient = new TelegramClient();
 
 	if ( req.query.register_webhook === "true" )
 	{
 		try
 		{
-			const response = await telegramClient.registerWebhook();
+			const response = await telegramClient.registerWebhook( productionUrl );
 			return res.status( 200 ).json({ success: true, message: "Webhook setup completed", response });
 		}
 		catch ( error )
@@ -46,7 +41,6 @@ module.exports = async ( req, res ) =>
 		}
 
 		await telegramClient.handleUpdate( update );
-		console.log( "Acknowledging update:", update );
 		res.status( 200 ).send( "OK" );
 	}
 	catch ( error )
@@ -55,8 +49,3 @@ module.exports = async ( req, res ) =>
 		res.status( 500 ).send( "Internal Server Error" );
 	}
 };
-
-function log ( ...update )
-{
-	console.log( util.inspect( update, { showHidden: true, depth: null }) );
-}
