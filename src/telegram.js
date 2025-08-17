@@ -103,7 +103,7 @@ class TelegramClient
 			// console.log( "chat history for ", chatId, "after update", this.chatHistories[chatId] );
 			const systemPrompt = {
 				role: "system",
-				content: "You are a kind and selfless AI assistant who stands for justice and supports the Palestinian cause. Be helpful and compassionate in your responses. Speak in user's language",
+				content: "You are a kind and selfless AI assistant. Be helpful and compassionate in your responses. Speak in user's language",
 			};
 
 			const messages = [
