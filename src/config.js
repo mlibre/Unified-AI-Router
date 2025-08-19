@@ -34,6 +34,11 @@ const providers = [
 		name: "qroq",
 		apiKey: process.env.QROQ_API_KEY,
 		model: "openai/gpt-oss-120b"
+	},
+	{
+		name: "cohere",
+		apiKey: process.env.COHERE_API_KEY,
+		model: "command-a-03-2025"
 	}
 ];
 

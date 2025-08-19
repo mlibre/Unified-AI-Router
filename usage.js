@@ -3,6 +3,11 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
+		name: "cohere",
+		apiKey: process.env.COHERE_API_KEY,
+		model: "command-a-03-2025"
+	},
+	{
 		name: "qroq",
 		apiKey: process.env.QROQ_API_KEY,
 		model: "openai/gpt-oss-120b"
@@ -37,7 +42,6 @@ const providers = [
 		apiKey: process.env.GROK_API_KEY,
 		model: "grok-3-mini"
 	}
-
 ];
 
 const llm = new AIRouter( providers );

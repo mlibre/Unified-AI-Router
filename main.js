@@ -48,6 +48,8 @@ class AIRouter
 			return await this.callZAI( provider, messages, options );
 		case "qroq":
 			return await this.callQroq( provider, messages, options );
+		case "cohere":
+			return await this.callCohere( provider, messages, options );
 		default:
 			throw new Error( `Unsupported provider: ${provider.name}` );
 		}
@@ -92,6 +94,12 @@ class AIRouter
 				"user": "user",
 				"assistant": "assistant",
 				"developer": "system"
+			},
+			"cohere": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"tool": "tool"
 			}
 		};
 		const providerMapping = roleMappings[providerName.toLowerCase()] || {};
@@ -260,6 +268,34 @@ class AIRouter
 
 		const response = await axios.post( url, body, { headers });
 		return response.data.choices[0].message.content;
+	}
+
+	async callCohere ( provider, messages, options )
+	{
+		const url = provider.apiUrl || "https://api.cohere.com/v2/chat";
+		const headers = {
+			"Authorization": `Bearer ${provider.apiKey}`,
+			"Content-Type": "application/json",
+			"accept": "application/json"
+		};
+
+		// Map messages to Cohere format
+		const cohereMessages = messages.map( msg =>
+		{
+			return {
+				...msg,
+				role: this.mapRole( msg.role, provider.name )
+			}
+		});
+
+		const body = {
+			model: provider.model || "command-a-03-2025", // Default model if not specified
+			messages: cohereMessages,
+			...options
+		};
+
+		const response = await axios.post( url, body, { headers });
+		return response.data.message?.content?.[0]?.text;
 	}
 }
 
