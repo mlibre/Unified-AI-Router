@@ -29,6 +29,11 @@ const providers = [
 		name: "z.ai",
 		apiKey: process.env.ZAI_API_KEY,
 		model: "glm-4.5-flash"
+	},
+	{
+		name: "qroq",
+		apiKey: process.env.QROQ_API_KEY,
+		model: "openai/gpt-oss-120b"
 	}
 ];
 

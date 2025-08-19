@@ -84,6 +84,8 @@ TELEGRAM_BOT_TOKEN=TOKEN
 GOOGLE_API_KEY=API_KEY
 OPENROUTER_API_KEY=API_KEY
 ZAI_API_KEY=API_KEY
+QROQ_API_KEY=API_KEY
+
 VERCEL_URL=VERCEL_URL
 
 vercel env add TELEGRAM_BOT_TOKEN
@@ -91,6 +93,7 @@ vercel env add GOOGLE_API_KEY
 vercel env add OPENROUTER_API_KEY
 vercel env add ZAI_API_KEY
 vercel env add VERCEL_URL
+vercel env add QROQ_API_KEY
 
 # vercel dev
 vercel
