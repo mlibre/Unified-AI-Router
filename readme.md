@@ -4,7 +4,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 
 ## 🚀 Features
 
-- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, and Cerebras
+- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, and Cerebras
 - **Automatic Fallback**: If one provider fails, automatically tries the next
 - **Smart Role Mapping**: Automatically translates roles between different provider formats
 - **Simple API**: Easy to use interface for all supported providers
@@ -57,20 +57,22 @@ console.log(response);
 - Grok
 - OpenRouter
 - Z.ai
-- Cerebras
+- Qroq
+- Cohere
 - Vercel
-- ...
+- Cerebras
 
 ## 🎯 Role Mapping
 
 Automatically maps standard roles to provider-specific formats:
 
-| Standard | Google | Z.ai | Others |
-|----------|--------|------|--------|
-| system   | system   | system | system |
-| user     | user   | user   | user   |
-| assistant| model  | assistant | assistant |
-| developer| user   | system | system |
+| Standard | Google | Z.ai | Cohere | Others |
+|----------|--------|------|--------|--------|
+| system   | system | system | system | system |
+| user     | user   | user   | user   | user   |
+| assistant| model  | assistant | assistant | assistant |
+| developer| user   | system | system | system |
+| tool     | -      | -     | tool   | -      |
 
 ## 🔼 Vercel
 
