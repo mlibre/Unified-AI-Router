@@ -52,6 +52,8 @@ class AIRouter
 			return await this.callCohere( provider, messages, options );
 		case "vercel":
 			return await this.callVercelAIGateway( provider, messages, options );
+		case "cerebras":
+			return await this.callCerebras( provider, messages, options );
 		default:
 			throw new Error( `Unsupported provider: ${provider.name}` );
 		}
@@ -104,6 +106,12 @@ class AIRouter
 				"tool": "tool"
 			},
 			"vercel": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			},
+			"cerebras": {
 				"system": "system",
 				"user": "user",
 				"assistant": "assistant",
@@ -323,6 +331,34 @@ class AIRouter
 					role: this.mapRole( msg.role, provider.name )
 				}
 			}),
+			...options
+		};
+
+		const response = await axios.post( url, body, { headers });
+		return response.data.choices[0].message.content;
+	}
+
+	async callCerebras ( provider, messages, options )
+	{
+		const url = provider.apiUrl || "https://api.cerebras.ai/v1/chat/completions";
+		const headers = {
+			"Authorization": `Bearer ${provider.apiKey}`,
+			"Content-Type": "application/json"
+		};
+
+		const body = {
+			model: provider.model,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
+			stream: options.stream || false,
+			max_tokens: options.max_tokens || 65536,
+			temperature: options.temperature || 1,
+			top_p: options.top_p || 1,
 			...options
 		};
 

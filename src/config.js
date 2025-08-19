@@ -41,6 +41,11 @@ const providers = [
 		model: "openai/gpt-oss-120b"
 	},
 	{
+		name: "cerebras",
+		apiKey: process.env.CEREBRAS_API_KEY,
+		model: "gpt-oss-120b"
+	},
+	{
 		name: "cohere",
 		apiKey: process.env.COHERE_API_KEY,
 		model: "command-a-03-2025"

@@ -4,7 +4,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 
 ## 🚀 Features
 
-- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, and Z.ai
+- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, and Cerebras
 - **Automatic Fallback**: If one provider fails, automatically tries the next
 - **Smart Role Mapping**: Automatically translates roles between different provider formats
 - **Simple API**: Easy to use interface for all supported providers
@@ -57,6 +57,9 @@ console.log(response);
 - Grok
 - OpenRouter
 - Z.ai
+- Cerebras
+- Vercel
+- ...
 
 ## 🎯 Role Mapping
 
@@ -87,6 +90,7 @@ ZAI_API_KEY=API_KEY
 QROQ_API_KEY=API_KEY
 COHERE_API_KEY=API_KEY
 VERCEL_AI_GATEWAY_API_KEY=API_KEY
+CEREBRAS_API_KEY=API_KEY
 VERCEL_URL=VERCEL_URL
 
 vercel env add TELEGRAM_BOT_TOKEN
@@ -97,6 +101,7 @@ vercel env add VERCEL_URL
 vercel env add QROQ_API_KEY
 vercel env add COHERE_API_KEY
 vercel env add VERCEL_AI_GATEWAY_API_KEY
+vercel env add CEREBRAS_API_KEY
 
 # vercel dev
 vercel
