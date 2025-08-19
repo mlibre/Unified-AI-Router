@@ -3,6 +3,11 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
+		name: "qroq",
+		apiKey: process.env.QROQ_API_KEY,
+		model: "openai/gpt-oss-120b"
+	},
+	{
 		name: "openrouter",
 		apiKey: process.env.OPENROUTER_API_KEY,
 		model: "z-ai/glm-4.5-air:free"
@@ -32,6 +37,7 @@ const providers = [
 		apiKey: process.env.GROK_API_KEY,
 		model: "grok-3-mini"
 	}
+
 ];
 
 const llm = new AIRouter( providers );
@@ -47,7 +53,6 @@ async function getResponse ()
 
 		const response = await llm.chatCompletion( messages, {
 			temperature: 0.7,
-			maxTokens: 500
 		});
 
 		console.log( "Response:", response );

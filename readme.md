@@ -64,7 +64,7 @@ Automatically maps standard roles to provider-specific formats:
 
 | Standard | Google | Z.ai | Others |
 |----------|--------|------|--------|
-| system   | user   | system | system |
+| system   | system   | system | system |
 | user     | user   | user   | user   |
 | assistant| model  | assistant | assistant |
 | developer| user   | system | system |

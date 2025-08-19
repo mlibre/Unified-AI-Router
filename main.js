@@ -46,6 +46,8 @@ class AIRouter
 			return await this.callOpenRouter( provider, messages, options );
 		case "z.ai":
 			return await this.callZAI( provider, messages, options );
+		case "qroq":
+			return await this.callQroq( provider, messages, options );
 		default:
 			throw new Error( `Unsupported provider: ${provider.name}` );
 		}
@@ -80,6 +82,12 @@ class AIRouter
 				"developer": "system"
 			},
 			"openrouter": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			},
+			"qroq": {
 				"system": "system",
 				"user": "user",
 				"assistant": "assistant",
@@ -212,6 +220,30 @@ class AIRouter
 			"Authorization": `Bearer ${provider.apiKey}`,
 			"Content-Type": "application/json",
 			"Accept-Language": "en-US,en"
+		};
+
+		const body = {
+			model: provider.model,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
+			...options
+		};
+
+		const response = await axios.post( url, body, { headers });
+		return response.data.choices[0].message.content;
+	}
+
+	async callQroq ( provider, messages, options )
+	{
+		const url = provider.apiUrl || "https://api.groq.com/openai/v1/chat/completions";
+		const headers = {
+			"Authorization": `Bearer ${provider.apiKey}`,
+			"Content-Type": "application/json"
 		};
 
 		const body = {
