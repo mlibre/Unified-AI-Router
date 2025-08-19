@@ -3,6 +3,11 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
+		name: "vercel",
+		apiKey: process.env.VERCEL_AI_GATEWAY_API_KEY,
+		model: "openai/gpt-oss-120b"
+	},
+	{
 		name: "cohere",
 		apiKey: process.env.COHERE_API_KEY,
 		model: "command-a-03-2025"
@@ -41,7 +46,8 @@ const providers = [
 		name: "grok",
 		apiKey: process.env.GROK_API_KEY,
 		model: "grok-3-mini"
-	}
+	},
+
 ];
 
 const llm = new AIRouter( providers );

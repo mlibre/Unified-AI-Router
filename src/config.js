@@ -36,6 +36,11 @@ const providers = [
 		model: "openai/gpt-oss-120b"
 	},
 	{
+		name: "vercel",
+		apiKey: process.env.VERCEL_AI_GATEWAY_API_KEY,
+		model: "openai/gpt-oss-120b"
+	},
+	{
 		name: "cohere",
 		apiKey: process.env.COHERE_API_KEY,
 		model: "command-a-03-2025"

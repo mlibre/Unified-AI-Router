@@ -50,6 +50,8 @@ class AIRouter
 			return await this.callQroq( provider, messages, options );
 		case "cohere":
 			return await this.callCohere( provider, messages, options );
+		case "vercel":
+			return await this.callVercelAIGateway( provider, messages, options );
 		default:
 			throw new Error( `Unsupported provider: ${provider.name}` );
 		}
@@ -100,6 +102,12 @@ class AIRouter
 				"user": "user",
 				"assistant": "assistant",
 				"tool": "tool"
+			},
+			"vercel": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
 			}
 		};
 		const providerMapping = roleMappings[providerName.toLowerCase()] || {};
@@ -296,6 +304,30 @@ class AIRouter
 
 		const response = await axios.post( url, body, { headers });
 		return response.data.message?.content?.[0]?.text;
+	}
+
+	async callVercelAIGateway ( provider, messages, options )
+	{
+		const url = provider.apiUrl || "https://ai-gateway.vercel.sh/v1/chat/completions";
+		const headers = {
+			"Authorization": `Bearer ${provider.apiKey}`,
+			"Content-Type": "application/json"
+		};
+
+		const body = {
+			model: provider.model,
+			messages: messages.map( msg =>
+			{
+				return {
+					...msg,
+					role: this.mapRole( msg.role, provider.name )
+				}
+			}),
+			...options
+		};
+
+		const response = await axios.post( url, body, { headers });
+		return response.data.choices[0].message.content;
 	}
 }
 
