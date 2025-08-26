@@ -118,9 +118,3 @@ curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
 ## 📄 License
 
 MIT
-
-## Standing with Palestine 🇵🇸
-
-This project supports Palestinian rights and stands in solidarity with Palestine. We believe in the importance of documenting and preserving Palestinian narratives, history, and struggles for justice and liberation.
-
-Free Palestine 🇵🇸
