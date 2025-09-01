@@ -88,17 +88,18 @@ For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-depl
 
 Automatically maps standard roles to provider-specific formats:
 
-| Standard  | OpenAI    | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  |
-| --------- | --------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- |
-| system    | system    | system | system    | system    | system     | system    | system    | system    | system    |
-| user      | user      | user   | user      | user      | user       | user      | user      | user      | user      |
-| assistant | assistant | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant |
-| developer | system    | user   | system    | system    | system     | system    | system    | system    | system    |
-| tool      | -         | -      | -         | -         | -          | -         | tool      | -         | -         |
+| Standard  | OpenAI               | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  |
+| --------- | -------------------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- |
+| system    | system               | system | system    | system    | system     | system    | system    | system    | system    |
+| user      | user                 | user   | user      | user      | user       | user      | user      | user      | user      |
+| assistant | assistant            | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant |
+| developer | system               | user   | system    | system    | system     | system    | system    | system    | system    |
+| tool      | function_call_output | -      | -         | -         | -          | -         | tool      | -         | -         |
 
 **Notes:**
 
 * **Google**: Maps `assistant` to `model` and `developer` to `user`
+* **OpenAI**: Maps `tool` to `function_call_output` for function calling support
 * **Cohere**: Supports `tool` role, others don't
 * All other providers follow the standard OpenAI-compatible mapping
 

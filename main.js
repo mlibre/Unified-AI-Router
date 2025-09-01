@@ -85,6 +85,7 @@ class AIRouter
 				"system": "system",
 				"user": "user",
 				"assistant": "assistant",
+				"tool": "function_call_output",
 				"developer": "system"
 			},
 			"openrouter": {
