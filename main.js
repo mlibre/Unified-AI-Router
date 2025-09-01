@@ -122,15 +122,10 @@ class AIRouter
 		return providerMapping[role] || role;
 	}
 
-	async callOpenAI ( provider, messages, options )
+	// Helper method to create standard OpenAI-compatible request body
+	createStandardRequestBody ( provider, messages, options )
 	{
-		const url = provider.apiUrl || "https://api.openai.com/v1/chat/completions";
-		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json"
-		};
-
-		const body = {
+		return {
 			model: provider.model,
 			messages: messages.map( msg =>
 			{
@@ -141,9 +136,30 @@ class AIRouter
 			}),
 			...options
 		};
+	}
 
+	// Helper method to create standard headers
+	createStandardHeaders ( provider )
+	{
+		return {
+			"Authorization": `Bearer ${provider.apiKey}`,
+			"Content-Type": "application/json"
+		};
+	}
+
+	// Helper method to make standard API call
+	async makeStandardApiCall ( url, body, headers )
+	{
 		const response = await axios.post( url, body, { headers });
 		return response.data.choices[0].message.content;
+	}
+
+	async callOpenAI ( provider, messages, options )
+	{
+		const url = provider.apiUrl || "https://api.openai.com/v1/chat/completions";
+		const headers = this.createStandardHeaders( provider );
+		const body = this.createStandardRequestBody( provider, messages, options );
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 
 	async callGoogle ( provider, messages, options )
@@ -192,106 +208,43 @@ class AIRouter
 	async callGrok ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://api.x.ai/v1/chat/completions";
-		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json"
-		};
-
-		const body = {
-			model: provider.model,
-			messages: messages.map( msg =>
-			{
-				return {
-					...msg,
-					role: this.mapRole( msg.role, provider.name )
-				}
-			}),
-			...options
-		};
-
-		const response = await axios.post( url, body, { headers });
-		return response.data.choices[0].message.content;
+		const headers = this.createStandardHeaders( provider );
+		const body = this.createStandardRequestBody( provider, messages, options );
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 
 	async callOpenRouter ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://openrouter.ai/api/v1/chat/completions";
-		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json",
-		};
-
-		const body = {
-			model: provider.model,
-			messages: messages.map( msg =>
-			{
-				return {
-					...msg,
-					role: this.mapRole( msg.role, provider.name )
-				}
-			}),
-			...options
-		};
-
-		const response = await axios.post( url, body, { headers });
-		return response.data.choices[0].message.content;
+		const headers = this.createStandardHeaders( provider );
+		const body = this.createStandardRequestBody( provider, messages, options );
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 
 	async callZAI ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://api.z.ai/api/paas/v4/chat/completions";
 		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json",
+			...this.createStandardHeaders( provider ),
 			"Accept-Language": "en-US,en"
 		};
-
-		const body = {
-			model: provider.model,
-			messages: messages.map( msg =>
-			{
-				return {
-					...msg,
-					role: this.mapRole( msg.role, provider.name )
-				}
-			}),
-			...options
-		};
-
-		const response = await axios.post( url, body, { headers });
-		return response.data.choices[0].message.content;
+		const body = this.createStandardRequestBody( provider, messages, options );
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 
 	async callQroq ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://api.groq.com/openai/v1/chat/completions";
-		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json"
-		};
-
-		const body = {
-			model: provider.model,
-			messages: messages.map( msg =>
-			{
-				return {
-					...msg,
-					role: this.mapRole( msg.role, provider.name )
-				}
-			}),
-			...options
-		};
-
-		const response = await axios.post( url, body, { headers });
-		return response.data.choices[0].message.content;
+		const headers = this.createStandardHeaders( provider );
+		const body = this.createStandardRequestBody( provider, messages, options );
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 
 	async callCohere ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://api.cohere.com/v2/chat";
 		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json",
+			...this.createStandardHeaders( provider ),
 			"accept": "application/json"
 		};
 
@@ -317,53 +270,23 @@ class AIRouter
 	async callVercelAIGateway ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://ai-gateway.vercel.sh/v1/chat/completions";
-		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json"
-		};
-
-		const body = {
-			model: provider.model,
-			messages: messages.map( msg =>
-			{
-				return {
-					...msg,
-					role: this.mapRole( msg.role, provider.name )
-				}
-			}),
-			...options
-		};
-
-		const response = await axios.post( url, body, { headers });
-		return response.data.choices[0].message.content;
+		const headers = this.createStandardHeaders( provider );
+		const body = this.createStandardRequestBody( provider, messages, options );
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 
 	async callCerebras ( provider, messages, options )
 	{
 		const url = provider.apiUrl || "https://api.cerebras.ai/v1/chat/completions";
-		const headers = {
-			"Authorization": `Bearer ${provider.apiKey}`,
-			"Content-Type": "application/json"
-		};
-
+		const headers = this.createStandardHeaders( provider );
 		const body = {
-			model: provider.model,
-			messages: messages.map( msg =>
-			{
-				return {
-					...msg,
-					role: this.mapRole( msg.role, provider.name )
-				}
-			}),
+			...this.createStandardRequestBody( provider, messages, options ),
 			stream: options.stream || false,
 			max_tokens: options.max_tokens || 65536,
 			temperature: options.temperature || 1,
 			top_p: options.top_p || 1,
-			...options
 		};
-
-		const response = await axios.post( url, body, { headers });
-		return response.data.choices[0].message.content;
+		return await this.makeStandardApiCall( url, body, headers );
 	}
 }
 

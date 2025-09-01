@@ -2,12 +2,26 @@
 
 A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously.
 
+* [🚀 Features](#-features)
+* [🛠️ Installation](#️-installation)
+* [📖 Usage](#-usage)
+  * [Basic Library Usage](#basic-library-usage)
+  * [Telegram Bot Deployment](#telegram-bot-deployment)
+* [🔧 Supported Providers](#-supported-providers)
+* [🎯 Role Mapping](#-role-mapping)
+* [🔼 Vercel Deployment (Telegram Bot)](#-vercel-deployment-telegram-bot)
+  * [Prerequisites](#prerequisites)
+  * [Deployment Steps](#deployment-steps)
+  * [Project Structure for Telegram Bot](#project-structure-for-telegram-bot)
+  * [Key Differences from Library Usage](#key-differences-from-library-usage)
+* [📄 License](#-license)
+
 ## 🚀 Features
 
-- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, and Cerebras
-- **Automatic Fallback**: If one provider fails, automatically tries the next
-- **Smart Role Mapping**: Automatically translates roles between different provider formats
-- **Simple API**: Easy to use interface for all supported providers
+* **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, and Cerebras
+* **Automatic Fallback**: If one provider fails, automatically tries the next
+* **Smart Role Mapping**: Automatically translates roles between different provider formats
+* **Simple API**: Easy to use interface for all supported providers
 
 ## 🛠️ Installation
 
@@ -18,6 +32,10 @@ npm install axios pino dotenv
 ```
 
 ## 📖 Usage
+
+### Basic Library Usage
+
+This is the core AIRouter library - a JavaScript class that provides a unified interface for multiple LLM providers.
 
 ```javascript
 const AIRouter = require("./main");
@@ -50,34 +68,53 @@ const response = await llm.chatCompletion(messages, {
 console.log(response);
 ```
 
+### Telegram Bot Deployment
+
+For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-deployment) below. This uses the AIRouter library as the backend for a Telegram bot interface.
+
 ## 🔧 Supported Providers
 
-- OpenAI
-- Google Gemini
-- Grok
-- OpenRouter
-- Z.ai
-- Qroq
-- Cohere
-- Vercel
-- Cerebras
+* OpenAI
+* Google Gemini
+* Grok
+* OpenRouter
+* Z.ai
+* Qroq
+* Cohere
+* Vercel
+* Cerebras
 
 ## 🎯 Role Mapping
 
 Automatically maps standard roles to provider-specific formats:
 
-| Standard | Google | Z.ai | Cohere | Others |
-|----------|--------|------|--------|--------|
-| system   | system | system | system | system |
-| user     | user   | user   | user   | user   |
-| assistant| model  | assistant | assistant | assistant |
-| developer| user   | system | system | system |
-| tool     | -      | -     | tool   | -      |
+| Standard  | OpenAI    | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  |
+| --------- | --------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- |
+| system    | system    | system | system    | system    | system     | system    | system    | system    | system    |
+| user      | user      | user   | user      | user      | user       | user      | user      | user      | user      |
+| assistant | assistant | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant |
+| developer | system    | user   | system    | system    | system     | system    | system    | system    | system    |
+| tool      | -         | -      | -         | -         | -          | -         | tool      | -         | -         |
 
-## 🔼 Vercel
+**Notes:**
+
+* **Google**: Maps `assistant` to `model` and `developer` to `user`
+* **Cohere**: Supports `tool` role, others don't
+* All other providers follow the standard OpenAI-compatible mapping
+
+## 🔼 Vercel Deployment (Telegram Bot)
+
+This section describes how to deploy the AIRouter as a Telegram bot using Vercel. This is a separate deployment from the core library.
+
+### Prerequisites
+
+* A Telegram Bot Token (@BotFather)
+* API keys for various AI providers
+* Vercel account
+
+### Deployment Steps
 
 ```bash
-
 # Create the vercel project: vercel.com
 # name: ai-router
 
@@ -105,15 +142,26 @@ vercel env add COHERE_API_KEY
 vercel env add VERCEL_AI_GATEWAY_API_KEY
 vercel env add CEREBRAS_API_KEY
 
-# vercel dev
+# Deploy to Vercel
 vercel
 vercel --prod
+
+# Check logs
 vercel logs https://ai-router-flame.vercel.app
 
+# Register webhook for Telegram
 # https://ai-router-flame.vercel.app/api?register_webhook=true
 curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
-
 ```
+
+## Project Structure
+
+The Telegram bot deployment uses these files:
+
+* `api/index.js` - Main webhook handler
+* `src/telegram.js` - Telegram client implementation
+* `src/config.js` - Configuration and provider setup
+* `main.js` - The AIRouter library (core functionality)
 
 ## 📄 License
 
