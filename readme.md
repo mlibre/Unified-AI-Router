@@ -12,8 +12,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 * [🔼 Vercel Deployment (Telegram Bot)](#-vercel-deployment-telegram-bot)
   * [Prerequisites](#prerequisites)
   * [Deployment Steps](#deployment-steps)
-  * [Project Structure for Telegram Bot](#project-structure-for-telegram-bot)
-  * [Key Differences from Library Usage](#key-differences-from-library-usage)
+* [Project Structure](#project-structure)
 * [📄 License](#-license)
 
 ## 🚀 Features
@@ -70,7 +69,7 @@ console.log(response);
 
 ### Telegram Bot Deployment
 
-For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-deployment) below. This uses the AIRouter library as the backend for a Telegram bot interface.
+For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-deployment-telegram-bot) below. This uses the AIRouter library as the backend for a Telegram bot interface.
 
 ## 🔧 Supported Providers
 
@@ -95,13 +94,6 @@ Automatically maps standard roles to provider-specific formats:
 | assistant | assistant            | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant |
 | developer | system               | user   | system    | system    | system     | system    | system    | system    | system    |
 | tool      | function_call_output | -      | -         | -         | -          | -         | tool      | -         | -         |
-
-**Notes:**
-
-* **Google**: Maps `assistant` to `model` and `developer` to `user`
-* **OpenAI**: Maps `tool` to `function_call_output` for function calling support
-* **Cohere**: Supports `tool` role, others don't
-* All other providers follow the standard OpenAI-compatible mapping
 
 ## 🔼 Vercel Deployment (Telegram Bot)
 
@@ -137,11 +129,11 @@ vercel env add TELEGRAM_BOT_TOKEN
 vercel env add GOOGLE_API_KEY
 vercel env add OPENROUTER_API_KEY
 vercel env add ZAI_API_KEY
-vercel env add VERCEL_URL
 vercel env add QROQ_API_KEY
 vercel env add COHERE_API_KEY
 vercel env add VERCEL_AI_GATEWAY_API_KEY
 vercel env add CEREBRAS_API_KEY
+vercel env add VERCEL_URL
 
 # Deploy to Vercel
 vercel
