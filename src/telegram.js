@@ -1,4 +1,4 @@
-const { webhookPath, token } = require( "./config.js" );
+const { webhookPath, token, productionUrl } = require( "./config.js" );
 const AIRouter = require( "../main.js" );
 const { providers } = require( "./config.js" );
 
@@ -89,6 +89,29 @@ class TelegramClient
 			const chatId = update.message.chat.id;
 			console.log( "text", text, "chatId", chatId );
 			// console.log( "chat history for ", chatId, this.chatHistories[chatId] );
+
+			// --- Command to launch the Mini App ---
+			if ( text === "/start" || text === "/app" )
+			{
+			    const miniAppUrl = productionUrl; // Your Vercel deployment URL
+
+			    const keyboard = {
+			        inline_keyboard: [
+			            [
+			                {
+			                    text: "🚀 Open AI Router App",
+			                    web_app: { url: miniAppUrl }
+			                }
+			            ]
+			        ]
+			    };
+
+			    await this.sendMessageWithRetry( chatId, "Click the button below to open the AI Router Mini App!", {
+			        reply_markup: JSON.stringify( keyboard )
+			    });
+			    return; // Stop processing further to avoid AI response
+			}
+			// --- END ---
 
 			if ( !this.chatHistories[chatId] )
 			{

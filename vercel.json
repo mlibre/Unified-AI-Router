@@ -3,15 +3,8 @@
 	"public": true,
 	"rewrites": [
 		{
-			"source": "/(.*)",
-			"destination": "api/index.js"
-		}
-	],
-	"redirects": [
-		{
-			"source": "/",
-			"destination": "/api",
-			"permanent": false
+			"source": "/api/(.*)",
+			"destination": "/api/index.js"
 		}
 	]
 }

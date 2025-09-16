@@ -147,6 +147,24 @@ vercel logs https://ai-router-flame.vercel.app
 curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
 ```
 
+### Enable Telegram Mini App
+
+After deploying the bot, you need to configure the Telegram Mini App and menu button:
+
+1. **Configure Mini App:**
+   * Go to [@BotFather](https://t.me/botfather)
+   * Send `/mybots` and select your bot
+   * Go to `Bot Settings` → `Configure Mini App`
+   * Set the Mini App URL to: `https://ai-router-flame.vercel.app`
+
+2. **Configure Menu Button:**
+   * Go to [@BotFather](https://t.me/botfather)
+   * Send `/mybots` and select your bot
+   * Go to `Bot Settings` → `Menu Button`
+   * Ensure the URL shown is: `https://ai-router-flame.vercel.app`
+
+Once configured, users can access the Mini App by sending `/start` or `/app` to your bot, or through the menu button.
+
 ## Project Structure
 
 The Telegram bot deployment uses these files:

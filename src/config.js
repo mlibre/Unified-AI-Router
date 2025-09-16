@@ -1,6 +1,6 @@
 require( "dotenv" ).config();
 
-const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const productionUrl = `https://${ process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
 const webhookPath = "/api";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
