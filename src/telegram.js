@@ -38,11 +38,12 @@ class TelegramClient
 
 	async withRetry ( operation, options, retries = 10, delay = 50 )
 	{
+		console.log( `Starting operation with ${retries} retries` );
 		for ( let i = 0; i < retries; i++ )
 		{
 			try
 			{
-				return await operation( options );
+				return await operation();
 			}
 			catch ( error )
 			{
@@ -119,6 +120,7 @@ class TelegramClient
 
 	async registerWebhook ( productionUrl )
 	{
+		console.log( `Registering webhook with URL: ${productionUrl}${webhookPath}` );
 		const response = await this.makeRequest( "setWebhook", {
 			url: `${productionUrl}${webhookPath}`,
 			drop_pending_updates: true,

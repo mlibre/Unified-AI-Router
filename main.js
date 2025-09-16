@@ -11,6 +11,7 @@ class AIRouter
 
 	async chatCompletion ( messages, options = {})
 	{
+		logger.info( `Starting chatCompletion with ${this.providers.length} providers` );
 		let lastError;
 
 		for ( const provider of this.providers )
