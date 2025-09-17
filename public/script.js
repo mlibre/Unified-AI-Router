@@ -3,61 +3,133 @@ const { WebApp } = window.Telegram;
 
 // Inform the Telegram client that the app is ready
 WebApp.ready();
+WebApp.expand(); // Expand the app to full height
 
 // --- UI Elements ---
-const welcomeMessage = document.getElementById( "welcome-message" );
+const chatMessages = document.getElementById( "chat-messages" );
+const chatForm = document.getElementById( "chat-form" );
 const promptInput = document.getElementById( "prompt-input" );
-const responseArea = document.getElementById( "response-area" );
-const userDataDiv = document.getElementById( "user-data" );
+const sendButton = document.getElementById( "send-button" );
+const fullscreenBtn = document.getElementById( "fullscreen-btn" );
+const enterIcon = document.getElementById( "fullscreen-enter-icon" );
+const exitIcon = document.getElementById( "fullscreen-exit-icon" );
 
-// --- Display User Info ---
-// As per the docs, initDataUnsafe is available right away
-if ( WebApp.initDataUnsafe.user )
+let conversationHistory = [];
+
+
+/**
+ * Renders the entire conversation history to the chat window.
+ */
+function renderMessages ()
 {
-	const { user } = WebApp.initDataUnsafe;
-	welcomeMessage.innerText = `Welcome, ${user.first_name}!`;
-	userDataDiv.innerHTML = `
-        <p>ID: ${user.id}</p>
-        <p>Username: @${user.username || "N/A"}</p>
-    `;
-}
-else
-{
-	welcomeMessage.innerText = "Welcome!";
-	userDataDiv.innerText = "Could not retrieve user data.";
+	chatMessages.innerHTML = ""; // Clear existing messages
+	conversationHistory.forEach( message =>
+	{
+		const messageDiv = document.createElement( "div" );
+		messageDiv.classList.add( "message" );
+		messageDiv.classList.add( message.role === "user" ? "user-message" : "assistant-message" );
+		messageDiv.textContent = message.content;
+		chatMessages.appendChild( messageDiv );
+	});
+	// Scroll to the latest message
+	chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// --- Main Button ---
-// This is the main button at the bottom of the screen
-WebApp.MainButton.setText( "Send Prompt" );
-WebApp.MainButton.show();
+/**
+ * Adds a temporary "Thinking..." message to the UI.
+ */
+function showThinkingIndicator ()
+{
+	const thinkingDiv = document.createElement( "div" );
+	thinkingDiv.id = "thinking-indicator";
+	thinkingDiv.classList.add( "message", "assistant-message", "thinking-message" );
+	thinkingDiv.textContent = "Thinking...";
+	chatMessages.appendChild( thinkingDiv );
+	chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+/**
+ * Removes the "Thinking..." message from the UI.
+ */
+function hideThinkingIndicator ()
+{
+	const thinkingIndicator = document.getElementById( "thinking-indicator" );
+	if ( thinkingIndicator )
+	{
+		thinkingIndicator.remove();
+	}
+}
+
+/**
+ * Saves the current conversation history to Telegram's CloudStorage.
+ */
+function saveHistory ()
+{
+	WebApp.CloudStorage.setItem( "chat_history", JSON.stringify( conversationHistory ), ( error, success ) =>
+	{
+		if ( error )
+		{
+			console.error( "Error saving history:", error );
+		}
+	});
+}
+
+/**
+ * Loads conversation history from Telegram's CloudStorage.
+ */
+function loadHistory ()
+{
+	WebApp.CloudStorage.getItem( "chat_history", ( error, value ) =>
+	{
+		if ( error )
+		{
+			console.error( "Error loading history:", error );
+			// Add a welcome message if history fails to load
+			conversationHistory = [{ role: "assistant", content: "Hello! How can I help you today?" }];
+			renderMessages();
+			return;
+		}
+		if ( value )
+		{
+			conversationHistory = JSON.parse( value );
+		}
+		else
+		{
+			// If no history, start with a welcome message
+			conversationHistory = [{ role: "assistant", content: "Hello! How can I help you today?" }];
+		}
+		renderMessages();
+	});
+}
 
 // --- Event Handlers ---
-WebApp.MainButton.onClick( async () =>
-{
-	const prompt = promptInput.value;
-	if ( prompt.trim() === "" )
-	{
-		WebApp.showAlert( "Please enter a prompt!" );
-		return;
-	}
 
-	// Show a loading indicator
-	WebApp.MainButton.showProgress( false );
-	WebApp.MainButton.disable();
-	responseArea.innerHTML = "<p>Thinking...</p>";
+chatForm.addEventListener( "submit", async ( event ) =>
+{
+	event.preventDefault();
+	const prompt = promptInput.value.trim();
+
+	if ( !prompt ) return;
+
+	// Add user message to history and UI
+	conversationHistory.push({ role: "user", content: prompt });
+	renderMessages();
+	saveHistory();
+	promptInput.value = ""; // Clear input
+	sendButton.disabled = true;
+
+	showThinkingIndicator();
 
 	try
 	{
-		// This is where we will call our Vercel backend
+		// Send the whole conversation to the backend
 		const response = await fetch( "/api/chat", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				// Send the validation data in a header
 				"Telegram-Data": WebApp.initData,
 			},
-			body: JSON.stringify({ prompt }),
+			body: JSON.stringify({ messages: conversationHistory }),
 		});
 
 		if ( !response.ok )
@@ -67,24 +139,61 @@ WebApp.MainButton.onClick( async () =>
 		}
 
 		const data = await response.json();
-		responseArea.innerHTML = `<p>${data.response}</p>`;
+
+		// Add assistant response to history
+		conversationHistory.push({ role: "assistant", content: data.response });
+		saveHistory();
 
 	}
 	catch ( error )
 	{
 		WebApp.showAlert( `Error: ${error.message}` );
-		responseArea.innerHTML = "<p>An error occurred. Please try again.</p>";
+		// Optionally remove the last user message if the API call failed
+		conversationHistory.pop();
 	}
 	finally
 	{
-		// Hide loading indicator
-		WebApp.MainButton.hideProgress();
-		WebApp.MainButton.enable();
+		hideThinkingIndicator();
+		renderMessages(); // Re-render to show the final assistant message
+		sendButton.disabled = false;
 	}
 });
 
+// --- NEW: Fullscreen Logic ---
+if ( WebApp.isVersionAtLeast( "8.0" ) )
+{
+	fullscreenBtn.style.display = "flex"; // Show the button only if supported
+
+	fullscreenBtn.addEventListener( "click", () =>
+	{
+		if ( WebApp.isFullscreen )
+		{
+			WebApp.exitFullscreen();
+		}
+		else
+		{
+			WebApp.requestFullscreen();
+		}
+	});
+
+	// Listen for the fullscreen state change event to keep the UI in sync
+	WebApp.onEvent( "fullscreenChanged", () =>
+	{
+		if ( WebApp.isFullscreen )
+		{
+			enterIcon.style.display = "none";
+			exitIcon.style.display = "block";
+		}
+		else
+		{
+			enterIcon.style.display = "block";
+			exitIcon.style.display = "none";
+		}
+	});
+}
+
+
 // --- Theme Handling ---
-// This syncs your app's theme with the user's Telegram theme
 function applyTheme ()
 {
 	document.body.style.backgroundColor = WebApp.themeParams.bg_color || "#ffffff";
@@ -93,3 +202,6 @@ function applyTheme ()
 
 WebApp.onEvent( "themeChanged", applyTheme );
 applyTheme();
+
+// --- Initial Load ---
+loadHistory();

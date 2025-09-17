@@ -38,19 +38,18 @@ module.exports = async ( req, res ) =>
 				return res.status( 403 ).json({ error: "Unauthorized: Invalid Telegram data" });
 			}
 
-			const { prompt } = req.body;
-			if ( !prompt )
+			//  Expect 'messages' array instead of 'prompt'
+			const { messages } = req.body;
+			if ( !messages || !Array.isArray( messages ) || messages.length === 0 )
 			{
-				return res.status( 400 ).json({ error: "Prompt is required" });
+				return res.status( 400 ).json({ error: "Messages array is required" });
 			}
 
-			// You can get user info from the validated data
 			const params = new URLSearchParams( telegramData );
 			const user = JSON.parse( params.get( "user" ) );
-			console.log( `Processing prompt from user ${user.id}: "${prompt}"` );
+			console.log( `Processing chat for user ${user.id}. History length: ${messages.length}` );
 
-			// Use your existing AI Router
-			const messages = [{ role: "user", content: prompt }];
+			// Use your existing AI Router with the full message history
 			const aiResponse = await telegramClient.aiRouter.chatCompletion( messages );
 
 			return res.status( 200 ).json({ response: aiResponse });
@@ -63,6 +62,7 @@ module.exports = async ( req, res ) =>
 		}
 	}
 
+	// ... (rest of the webhook handling code remains the same) ...
 	if ( req.query.register_webhook === "true" )
 	{
 		try
