@@ -46,11 +46,6 @@ const providers = [
 		model: "gpt-oss-120b"
 	},
 	{
-		name: "grok",
-		apiKey: process.env.GROK_API_KEY,
-		model: "grok-3-mini"
-	},
-	{
 		name: "llm7",
 		apiKey: process.env.LLM7_API_KEY,
 		model: "gpt-o4-mini-2025-04-16"
