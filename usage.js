@@ -3,6 +3,16 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
+		name: "grok",
+		apiKey: process.env.GROK_API_KEY,
+		model: "grok-3-mini"
+	},
+	{
+		name: "llm7",
+		apiKey: process.env.LLM7_API_KEY,
+		model: "gpt-o4-mini-2025-04-16"
+	},
+	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
 		model: "gpt-oss-120b"
@@ -47,11 +57,7 @@ const providers = [
 		apiKey: process.env.OPENAI_API_KEY,
 		model: "gpt-4.1-mini-2025-04-14"
 	},
-	{
-		name: "grok",
-		apiKey: process.env.GROK_API_KEY,
-		model: "grok-3-mini"
-	},
+
 ];
 
 const llm = new AIRouter( providers );

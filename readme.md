@@ -8,6 +8,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
   * [Basic Library Usage](#basic-library-usage)
   * [Telegram Bot Deployment](#telegram-bot-deployment)
 * [🔧 Supported Providers](#-supported-providers)
+* [🔑 API Keys](#-api-keys)
 * [🎯 Role Mapping](#-role-mapping)
 * [🔼 Vercel Deployment (Telegram Bot)](#-vercel-deployment-telegram-bot)
   * [Prerequisites](#prerequisites)
@@ -17,7 +18,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 
 ## 🚀 Features
 
-* **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, and Cerebras
+* **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, Cerebras, and LLM7
 * **Automatic Fallback**: If one provider fails, automatically tries the next
 * **Smart Role Mapping**: Automatically translates roles between different provider formats
 * **Simple API**: Easy to use interface for all supported providers
@@ -82,18 +83,34 @@ For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-depl
 * Cohere
 * Vercel
 * Cerebras
+* LLM7
+
+## 🔑 API Keys
+
+Get your API keys from the following providers:
+
+* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+* **Grok**: [console.x.ai](https://console.x.ai/)
+* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
+* **Z.ai**: [api.z.ai](https://api.z.ai)
+* **Qroq**: [console.groq.com/keys](https://console.groq.com/keys)
+* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
+* **Vercel**: [vercel.com/docs/ai/ai-gateway](https://vercel.com/docs/ai/ai-gateway)
+* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
+* **LLM7**: [token.llm7.io](https://token.llm7.io/)
 
 ## 🎯 Role Mapping
 
 Automatically maps standard roles to provider-specific formats:
 
-| Standard  | OpenAI               | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  |
+| Standard  | OpenAI               | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  | LLM7      |
 | --------- | -------------------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- |
-| system    | system               | system | system    | system    | system     | system    | system    | system    | system    |
-| user      | user                 | user   | user      | user      | user       | user      | user      | user      | user      |
-| assistant | assistant            | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant |
-| developer | system               | user   | system    | system    | system     | system    | system    | system    | system    |
-| tool      | function_call_output | -      | -         | -         | -          | -         | tool      | -         | -         |
+| system    | system               | system | system    | system    | system     | system    | system    | system    | system    | system    |
+| user      | user                 | user   | user      | user      | user       | user      | user      | user      | user      | user      |
+| assistant | assistant            | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant | assistant |
+| developer | system               | user   | system    | system    | system     | system    | system    | system    | system    | system    |
+| tool      | function_call_output | -      | -         | -         | -          | -         | tool      | -         | -         | -         |
 
 ## 🔼 Vercel Deployment (Telegram Bot)
 
@@ -123,6 +140,7 @@ QROQ_API_KEY=API_KEY
 COHERE_API_KEY=API_KEY
 VERCEL_AI_GATEWAY_API_KEY=API_KEY
 CEREBRAS_API_KEY=API_KEY
+LLM7_API_KEY=API_KEY
 VERCEL_URL=VERCEL_URL
 
 vercel env add TELEGRAM_BOT_TOKEN
@@ -133,6 +151,7 @@ vercel env add QROQ_API_KEY
 vercel env add COHERE_API_KEY
 vercel env add VERCEL_AI_GATEWAY_API_KEY
 vercel env add CEREBRAS_API_KEY
+vercel env add LLM7_API_KEY
 vercel env add VERCEL_URL
 
 # Deploy to Vercel

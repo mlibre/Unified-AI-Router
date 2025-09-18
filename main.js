@@ -55,6 +55,8 @@ class AIRouter
 			return await this.callVercelAIGateway( provider, messages, options );
 		case "cerebras":
 			return await this.callCerebras( provider, messages, options );
+		case "llm7":
+			return await this.callLLM7( provider, messages, options );
 		default:
 			throw new Error( `Unsupported provider: ${provider.name}` );
 		}
@@ -113,6 +115,12 @@ class AIRouter
 				"developer": "system"
 			},
 			"cerebras": {
+				"system": "system",
+				"user": "user",
+				"assistant": "assistant",
+				"developer": "system"
+			},
+			"llm7": {
 				"system": "system",
 				"user": "user",
 				"assistant": "assistant",
@@ -287,6 +295,14 @@ class AIRouter
 			temperature: options.temperature || 1,
 			top_p: options.top_p || 1,
 		};
+		return await this.makeStandardApiCall( url, body, headers );
+	}
+
+	async callLLM7 ( provider, messages, options )
+	{
+		const url = provider.apiUrl || "https://api.llm7.io/v1/chat/completions";
+		const headers = this.createStandardHeaders( provider );
+		const body = this.createStandardRequestBody( provider, messages, options );
 		return await this.makeStandardApiCall( url, body, headers );
 	}
 }
