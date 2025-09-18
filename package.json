@@ -1,6 +1,6 @@
 {
   "name": "ai-router",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "license": "ISC",
   "author": "mlibre",
@@ -10,9 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@langchain/openai": "^1.0.0-alpha.1",
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "eslint": "^9.33.0",
+    "langchain": "^1.0.0-alpha.6",
     "pino": "^9.9.0"
   },
   "devDependencies": {
