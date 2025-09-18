@@ -11,9 +11,12 @@ class AIRouter
 		this.providers = providers;
 	}
 
-	async chatCompletion ( messages, options = {})
+	async chatCompletion ( messages, options = {}, stream = false )
 	{
-		logger.info( `Starting chatCompletion with ${this.providers.length} providers` );
+		const { stream: streamOption, ...restOptions } = options;
+		const isStreaming = stream || streamOption;
+
+		logger.info( `Starting chatCompletion with ${this.providers.length} providers (streaming: ${isStreaming})` );
 		let lastError;
 
 		for ( const provider of this.providers )
@@ -21,7 +24,7 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const response = await this.callProvider( provider, messages, options );
+				const response = await this.callProvider( provider, messages, restOptions, isStreaming );
 				return response;
 			}
 			catch ( error )
@@ -35,20 +38,26 @@ class AIRouter
 		throw new Error( `All providers failed. Last error: ${lastError.message}` );
 	}
 
-	async callProvider ( provider, messages, options )
+	async callProvider ( provider, messages, options, stream = false )
 	{
 		const llm = new ChatOpenAI({
 			apiKey: provider.apiKey,
 			model: provider.model,
 			configuration: {
-
 				baseURL: provider.apiUrl,
 			},
 			...options,
 		});
 
-		const response = await llm.invoke( messages, { timeout: 10000 });
-		return response.content;
+		if ( stream )
+		{
+			return await llm.stream( messages, { timeout: 300000 });
+		}
+		else
+		{
+			const response = await llm.invoke( messages, { timeout: 300000 });
+			return response.content;
+		}
 	}
 }
 

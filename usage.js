@@ -82,11 +82,15 @@ async function getResponse ()
 			{ role: "user", content: "Explain quantum computing in simple terms." }
 		];
 
-		const response = await llm.chatCompletion( messages, {
+		const stream = await llm.chatCompletion( messages, {
 			temperature: 0.7,
+			stream: true,
 		});
 
-		console.log( "Response:", response );
+		for await ( const chunk of stream )
+		{
+			process.stdout.write( chunk.content );
+		}
 	}
 	catch ( error )
 	{
