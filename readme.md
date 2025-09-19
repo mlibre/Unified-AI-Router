@@ -9,10 +9,10 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
   * [Telegram Bot Deployment](#telegram-bot-deployment)
 * [🔧 Supported Providers](#-supported-providers)
 * [🔑 API Keys](#-api-keys)
-* [🎯 Role Mapping](#-role-mapping)
 * [🔼 Vercel Deployment (Telegram Bot)](#-vercel-deployment-telegram-bot)
   * [Prerequisites](#prerequisites)
   * [Deployment Steps](#deployment-steps)
+  * [Enable Telegram Mini App](#enable-telegram-mini-app)
 * [Project Structure](#project-structure)
 * [📄 License](#-license)
 
@@ -20,7 +20,6 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 
 * **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, Cerebras, and LLM7
 * **Automatic Fallback**: If one provider fails, automatically tries the next
-* **Smart Role Mapping**: Automatically translates roles between different provider formats
 * **Simple API**: Easy to use interface for all supported providers
 
 ## 🛠️ Installation
@@ -99,18 +98,6 @@ Get your API keys from the following providers:
 * **Vercel**: [vercel.com/docs/ai/ai-gateway](https://vercel.com/masoud-ghorbanzadehs-projects/~/ai/api-keys)
 * **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
 * **LLM7**: [token.llm7.io](https://token.llm7.io/)
-
-## 🎯 Role Mapping
-
-Automatically maps standard roles to provider-specific formats:
-
-| Standard  | OpenAI    | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  | LLM7      |
-| --------- | --------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- | --------- |
-| system    | system    | system | system    | system    | system     | system    | system    | system    | system    | system    |
-| user      | user      | user   | user      | user      | user       | user      | user      | user      | user      | user      |
-| assistant | assistant | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant | assistant |
-| developer | system    | user   | system    | system    | system     | system    | system    | system    | system    | system    |
-| tool      | -         | -      | -         | -         | -          | -         | tool      | -         | -         | -         |
 
 ## 🔼 Vercel Deployment (Telegram Bot)
 
