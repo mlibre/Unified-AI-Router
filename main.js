@@ -4,6 +4,39 @@ const logger = pino({
 	base: false,
 });
 
+/**
+ * Wraps an async iterable stream, aborting if no chunk is received within inactivityMs.
+ * @param {AsyncIterable} stream - The original stream (e.g., from llm.stream()).
+ * @param {number} inactivityMs - Max allowed ms between chunks.
+ * @returns {AsyncIterable} A wrapped async iterable with inter-chunk timeout.
+ */
+async function* streamWithInterChunkTimeout ( stream, inactivityMs = 5000 )
+{
+	let timeoutId;
+	let abort = false;
+
+	const resetTimer = () =>
+	{
+		 if ( timeoutId ) clearTimeout( timeoutId );
+		 timeoutId = setTimeout( () => { abort = true; }, inactivityMs );
+	};
+
+	try
+	{
+		 resetTimer();
+		 for await ( const chunk of stream )
+		{
+			  if ( abort ) throw new Error( `Stream aborted: inactivity timeout (${inactivityMs}ms)` );
+			  resetTimer();
+			  yield chunk;
+		 }
+	}
+	finally
+	{
+		 clearTimeout( timeoutId );
+	}
+}
+
 class AIRouter
 {
 	constructor ( providers )
@@ -24,8 +57,26 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const response = await this.callProvider( provider, messages, restOptions, isStreaming );
-				return response;
+				const llm = new ChatOpenAI({
+					apiKey: provider.apiKey,
+					model: provider.model,
+					configuration: {
+						baseURL: provider.apiUrl,
+					},
+					...restOptions,
+				});
+
+				if ( isStreaming )
+				{
+					const stream = await llm.stream( messages, { timeout: 300000 });
+					// Wrap the stream with the custom inter-chunk timeout logic.[3, 4]
+					return streamWithInterChunkTimeout( stream, 10000 );
+				}
+				else
+				{
+					const response = await llm.invoke( messages, { timeout: 300000 });
+					return response.content;
+				}
 			}
 			catch ( error )
 			{
@@ -34,30 +85,7 @@ class AIRouter
 				// Continue to next provider
 			}
 		}
-
 		throw new Error( `All providers failed. Last error: ${lastError.message}` );
-	}
-
-	async callProvider ( provider, messages, options, stream = false )
-	{
-		const llm = new ChatOpenAI({
-			apiKey: provider.apiKey,
-			model: provider.model,
-			configuration: {
-				baseURL: provider.apiUrl,
-			},
-			...options,
-		});
-
-		if ( stream )
-		{
-			return await llm.stream( messages, { timeout: 300000 });
-		}
-		else
-		{
-			const response = await llm.invoke( messages, { timeout: 300000 });
-			return response.content;
-		}
 	}
 }
 

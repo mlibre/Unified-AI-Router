@@ -3,16 +3,16 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
-		name: "cohere",
-		apiKey: process.env.COHERE_API_KEY,
-		model: "command-a-03-2025",
-		apiUrl: "https://api.cohere.ai/compatibility/v1",
-	},
-	{
 		name: "grok",
 		apiKey: process.env.GROK_API_KEY,
 		model: "grok-3-mini",
 		apiUrl: "https://api.x.ai/v1",
+	},
+	{
+		name: "cohere",
+		apiKey: process.env.COHERE_API_KEY,
+		model: "command-a-03-2025",
+		apiUrl: "https://api.cohere.ai/compatibility/v1",
 	},
 	{
 		name: "llm7",
@@ -79,7 +79,7 @@ async function getResponse ()
 	{
 		const messages = [
 			{ role: "system", content: "You are a helpful assistant." },
-			{ role: "user", content: "Explain quantum computing in simple terms." }
+			{ role: "user", content: "Explain quantum computing in simple terms. explain in 2000 lines" }
 		];
 
 		const stream = await llm.chatCompletion( messages, {
