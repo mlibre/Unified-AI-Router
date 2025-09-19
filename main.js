@@ -1,8 +1,8 @@
 const { ChatOpenAI } = require( "@langchain/openai" );
 const pino = require( "pino" );
-const logger = pino({
-	base: false,
-});
+const pretty = require( "pino-pretty" );
+const stream = pretty({ colorize: true, ignore: "pid,hostname" });
+const logger = pino({ base: false }, stream );
 
 /**
  * Wraps an async iterable stream, aborting if no chunk is received within inactivityMs.
