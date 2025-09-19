@@ -44,12 +44,14 @@ const providers = [
   {
     name: "openai",
     apiKey: process.env.OPENAI_API_KEY,
-    model: "gpt-4"
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1"
   },
   {
     name: "google",
     apiKey: process.env.GOOGLE_API_KEY,
-    model: "gemini-2.5-pro"
+    model: "gemini-2.5-pro",
+    apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/"
   }
 ];
 
