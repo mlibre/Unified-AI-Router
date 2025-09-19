@@ -69,8 +69,7 @@ class AIRouter
 				if ( isStreaming )
 				{
 					const stream = await llm.stream( messages, { timeout: 300000 });
-					// Wrap the stream with the custom inter-chunk timeout logic.[3, 4]
-					return streamWithInterChunkTimeout( stream, 10000 );
+					return streamWithInterChunkTimeout( stream, 20000 );
 				}
 				else
 				{

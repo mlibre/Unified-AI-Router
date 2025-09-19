@@ -3,17 +3,18 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
-		name: "grok",
-		apiKey: process.env.GROK_API_KEY,
-		model: "grok-3-mini",
-		apiUrl: "https://api.x.ai/v1",
-	},
-	{
 		name: "cohere",
 		apiKey: process.env.COHERE_API_KEY,
 		model: "command-a-03-2025",
 		apiUrl: "https://api.cohere.ai/compatibility/v1",
 	},
+	{
+		name: "grok",
+		apiKey: process.env.GROK_API_KEY,
+		model: "grok-3-mini",
+		apiUrl: "https://api.x.ai/v1",
+	},
+
 	{
 		name: "llm7",
 		apiKey: process.env.LLM7_API_KEY,
