@@ -96,7 +96,7 @@ Get your API keys from the following providers:
 * **Z.ai**: [api.z.ai](https://api.z.ai)
 * **Qroq**: [console.groq.com/keys](https://console.groq.com/keys)
 * **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
-* **Vercel**: [vercel.com/docs/ai/ai-gateway](https://vercel.com/docs/ai/ai-gateway)
+* **Vercel**: [vercel.com/docs/ai/ai-gateway](https://vercel.com/masoud-ghorbanzadehs-projects/~/ai/api-keys)
 * **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
 * **LLM7**: [token.llm7.io](https://token.llm7.io/)
 
