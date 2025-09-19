@@ -104,13 +104,13 @@ Get your API keys from the following providers:
 
 Automatically maps standard roles to provider-specific formats:
 
-| Standard  | OpenAI               | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  | LLM7      |
-| --------- | -------------------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- |
-| system    | system               | system | system    | system    | system     | system    | system    | system    | system    | system    |
-| user      | user                 | user   | user      | user      | user       | user      | user      | user      | user      | user      |
-| assistant | assistant            | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant | assistant |
-| developer | system               | user   | system    | system    | system     | system    | system    | system    | system    | system    |
-| tool      | function_call_output | -      | -         | -         | -          | -         | tool      | -         | -         | -         |
+| Standard  | OpenAI    | Google | Z.ai      | Grok      | OpenRouter | Qroq      | Cohere    | Vercel    | Cerebras  | LLM7      |
+| --------- | --------- | ------ | --------- | --------- | ---------- | --------- | --------- | --------- | --------- | --------- |
+| system    | system    | system | system    | system    | system     | system    | system    | system    | system    | system    |
+| user      | user      | user   | user      | user      | user       | user      | user      | user      | user      | user      |
+| assistant | assistant | model  | assistant | assistant | assistant  | assistant | assistant | assistant | assistant | assistant |
+| developer | system    | user   | system    | system    | system     | system    | system    | system    | system    | system    |
+| tool      | -         | -      | -         | -         | -          | -         | tool      | -         | -         | -         |
 
 ## 🔼 Vercel Deployment (Telegram Bot)
 
