@@ -5,15 +5,15 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 * [🚀 Features](#-features)
 * [🛠️ Installation](#️-installation)
 * [📖 Usage](#-usage)
-  * [Basic Library Usage](#basic-library-usage)
-  * [Telegram Bot Deployment](#telegram-bot-deployment)
+  * [📚 Basic Library Usage](#-basic-library-usage)
+  * [🤖 Telegram Bot Deployment](#-telegram-bot-deployment)
 * [🔧 Supported Providers](#-supported-providers)
 * [🔑 API Keys](#-api-keys)
 * [🔼 Vercel Deployment (Telegram Bot)](#-vercel-deployment-telegram-bot)
-  * [Prerequisites](#prerequisites)
-  * [Deployment Steps](#deployment-steps)
-  * [Enable Telegram Mini App](#enable-telegram-mini-app)
-* [Project Structure](#project-structure)
+  * [📋 Prerequisites](#-prerequisites)
+  * [🚀 Deployment Steps](#-deployment-steps)
+  * [📱 Enable Telegram Mini App](#-enable-telegram-mini-app)
+* [📁 Project Structure](#-project-structure)
 * [📄 License](#-license)
 
 ## 🚀 Features
@@ -27,12 +27,12 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 ```bash
 git clone https://github.com/mlibre/AIRouter
 cd AIRouter
-npm install axios pino dotenv
+npm i
 ```
 
 ## 📖 Usage
 
-### Basic Library Usage
+### 📚 Basic Library Usage
 
 This is the core AIRouter library - a JavaScript class that provides a unified interface for multiple LLM providers.
 
@@ -67,7 +67,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response);
 ```
 
-### Telegram Bot Deployment
+### 🤖 Telegram Bot Deployment
 
 For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-deployment-telegram-bot) below. This uses the AIRouter library as the backend for a Telegram bot interface.
 
@@ -103,13 +103,13 @@ Get your API keys from the following providers:
 
 This section describes how to deploy the AIRouter as a Telegram bot using Vercel. This is a separate deployment from the core library.
 
-### Prerequisites
+### 📋 Prerequisites
 
 * A Telegram Bot Token (@BotFather)
 * API keys for various AI providers
 * Vercel account
 
-### Deployment Steps
+### 🚀 Deployment Steps
 
 ```bash
 # Create the vercel project: vercel.com
@@ -153,7 +153,7 @@ vercel logs https://ai-router-flame.vercel.app
 curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
 ```
 
-### Enable Telegram Mini App
+### 📱 Enable Telegram Mini App
 
 After deploying the bot, you need to configure the Telegram Mini App and menu button:
 
@@ -171,7 +171,7 @@ After deploying the bot, you need to configure the Telegram Mini App and menu bu
 
 Once configured, users can access the Mini App by sending `/start` or `/app` to your bot, or through the menu button.
 
-## Project Structure
+## 📁 Project Structure
 
 The Telegram bot deployment uses these files:
 
