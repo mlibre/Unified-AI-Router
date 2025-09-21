@@ -131,6 +131,7 @@ VERCEL_AI_GATEWAY_API_KEY=API_KEY
 CEREBRAS_API_KEY=API_KEY
 LLM7_API_KEY=API_KEY
 VERCEL_URL=VERCEL_URL
+SEARX_URL=SEARX_URL
 
 vercel env add TELEGRAM_BOT_TOKEN
 vercel env add GOOGLE_API_KEY
@@ -142,6 +143,7 @@ vercel env add VERCEL_AI_GATEWAY_API_KEY
 vercel env add CEREBRAS_API_KEY
 vercel env add LLM7_API_KEY
 vercel env add VERCEL_URL
+vercel env add SEARX_URL
 
 # Deploy to Vercel
 vercel
