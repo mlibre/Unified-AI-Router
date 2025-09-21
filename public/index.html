@@ -2,48 +2,50 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<title>AI Router Chat</title>
-	<link rel="stylesheet" href="style.css">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+	<title>AI Router — New UI</title>
+	<link rel="stylesheet" href="style.css" />
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 
 <body>
-	<div class="chat-container">
-		<!-- NEW: Header for controls -->
-		<div class="chat-header">
-			<div class="chat-title">AI Router</div>
-			<button id="fullscreen-btn" class="icon-btn">
-				<!-- SVG icon for "enter fullscreen" -->
-				<svg id="fullscreen-enter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-					height="24" fill="currentColor">
-					<path
-						d="M21 3h-6a1 1 0 0 0 0 2h3.586L14.293 9.293a1 1 0 1 0 1.414 1.414L20 6.414V10a1 1 0 0 0 2 0V4a1 1 0 0 0-1-1zM3 21h6a1 1 0 0 0 0-2H5.414l4.293-4.293a1 1 0 1 0-1.414-1.414L4 17.586V14a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1z" />
-				</svg>
-				<!-- SVG icon for "exit fullscreen" (initially hidden) -->
-				<svg id="fullscreen-exit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
-					fill="currentColor" style="display: none;">
-					<path
-						d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 2 0V5.414l4.293 4.293a1 1 0 1 0 1.414-1.414L6.414 4H10a1 1 0 0 0 0-2zm11 11h-6a1 1 0 0 0 0 2h3.586l-4.293 4.293a1 1 0 1 0 1.414 1.414L20 17.586V21a1 1 0 0 0 2 0v-6a1 1 0 0 0-1-1z" />
-				</svg>
-			</button>
-		</div>
+	<div class="app-shell">
+		<header class="app-header">
+			<div class="brand">
+				<div class="brand-title">AI Router</div>
+				<div class="brand-sub">Beautiful · Fast · Private</div>
+			</div>
 
-		<div id="chat-messages" class="chat-messages">
-			<!-- Messages will be dynamically inserted here -->
-		</div>
-		<form id="chat-form" class="chat-form">
-			<input type="text" id="prompt-input" placeholder="Ask anything..." autocomplete="off">
-			<button type="submit" id="send-button">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-					<path
-						d="M3.478 2.405a.75.75 0 0 0-.926.94l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.405Z" />
-				</svg>
-			</button>
+			<div class="header-actions">
+				<!-- removed explicit Search toggle per request -->
+				<button id="fullscreen-btn" class="icon-btn" aria-label="Toggle fullscreen">⤢</button>
+			</div>
+		</header>
+
+		<main class="chat-area">
+			<div id="messages" class="messages" role="log" aria-live="polite"></div>
+
+			<div id="search-panel" class="search-panel hidden">
+				<div id="search-status" class="search-status">Search results will appear here when you use the \"Include
+					search\" option.</div>
+				<ul id="search-results" class="search-results"></ul>
+			</div>
+		</main>
+
+		<form id="composer" class="composer" autocomplete="off">
+			<input id="input" type="text" placeholder="Ask anything..." aria-label="Message input" />
+			<label class="checkbox-inline" title="Include most recent search snippets when asking">
+				<input id="include-search" type="checkbox" />
+				<span class="small">Include search</span>
+			</label>
+			<button id="send" type="submit" class="send-btn">Send</button>
 		</form>
+
+		<footer class="app-footer">Search powered by your Searx instance • Privacy-first</footer>
 	</div>
-	<script src="script.js"></script>
+
+	<script src="app.js"></script>
 </body>
 
 </html>
