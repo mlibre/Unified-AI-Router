@@ -22,10 +22,6 @@ void async function main ()
 
 		let fullContent = "";
 		let chunks = [];
-		for await ( const chunk of streamRes )
-		{
-			console.log( chunk );
-		}
 		streamRes.data.on( "data", ( chunk ) =>
 		{
 			const data = chunk.toString();

@@ -1,5 +1,11 @@
 module.exports = [
 	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
+		model: "z-ai/glm-4.5-air:free",
+		apiUrl: "https://openrouter.ai/api/v1",
+	},
+	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
 		model: "gpt-oss-120b",
@@ -17,12 +23,7 @@ module.exports = [
 		model: "openai/gpt-oss-120b",
 		apiUrl: "https://api.groq.com/openai/v1",
 	},
-	{
-		name: "openrouter",
-		apiKey: process.env.OPENROUTER_API_KEY,
-		model: "z-ai/glm-4.5-air:free",
-		apiUrl: "https://openrouter.ai/api/v1",
-	},
+
 	{
 		name: "google",
 		apiKey: process.env.GOOGLE_API_KEY,

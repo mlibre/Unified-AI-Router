@@ -42,7 +42,6 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 			try
 			{
 				const s = await aiRouter.chatCompletion( messages, { model, ...rest }, true );
-				return s
 				const id = `chatcmpl-${Date.now()}`;
 				const created = Math.floor( Date.now() / 1000 );
 				const modelName = model || "unknown";
