@@ -1,4 +1,4 @@
-# AIRouter
+# Unified AI Router
 
 A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously.
 
@@ -25,6 +25,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 ## 🛠️ Installation
 
 ```bash
+npm i unified-ai-router
 git clone https://github.com/mlibre/AIRouter
 cd AIRouter
 npm i
