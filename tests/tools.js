@@ -1,21 +1,8 @@
 const AIRouter = require( "../main" );
-const { tool } = require( "@langchain/core/tools" );
+const { tool } = require( "langchain" );
 require( "dotenv" ).config();
 
 const providers = [
-	{
-		name: "cohere",
-		apiKey: process.env.COHERE_API_KEY,
-		model: "command-a-03-2025",
-		apiUrl: "https://api.cohere.ai/compatibility/v1",
-	},
-	{
-		name: "grok",
-		apiKey: process.env.GROK_API_KEY,
-		model: "grok-3-mini",
-		apiUrl: "https://api.x.ai/v1",
-	},
-
 	{
 		name: "llm7",
 		apiKey: process.env.LLM7_API_KEY,
@@ -70,7 +57,18 @@ const providers = [
 		model: "gpt-4.1-mini-2025-04-14",
 		apiUrl: "https://api.openai.com/v1",
 	},
-
+	{
+		name: "cohere",
+		apiKey: process.env.COHERE_API_KEY,
+		model: "command-a-03-2025",
+		apiUrl: "https://api.cohere.ai/compatibility/v1",
+	},
+	{
+		name: "grok",
+		apiKey: process.env.GROK_API_KEY,
+		model: "grok-3-mini",
+		apiUrl: "https://api.x.ai/v1",
+	},
 ];
 
 const llm = new AIRouter( providers );
@@ -99,21 +97,45 @@ const multiplyTool = tool(
 	}
 );
 
+const weatherTool = tool(
+	async ({ city }) =>
+	{
+		// Mock weather data for demonstration
+		const mockWeather = {
+			city,
+			temperature: 25,
+			condition: "Sunny",
+			humidity: 50,
+			wind: "10 km/h"
+		};
+		return mockWeather;
+	},
+	{
+		name: "get_weather",
+		description: "Get the current weather forecast for a given city.",
+		schema: {
+			city: {
+				type: "string",
+				description: "The name of the city (e.g., Tehran) to get the weather for."
+			}
+		}
+	}
+);
 void async function main ()
 {
 	try
 	{
 		const messages = [
-			{ role: "system", content: "You are a helpful assistant with access to a multiply tool. Use it for calculations." },
-			{ role: "user", content: "What is 1200 multiplied by 7145?" }
+			{ role: "system", content: "You are a helpful assistant with access to tools for calculations and weather forecasts. Use the multiply tool for calculations and the get_weather tool for weather information." },
+			{ role: "user", content: "What's the weather like in Tehran today?" }
 		];
 
 		const response = await llm.chatCompletion( messages, {
 			temperature: 0,
-			tools: [multiplyTool],
+			tools: [multiplyTool, weatherTool],
 		});
 
-		console.log( "Tool example response:", response );
+		console.log( "Weather tool example response:", response );
 	}
 	catch ( error )
 	{
