@@ -52,7 +52,7 @@ module.exports = async ( req, res ) =>
 			// Use your existing AI Router with the full message history
 			const aiResponse = await telegramClient.aiRouter.chatCompletion( messages );
 
-			return res.status( 200 ).json({ response: aiResponse });
+			return res.status( 200 ).json({ response: aiResponse.content });
 
 		}
 		catch ( error )
