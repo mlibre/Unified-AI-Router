@@ -41,13 +41,13 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 
 			try
 			{
-				const s = await aiRouter.chatCompletion( messages, { model, ...rest }, true );
+				const response = await aiRouter.chatCompletion( messages, { model, ...rest }, true );
 				const id = `chatcmpl-${Date.now()}`;
 				const created = Math.floor( Date.now() / 1000 );
-				const modelName = model || "unknown";
 				let fullResponse = null;
-				for await ( const chunk of s )
+				for await ( const chunk of response )
 				{
+					const modelName = chunk?.response_metadata?.model_name || model || "unknown";
 					const delta = chunk.delta || { content: chunk.content || "" };
 					if ( chunk.content && !fullResponse ) fullResponse = chunk; // Capture full for reasoning if available
 					const payload = {
@@ -124,7 +124,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				provider: "OpenAI",
 				object: "chat.completion",
 				created: Math.floor( Date.now() / 1000 ),
-				model: model || "unknown",
+				model: response.response_metadata?.model_name || model || "unknown",
 				choices: [
 					{
 						logprobs: null,
