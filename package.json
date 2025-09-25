@@ -34,6 +34,7 @@
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "eslint": "^9.33.0",
+    "express": "^5.1.0",
     "langchain": "^1.0.0-alpha.6",
     "pino": "^9.9.0",
     "pino-pretty": "^13.1.1",

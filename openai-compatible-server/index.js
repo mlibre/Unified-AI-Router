@@ -1,5 +1,4 @@
 const express = require( "express" );
-const bodyParser = require( "body-parser" );
 const cors = require( "cors" );
 const AIRouter = require( "../main" ); // your existing class
 const pino = require( "pino" );
@@ -9,20 +8,13 @@ const logger = pino({ base: false }, stream );
 
 const app = express();
 app.use( cors() );
-app.use( bodyParser.json() );
+app.use( express.json() );
 
 /**
  * Initialize router with providers (could load from env/config)
  */
-const providers = [
-	{
-		name: "openai",
-		apiKey: process.env.OPENAI_API_KEY,
-		apiUrl: "https://api.openai.com/v1",
-		model: "gpt-4o-mini",
-	},
-	// add more providers here
-];
+const providers = require( "../provider" )
+
 const aiRouter = new AIRouter( providers );
 
 /**
