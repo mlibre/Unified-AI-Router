@@ -1,4 +1,4 @@
-const AIRouter = require( "./main" );
+const AIRouter = require( "../main" );
 require( "dotenv" ).config();
 
 const providers = [
