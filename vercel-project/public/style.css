@@ -136,7 +136,7 @@ body {
     display: flex;
     gap: 8px;
     padding: 10px;
-    background: var(--tg-theme-bottom-bar-bg-color);
+    background: var(--tg-theme-secondary-bg-color);
     border-top: 1px solid var(--tg-theme-section-separator-color);
     align-items: center
 }
@@ -147,6 +147,7 @@ body {
     border-radius: 18px;
     border: 1px solid var(--tg-theme-section-separator-color);
     background: var(--tg-theme-section-bg-color);
+    color: var(--text);
     outline: none;
 }
 
