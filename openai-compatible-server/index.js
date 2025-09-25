@@ -45,16 +45,20 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				const id = `chatcmpl-${Date.now()}`;
 				const created = Math.floor( Date.now() / 1000 );
 				const modelName = model || "unknown";
+				let fullResponse = null;
 				for await ( const chunk of s )
 				{
 					const delta = chunk.delta || { content: chunk.content || "" };
+					if ( chunk.content && !fullResponse ) fullResponse = chunk; // Capture full for reasoning if available
 					const payload = {
 						id,
+						provider: "OpenAI",
 						object: "chat.completion.chunk",
 						created,
 						model: modelName,
 						choices: [
 							{
+								logprobs: null,
 								delta,
 								index: 0,
 								finish_reason: null,
@@ -62,6 +66,32 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 						],
 					};
 					res.write( `data: ${JSON.stringify( payload )}\n\n` );
+				}
+				// Optional: Send final chunk with full message if reasoning available
+				if ( fullResponse && fullResponse.additional_kwargs?.reasoning )
+				{
+					const finalPayload = {
+						id,
+						provider: "OpenAI",
+						object: "chat.completion.chunk",
+						created,
+						model: modelName,
+						choices: [
+							{
+								logprobs: null,
+								finish_reason: "stop",
+								native_finish_reason: "stop",
+								index: 0,
+								delta: {
+									content: "",
+									role: "assistant",
+									refusal: fullResponse.additional_kwargs?.refusal || null,
+									reasoning: fullResponse.additional_kwargs?.reasoning || null
+								},
+							},
+						],
+					};
+					res.write( `data: ${JSON.stringify( finalPayload )}\n\n` );
 				}
 
 				// Send done signal
@@ -80,16 +110,33 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 		{
 			// Non-streaming → return one-shot completion
 			const response = await aiRouter.chatCompletion( messages, { model, ...rest }, false );
+			let reasoning = null;
+			let refusal = null;
+			if ( response.contentBlocks )
+			{
+				const reasoningBlocks = response.contentBlocks.filter( b => { return b.type === "reasoning" || b.type === "thinking" });
+				reasoning = reasoningBlocks.length > 0 ? reasoningBlocks.map( b => { return b.text }).join( "\n" ) : null;
+				const refusalBlocks = response.contentBlocks.filter( b => { return b.type === "refusal" });
+				refusal = refusalBlocks.length > 0 ? refusalBlocks.map( b => { return b.text }).join( "\n" ) : null;
+			}
 			res.json({
 				id: `chatcmpl_${Date.now()}`,
+				provider: "OpenAI",
 				object: "chat.completion",
 				created: Math.floor( Date.now() / 1000 ),
 				model: model || "unknown",
 				choices: [
 					{
-						index: 0,
-						message: { role: "assistant", content: response.content },
+						logprobs: null,
 						finish_reason: "stop",
+						native_finish_reason: "stop",
+						index: 0,
+						message: {
+							role: "assistant",
+							content: response.content,
+							refusal,
+							reasoning
+						},
 					},
 				],
 			});

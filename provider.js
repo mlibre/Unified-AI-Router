@@ -2,6 +2,12 @@ module.exports = [
 	{
 		name: "openrouter",
 		apiKey: process.env.OPENROUTER_API_KEY,
+		model: "deepseek/deepseek-r1:free",
+		apiUrl: "https://openrouter.ai/api/v1",
+	},
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
 		model: "z-ai/glm-4.5-air:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
