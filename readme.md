@@ -1,6 +1,6 @@
 # Unified AI Router
 
-A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously. This project also includes an OpenAI-compatible server and a deployable Telegram bot with a Mini App interface.
+A unified interface for multiple LLM providers with automatic fallback. This project includes an OpenAI-compatible server and a deployable Telegram bot with a Mini App interface. It supports major providers like OpenAI, Google, Grok, and more, ensuring reliability and flexibility for your AI applications.
 
 * [🚀 Features](#-features)
 * [🛠️ Installation](#️-installation)
