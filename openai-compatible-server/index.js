@@ -48,10 +48,13 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				for await ( const chunk of response )
 				{
 					const modelName = chunk?.response_metadata?.model_name || model || "unknown";
-					let delta = chunk.delta || { content: chunk.content || "" };
+					const systemFingerprint = chunk?.response_metadata?.system_fingerprint || null;
+					let delta = { ... chunk.delta || { content: chunk.content || "" } };
 					if ( !delta.role ) delta.role = "assistant";
-					delta.reasoning = null;
-					delta.reasoning_details = [];
+					delta.reasoning = delta.reasoning || null;
+					delta.reasoning_details = delta.reasoning_details || [];
+					const chunkFinishReason = delta.finish_reason || chunk?.response_metadata?.finish_reason || null;
+					const chunkNativeFinishReason = delta.native_finish_reason || chunk?.response_metadata?.native_finish_reason || null;
 					if ( chunk.content && !fullResponse ) fullResponse = chunk; // Capture full for reasoning if available
 					const payload = {
 						id,
@@ -59,49 +62,20 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 						object: "chat.completion.chunk",
 						created,
 						model: modelName,
-						system_fingerprint: null,
+						system_fingerprint: systemFingerprint,
 						choices: [
 							{
 								logprobs: null,
 								delta,
 								index: 0,
-								finish_reason: null,
-								native_finish_reason: null,
+								finish_reason: chunkFinishReason,
+								native_finish_reason: chunkNativeFinishReason,
 							},
 						],
 					};
 					res.write( `data: ${JSON.stringify( payload )}\n\n` );
 				}
 				// Optional: Send final chunk with full message if reasoning available
-				if ( fullResponse && fullResponse.additional_kwargs?.reasoning )
-				{
-					let finalDelta = {
-						content: "",
-						role: "assistant",
-						refusal: fullResponse.additional_kwargs?.refusal || null,
-						reasoning: fullResponse.additional_kwargs?.reasoning || null,
-						reasoning_details: []
-					};
-					const finalPayload = {
-						id,
-						provider: "OpenAI",
-						object: "chat.completion.chunk",
-						created,
-						model: modelName,
-						system_fingerprint: null,
-						choices: [
-							{
-								logprobs: null,
-								finish_reason: "stop",
-								native_finish_reason: "stop",
-								index: 0,
-								delta: finalDelta,
-							},
-						],
-					};
-					res.write( `data: ${JSON.stringify( finalPayload )}\n\n` );
-				}
-
 				// Send done signal
 				res.write( "data: [DONE]\n\n" );
 				res.end();
@@ -127,18 +101,21 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				const refusalBlocks = response.contentBlocks.filter( b => { return b.type === "refusal" });
 				refusal = refusalBlocks.length > 0 ? refusalBlocks.map( b => { return b.text }).join( "\n" ) : null;
 			}
+			const systemFingerprint = response.response_metadata?.system_fingerprint || null;
+			const finishReason = response.response_metadata?.finish_reason || null;
+			const nativeFinishReason = response.response_metadata?.native_finish_reason || null;
 			res.json({
 				id: `chatcmpl_${Date.now()}`,
 				provider: "OpenAI",
 				object: "chat.completion",
 				created: Math.floor( Date.now() / 1000 ),
 				model: response.response_metadata?.model_name || model || "unknown",
-				system_fingerprint: null,
+				system_fingerprint: systemFingerprint,
 				choices: [
 					{
 						logprobs: null,
-						finish_reason: "stop",
-						native_finish_reason: "stop",
+						finish_reason: finishReason,
+						native_finish_reason: nativeFinishReason,
 						index: 0,
 						message: {
 							role: "assistant",
