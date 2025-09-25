@@ -10,7 +10,7 @@ async function getResponse ()
 	{
 		const messages = [
 			{ role: "system", content: "You are a helpful assistant." },
-			{ role: "user", content: "Explain quantum computing in simple terms. explain in 2000 lines" }
+			{ role: "user", content: "Hello, say something short." }
 		];
 
 		const stream = await llm.chatCompletion( messages, {

@@ -45,7 +45,7 @@ class AIRouter
 				}
 				else
 				{
-					const response = await llm.invoke( messages, { timeout: 30000 });
+					const response = await llm.invoke( messages, { timeout: 60000 });
 					return response;
 				}
 			}
