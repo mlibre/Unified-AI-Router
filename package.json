@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously and failover support.",
   "license": "ISC",
   "author": "mlibre",

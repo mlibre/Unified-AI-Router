@@ -1,22 +1,24 @@
 module.exports = [
-	{
-		name: "openrouter",
-		apiKey: process.env.OPENROUTER_API_KEY,
-		model: "deepseek/deepseek-r1:free",
-		apiUrl: "https://openrouter.ai/api/v1",
-	},
-	{
-		name: "openrouter",
-		apiKey: process.env.OPENROUTER_API_KEY,
-		model: "z-ai/glm-4.5-air:free",
-		apiUrl: "https://openrouter.ai/api/v1",
-	},
+
 	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
 		model: "gpt-oss-120b",
 		apiUrl: "https://api.cerebras.ai/v1",
 	},
+	// {
+	// 	name: "openrouter",
+	// 	apiKey: process.env.OPENROUTER_API_KEY,
+	// 	model: "deepseek/deepseek-r1:free",
+	// 	apiUrl: "https://openrouter.ai/api/v1",
+	// },
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
+		model: "z-ai/glm-4.5-air:free",
+		apiUrl: "https://openrouter.ai/api/v1",
+	},
+
 	{
 		name: "vercel",
 		apiKey: process.env.VERCEL_AI_GATEWAY_API_KEY,
