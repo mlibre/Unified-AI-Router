@@ -1,12 +1,13 @@
 # Unified AI Router
 
-A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously.
+A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously. This project also includes an OpenAI-compatible server and a deployable Telegram bot with a Mini App interface.
 
 * [🚀 Features](#-features)
 * [🛠️ Installation](#️-installation)
 * [📖 Usage](#-usage)
   * [📚 Basic Library Usage](#-basic-library-usage)
-  * [🤖 Telegram Bot Deployment](#-telegram-bot-deployment)
+  * [🤖 OpenAI-Compatible Server](#-openai-compatible-server)
+  * [🧪 Testing](#-testing)
 * [🔧 Supported Providers](#-supported-providers)
 * [🔑 API Keys](#-api-keys)
 * [🔼 Vercel Deployment (Telegram Bot)](#-vercel-deployment-telegram-bot)
@@ -21,6 +22,10 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 * **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Vercel, Cerebras, and LLM7
 * **Automatic Fallback**: If one provider fails, automatically tries the next
 * **Simple API**: Easy to use interface for all supported providers
+* **OpenAI-Compatible Server**: Drop-in replacement for OpenAI API
+* **Streaming and Non-Streaming**: Supports both streaming and non-streaming responses
+* **Tool Support**: Use tools with your LLM calls
+* **Telegram Bot**: Deployable as a Telegram bot with a Mini App interface
 
 ## 🛠️ Installation
 
@@ -70,9 +75,35 @@ const response = await llm.chatCompletion(messages, {
 console.log(response);
 ```
 
-### 🤖 Telegram Bot Deployment
+### 🤖 OpenAI-Compatible Server
 
-For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-deployment-telegram-bot) below. This uses the AIRouter library as the backend for a Telegram bot interface.
+The project includes an OpenAI-compatible server that can be used as a drop-in replacement for the OpenAI API.
+
+To start the server, run:
+
+```bash
+node openai-compatible-server/index.js
+```
+
+The server will be available at `http://localhost:3000/v1/chat/completions`.
+
+### 🧪 Testing
+
+The project includes tests for the core library and the OpenAI-compatible server. To run the tests, use the following commands:
+
+```bash
+# Test chat completion
+node tests/chat.js
+
+# Test OpenAI server non-streaming
+node tests/openai-server-non-stream.js
+
+# Test OpenAI server streaming
+node tests/openai-server-stream.js
+
+# Test tool usage
+node tests/tools.js
+```
 
 ## 🔧 Supported Providers
 
@@ -179,12 +210,17 @@ Once configured, users can access the Mini App by sending `/start` or `/app` to 
 
 ## 📁 Project Structure
 
-The Telegram bot deployment uses these files:
-
-* `api/index.js` - Main webhook handler
-* `src/telegram.js` - Telegram client implementation
-* `src/config.js` - Configuration and provider setup
-* `main.js` - The AIRouter library (core functionality)
+* `main.js` - The core AIRouter library.
+* `provider.js` - A list of supported AI providers.
+* `openai-compatible-server/index.js` - An OpenAI-compatible server.
+* `tests/` - A suite of tests for the library and server.
+* `bruno/` - A Bruno collection for API testing.
+* `vercel-project/` - A Vercel project for deploying a Telegram bot.
+  * `api/index.js` - Main webhook handler for the Telegram bot.
+  * `api/search.js` - A search proxy for the Telegram bot.
+  * `public/` - The frontend for the Telegram Mini App.
+  * `src/config.js` - Configuration for the Telegram bot.
+  * `src/telegram.js` - Telegram client implementation.
 
 ## 📄 License
 
