@@ -53,8 +53,26 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 					if ( !delta.role ) delta.role = "assistant";
 					delta.reasoning = delta.reasoning || null;
 					delta.reasoning_details = delta.reasoning_details || [];
+					let toolCallsDelta = null;
+					if ( chunk.tool_calls && chunk.tool_calls.length > 0 )
+					{
+						toolCallsDelta = chunk.tool_calls.map( ( tc, index ) =>
+						{
+							return {
+								id: tc.id || `call_${Date.now()}_${Math.random().toString( 36 ).substr( 2, 9 )}`,
+								type: "function",
+								index,
+								function: {
+									name: tc.name,
+									arguments: JSON.stringify( tc.args || {})
+								}
+							};
+						});
+						delta.tool_calls = toolCallsDelta;
+						delta.content = "";
+					}
 					const chunkFinishReason = delta.finish_reason || chunk?.response_metadata?.finish_reason || null;
-					const chunkNativeFinishReason = delta.native_finish_reason || chunk?.response_metadata?.native_finish_reason || null;
+					const chunkNativeFinishReason = delta.native_finish_reason || chunk?.response_metadata?.native_finish_reason || chunkFinishReason || null;
 					if ( chunk.content && !fullResponse ) fullResponse = chunk; // Capture full for reasoning if available
 					const payload = {
 						id,
@@ -73,6 +91,11 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 							},
 						],
 					};
+					const usage = chunk?.response_metadata?.usage;
+					if ( usage && typeof usage === "object" && !Array.isArray( usage ) && Object.keys( usage ).length > 0 )
+					{
+						payload.usage = chunk?.response_metadata?.usage || null;
+					}
 					res.write( `data: ${JSON.stringify( payload )}\n\n` );
 				}
 				// Send done signal
