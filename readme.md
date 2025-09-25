@@ -82,7 +82,7 @@ The project includes an OpenAI-compatible server that can be used as a drop-in r
 To start the server, run:
 
 ```bash
-node openai-compatible-server/index.js
+npm start
 ```
 
 The server will be available at `http://localhost:3000/v1/chat/completions`.

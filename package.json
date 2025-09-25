@@ -1,13 +1,14 @@
 {
   "name": "unified-ai-router",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously and failover support.",
   "license": "ISC",
   "author": "mlibre",
   "type": "commonjs",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node openai-compatible-server/index.js"
   },
   "keywords": [
     "ai",
