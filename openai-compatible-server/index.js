@@ -166,9 +166,10 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 					},
 				],
 			}
-			if ( response?.response_metadata?.usage )
+			const usage = response?.response_metadata?.usage;
+			if ( usage && typeof usage === "object" && !Array.isArray( usage ) && Object.keys( usage ).length > 0 )
 			{
-				finalResult.usage = response.response_metadata.usage
+				finalResult.usage = response?.response_metadata?.usage || null;
 			}
 			res.json( finalResult );
 		}
