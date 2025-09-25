@@ -75,7 +75,6 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 					};
 					res.write( `data: ${JSON.stringify( payload )}\n\n` );
 				}
-				// Optional: Send final chunk with full message if reasoning available
 				// Send done signal
 				res.write( "data: [DONE]\n\n" );
 				res.end();
