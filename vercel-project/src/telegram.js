@@ -136,7 +136,7 @@ class TelegramClient
 			];
 
 			const response = await this.aiRouter.chatCompletion( messages );
-			history.push({ role: "assistant", content: response });
+			history.push({ role: "assistant", content: response.content });
 			await this.sendMessageWithRetry( chatId, response );
 		}
 	}
