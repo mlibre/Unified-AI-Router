@@ -60,9 +60,42 @@ void async function main ()
 		});
 
 		console.log( "Weather tool example response:", response );
+
+		if ( response.tool_calls && response.tool_calls.length > 0 )
+		{
+			for ( const toolCall of response.tool_calls )
+			{
+				let selectedTool;
+				if ( toolCall.name === "multiply" )
+				{
+					selectedTool = multiplyTool;
+				}
+				else if ( toolCall.name === "get_weather" )
+				{
+					selectedTool = weatherTool;
+				}
+
+				if ( selectedTool )
+				{
+					try
+					{
+						const result = await selectedTool.call( toolCall.args );
+						console.log( `Tool "${toolCall.name}" executed with result:`, result );
+					}
+					catch ( toolError )
+					{
+						console.error( `Error executing tool "${toolCall.name}":`, toolError.message );
+					}
+				}
+				else
+				{
+					console.warn( `Unknown tool: ${toolCall.name}` );
+				}
+			}
+		}
 	}
 	catch ( error )
 	{
 		console.error( "Tool example failed:", error.message );
 	}
-}()
+}
