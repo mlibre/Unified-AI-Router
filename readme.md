@@ -31,6 +31,7 @@ A unified interface for multiple LLM providers with automatic fallback. Send one
 
 ```bash
 npm i unified-ai-router
+# OR
 git clone https://github.com/mlibre/AIRouter
 cd AIRouter
 npm i

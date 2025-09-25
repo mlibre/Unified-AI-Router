@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "A unified interface for multiple LLM providers with automatic fallback, featuring an OpenAI-compatible server, tool support, and a deployable Telegram bot.",
   "license": "ISC",
   "author": "mlibre",
