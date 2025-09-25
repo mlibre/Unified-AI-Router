@@ -1,10 +1,18 @@
 {
   "name": "unified-ai-router",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "A unified interface for multiple LLM providers with automatic fallback. This project includes an OpenAI-compatible server and a deployable Telegram bot with a Mini App interface. It supports major providers like OpenAI, Google, Grok, and more, ensuring reliability and flexibility for your AI applications.",
   "license": "ISC",
   "author": "mlibre",
   "type": "commonjs",
+  "homepage": "https://github.com/mlibre/Unified-AI-Router#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlibre/Unified-AI-Router.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mlibre/Unified-AI-Router/issues"
+  },
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
