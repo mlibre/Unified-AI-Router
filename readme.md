@@ -208,6 +208,8 @@ After deploying the bot, you need to configure the Telegram Mini App and menu bu
 
 Once configured, users can access the Mini App by sending `/start` or `/app` to your bot, or through the menu button.
 
+An example of a deployed bot is accessible on Telegram: [https://t.me/freePulseAIbot](https://t.me/freePulseAIbot)
+
 ## 📁 Project Structure
 
 * `main.js` - The core AIRouter library.
