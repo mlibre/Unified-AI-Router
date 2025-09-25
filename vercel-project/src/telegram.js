@@ -1,5 +1,5 @@
 const { webhookPath, token, productionUrl } = require( "./config.js" );
-const AIRouter = require( "../main.js" );
+const AIRouter = require( "../../main.js" );
 const { providers } = require( "./config.js" );
 
 class TelegramClient

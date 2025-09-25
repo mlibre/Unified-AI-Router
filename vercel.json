@@ -1,10 +1,27 @@
 {
 	"version": 2,
-	"public": true,
-	"rewrites": [
+	"builds": [
 		{
-			"source": "/api/(.*)",
-			"destination": "/api/index.js"
+			"src": "vercel-project/api/index.js",
+			"use": "@vercel/node"
+		},
+		{
+			"src": "vercel-project/public/**",
+			"use": "@vercel/static"
+		}
+	],
+	"routes": [
+		{
+			"src": "/api",
+			"dest": "vercel-project/api/index.js"
+		},
+		{
+			"src": "/api/(.*)",
+			"dest": "vercel-project/api/index.js"
+		},
+		{
+			"src": "/(.*)",
+			"dest": "vercel-project/public/$1"
 		}
 	]
 }
