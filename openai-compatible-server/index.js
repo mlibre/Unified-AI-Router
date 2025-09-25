@@ -48,7 +48,10 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				for await ( const chunk of response )
 				{
 					const modelName = chunk?.response_metadata?.model_name || model || "unknown";
-					const delta = chunk.delta || { content: chunk.content || "" };
+					let delta = chunk.delta || { content: chunk.content || "" };
+					if ( !delta.role ) delta.role = "assistant";
+					delta.reasoning = null;
+					delta.reasoning_details = [];
 					if ( chunk.content && !fullResponse ) fullResponse = chunk; // Capture full for reasoning if available
 					const payload = {
 						id,
@@ -56,12 +59,14 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 						object: "chat.completion.chunk",
 						created,
 						model: modelName,
+						system_fingerprint: null,
 						choices: [
 							{
 								logprobs: null,
 								delta,
 								index: 0,
 								finish_reason: null,
+								native_finish_reason: null,
 							},
 						],
 					};
@@ -70,24 +75,27 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				// Optional: Send final chunk with full message if reasoning available
 				if ( fullResponse && fullResponse.additional_kwargs?.reasoning )
 				{
+					let finalDelta = {
+						content: "",
+						role: "assistant",
+						refusal: fullResponse.additional_kwargs?.refusal || null,
+						reasoning: fullResponse.additional_kwargs?.reasoning || null,
+						reasoning_details: []
+					};
 					const finalPayload = {
 						id,
 						provider: "OpenAI",
 						object: "chat.completion.chunk",
 						created,
 						model: modelName,
+						system_fingerprint: null,
 						choices: [
 							{
 								logprobs: null,
 								finish_reason: "stop",
 								native_finish_reason: "stop",
 								index: 0,
-								delta: {
-									content: "",
-									role: "assistant",
-									refusal: fullResponse.additional_kwargs?.refusal || null,
-									reasoning: fullResponse.additional_kwargs?.reasoning || null
-								},
+								delta: finalDelta,
 							},
 						],
 					};
@@ -125,6 +133,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				object: "chat.completion",
 				created: Math.floor( Date.now() / 1000 ),
 				model: response.response_metadata?.model_name || model || "unknown",
+				system_fingerprint: null,
 				choices: [
 					{
 						logprobs: null,
