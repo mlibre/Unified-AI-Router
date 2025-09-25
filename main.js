@@ -4,39 +4,6 @@ const pretty = require( "pino-pretty" );
 const stream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, stream );
 
-/**
- * Wraps an async iterable stream, aborting if no chunk is received within inactivityMs.
- * @param {AsyncIterable} stream - The original stream (e.g., from llm.stream()).
- * @param {number} inactivityMs - Max allowed ms between chunks.
- * @returns {AsyncIterable} A wrapped async iterable with inter-chunk timeout.
- */
-async function* streamWithInterChunkTimeout ( stream, inactivityMs = 5000 )
-{
-	let timeoutId;
-	let abort = false;
-
-	const resetTimer = () =>
-	{
-		 if ( timeoutId ) clearTimeout( timeoutId );
-		 timeoutId = setTimeout( () => { abort = true; }, inactivityMs );
-	};
-
-	try
-	{
-		 resetTimer();
-		 for await ( const chunk of stream )
-		{
-			  if ( abort ) throw new Error( `Stream aborted: inactivity timeout (${inactivityMs}ms)` );
-			  resetTimer();
-			  yield chunk;
-		 }
-	}
-	finally
-	{
-		 clearTimeout( timeoutId );
-	}
-}
-
 class AIRouter
 {
 	constructor ( providers )

@@ -85,7 +85,7 @@ For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-depl
 * Cohere
 * Vercel
 * Cerebras
-* LLM7: does not support tool calling
+* LLM7
 
 ## 🔑 API Keys
 
@@ -101,6 +101,7 @@ Get your API keys from the following providers:
 * **Vercel**: [vercel.com/docs/ai/ai-gateway](https://vercel.com/masoud-ghorbanzadehs-projects/~/ai/api-keys)
 * **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
 * **LLM7**: [token.llm7.io](https://token.llm7.io/)
+  * Seems like it does not support tool calling
 
 ## 🔼 Vercel Deployment (Telegram Bot)
 
