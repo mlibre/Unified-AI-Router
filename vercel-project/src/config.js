@@ -1,4 +1,4 @@
-require( "dotenv" ).config();
+require( "dotenv" ).config({ quiet: true });
 
 const productionUrl = `https://${ process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
 const webhookPath = "/api";

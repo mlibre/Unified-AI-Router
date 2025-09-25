@@ -46,7 +46,7 @@ class AIRouter
 
 	async chatCompletion ( messages, options = {}, stream = false )
 	{
-		const { stream: streamOption, tools, ...restOptions } = options;
+		const { stream: streamOption, tools, model, ...restOptions } = options;
 		const isStreaming = stream || streamOption;
 
 		logger.info( `Starting chatCompletion with ${this.providers.length} providers (streaming: ${isStreaming})` );
@@ -73,12 +73,12 @@ class AIRouter
 
 				if ( isStreaming )
 				{
-					const stream = await llm.stream( messages, { timeout: 300000 });
-					return streamWithInterChunkTimeout( stream, 20000 );
+					const stream = await llm.stream( messages );
+					return stream;
 				}
 				else
 				{
-					const response = await llm.invoke( messages, { timeout: 300000 });
+					const response = await llm.invoke( messages, { timeout: 30000 });
 					return response;
 				}
 			}

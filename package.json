@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously and failover support.",
   "license": "ISC",
   "author": "mlibre",
@@ -32,6 +32,7 @@
   "dependencies": {
     "@langchain/openai": "^1.0.0-alpha.1",
     "axios": "^1.11.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "eslint": "^9.33.0",
     "express": "^5.1.0",

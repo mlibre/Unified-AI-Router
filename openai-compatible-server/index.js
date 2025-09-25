@@ -5,6 +5,7 @@ const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
 const stream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, stream );
+require( "dotenv" ).config({ quiet: true });
 
 const app = express();
 app.use( cors() );
@@ -41,14 +42,18 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 			try
 			{
 				const s = await aiRouter.chatCompletion( messages, { model, ...rest }, true );
+				return s
+				const id = `chatcmpl-${Date.now()}`;
+				const created = Math.floor( Date.now() / 1000 );
+				const modelName = model || "unknown";
 				for await ( const chunk of s )
 				{
 					const delta = chunk.delta || { content: chunk.content || "" };
 					const payload = {
-						id: `chatcmpl_${Date.now()}`,
+						id,
 						object: "chat.completion.chunk",
-						created: Math.floor( Date.now() / 1000 ),
-						model: model || "unknown",
+						created,
+						model: modelName,
 						choices: [
 							{
 								delta,
@@ -75,7 +80,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 		else
 		{
 			// Non-streaming → return one-shot completion
-			const content = await aiRouter.chatCompletion( messages, { model, ...rest }, false );
+			const response = await aiRouter.chatCompletion( messages, { model, ...rest }, false );
 			res.json({
 				id: `chatcmpl_${Date.now()}`,
 				object: "chat.completion",
@@ -84,7 +89,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				choices: [
 					{
 						index: 0,
-						message: { role: "assistant", content },
+						message: { role: "assistant", content: response.content },
 						finish_reason: "stop",
 					},
 				],

@@ -1,5 +1,5 @@
 const AIRouter = require( "../main" );
-require( "dotenv" ).config();
+require( "dotenv" ).config({ quiet: true });
 
 const providers = require( "../provider" )
 const llm = new AIRouter( providers );

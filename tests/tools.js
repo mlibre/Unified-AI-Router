@@ -1,7 +1,7 @@
 const AIRouter = require( "../main" );
 const { tool } = require( "langchain" );
 const z = require( "zod" );
-require( "dotenv" ).config();
+require( "dotenv" ).config({ quiet: true });
 
 const providers = require( "../provider" )
 const llm = new AIRouter( providers );
