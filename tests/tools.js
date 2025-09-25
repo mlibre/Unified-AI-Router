@@ -45,7 +45,7 @@ const weatherTool = tool(
 		})
 	}
 );
-void async function main ()
+async function main ()
 {
 	try
 	{
@@ -61,6 +61,7 @@ void async function main ()
 
 		console.log( "Weather tool example response:", response );
 
+		const toolResults = [];
 		if ( response.tool_calls && response.tool_calls.length > 0 )
 		{
 			for ( const toolCall of response.tool_calls )
@@ -81,16 +82,49 @@ void async function main ()
 					{
 						const result = await selectedTool.call( toolCall.args );
 						console.log( `Tool "${toolCall.name}" executed with result:`, result );
+						toolResults.push({
+							tool_call_id: toolCall.id,
+							content: JSON.stringify( result )
+						});
 					}
 					catch ( toolError )
 					{
 						console.error( `Error executing tool "${toolCall.name}":`, toolError.message );
+						toolResults.push({
+							tool_call_id: toolCall.id,
+							content: `Error: ${toolError.message}`
+						});
 					}
 				}
 				else
 				{
 					console.warn( `Unknown tool: ${toolCall.name}` );
 				}
+			}
+
+			if ( toolResults.length > 0 )
+			{
+				const updatedMessages = [
+					...messages,
+					{
+						role: "assistant",
+						content: response.content,
+						tool_calls: response.tool_calls
+					},
+					...toolResults.map( tr =>
+					{
+						return {
+							role: "tool",
+							content: tr.content,
+							tool_call_id: tr.tool_call_id
+						}
+					})
+				];
+				const finalResponse = await llm.chatCompletion( updatedMessages, {
+					temperature: 0,
+					tools: [multiplyTool, weatherTool]
+				});
+				console.log( "Final response after tool execution:", finalResponse.content || finalResponse );
 			}
 		}
 	}
@@ -99,3 +133,5 @@ void async function main ()
 		console.error( "Tool example failed:", error.message );
 	}
 }
+
+main();
