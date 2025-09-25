@@ -1,5 +1,6 @@
 const AIRouter = require( "../main" );
 const { tool } = require( "langchain" );
+const z = require( "zod" );
 require( "dotenv" ).config();
 
 const providers = [
@@ -84,16 +85,10 @@ const multiplyTool = tool(
 	{
 		name: "multiply",
 		description: "Multiply two numbers",
-		schema: {
-			a: {
-				type: "number",
-				description: "First number",
-			},
-			b: {
-				type: "number",
-				description: "Second number",
-			},
-		},
+		schema: z.object({
+			a: z.number().describe( "First number" ),
+			b: z.number().describe( "Second number" ),
+		}),
 	}
 );
 
@@ -113,12 +108,9 @@ const weatherTool = tool(
 	{
 		name: "get_weather",
 		description: "Get the current weather forecast for a given city.",
-		schema: {
-			city: {
-				type: "string",
-				description: "The name of the city (e.g., Tehran) to get the weather for."
-			}
-		}
+		schema: z.object({
+			city: z.string().describe( "The name of the city (e.g., Tehran) to get the weather for." )
+		})
 	}
 );
 void async function main ()

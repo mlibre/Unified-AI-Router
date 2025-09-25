@@ -46,7 +46,7 @@ class AIRouter
 
 	async chatCompletion ( messages, options = {}, stream = false )
 	{
-		const { stream: streamOption, ...restOptions } = options;
+		const { stream: streamOption, tools, ...restOptions } = options;
 		const isStreaming = stream || streamOption;
 
 		logger.info( `Starting chatCompletion with ${this.providers.length} providers (streaming: ${isStreaming})` );
@@ -57,7 +57,7 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const llm = new ChatOpenAI({
+				let llm = new ChatOpenAI({
 					apiKey: provider.apiKey,
 					model: provider.model,
 					configuration: {
@@ -65,6 +65,13 @@ class AIRouter
 					},
 					...restOptions,
 				});
+
+				if ( tools && tools.length > 0 )
+				{
+					llm = llm.bindTools( tools, {
+						strict: true,
+					});
+				}
 
 				if ( isStreaming )
 				{
@@ -74,7 +81,7 @@ class AIRouter
 				else
 				{
 					const response = await llm.invoke( messages, { timeout: 300000 });
-					return response.content;
+					return response;
 				}
 			}
 			catch ( error )
