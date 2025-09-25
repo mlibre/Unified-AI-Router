@@ -5,12 +5,6 @@ require( "dotenv" ).config();
 
 const providers = [
 	{
-		name: "llm7",
-		apiKey: process.env.LLM7_API_KEY,
-		model: "gpt-o4-mini-2025-04-16",
-		apiUrl: "https://api.llm7.io/v1",
-	},
-	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
 		model: "gpt-oss-120b",
@@ -69,6 +63,12 @@ const providers = [
 		apiKey: process.env.GROK_API_KEY,
 		model: "grok-3-mini",
 		apiUrl: "https://api.x.ai/v1",
+	},
+	{
+		name: "llm7", // does not support tool calling
+		apiKey: process.env.LLM7_API_KEY,
+		model: "gpt-o4-mini-2025-04-16",
+		apiUrl: "https://api.llm7.io/v1",
 	},
 ];
 

@@ -68,9 +68,7 @@ class AIRouter
 
 				if ( tools && tools.length > 0 )
 				{
-					llm = llm.bindTools( tools, {
-						strict: true,
-					});
+					llm = llm.bindTools( tools );
 				}
 
 				if ( isStreaming )

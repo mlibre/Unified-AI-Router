@@ -85,7 +85,7 @@ For deploying as a Telegram bot, see the [Vercel Deployment Guide](#-vercel-depl
 * Cohere
 * Vercel
 * Cerebras
-* LLM7
+* LLM7: does not support tool calling
 
 ## 🔑 API Keys
 
