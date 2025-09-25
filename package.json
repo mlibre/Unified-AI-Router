@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "A unified interface for multiple LLM providers with automatic fallback. Send one request to multiple AI models simultaneously and failover support.",
   "license": "ISC",
   "author": "mlibre",
@@ -12,23 +12,24 @@
   },
   "keywords": [
     "ai",
+    "telegram-bot",
+    "openai-compatible",
+    "openai-compatible-server",
     "llm",
+    "fallback",
+    "load-balancing",
     "openai",
     "gemini",
     "chatgpt",
     "router",
-    "fallback",
-    "load-balancing",
     "multi-provider",
     "langchain",
     "artificial-intelligence",
-    "machine-learning",
     "grok",
     "openrouter",
     "cohere",
     "vercel",
-    "cerebras",
-    "telegram-bot"
+    "cerebras"
   ],
   "dependencies": {
     "@langchain/openai": "^1.0.0-alpha.1",
