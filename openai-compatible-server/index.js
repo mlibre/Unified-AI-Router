@@ -94,6 +94,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 			const response = await aiRouter.chatCompletion( messages, { model, ...rest }, false );
 			let reasoning = null;
 			let refusal = null;
+			let toolCalls = null;
 			if ( response.contentBlocks )
 			{
 				const reasoningBlocks = response.contentBlocks.filter( b => { return b.type === "reasoning" || b.type === "thinking" });
@@ -101,10 +102,26 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 				const refusalBlocks = response.contentBlocks.filter( b => { return b.type === "refusal" });
 				refusal = refusalBlocks.length > 0 ? refusalBlocks.map( b => { return b.text }).join( "\n" ) : null;
 			}
+			if ( response.tool_calls && response.tool_calls.length > 0 )
+			{
+				toolCalls = response.tool_calls.map( ( tc, index ) =>
+				{
+				  return {
+					 id: tc.id || `call_${Date.now()}_${Math.random().toString( 36 ).substr( 2, 9 )}`,
+					 type: "function",
+					 index,
+					 function: {
+							name: tc.name,
+							arguments: JSON.stringify( tc.args || {})
+					 }
+				  };
+				});
+			}
 			const systemFingerprint = response.response_metadata?.system_fingerprint || null;
 			const finishReason = response.response_metadata?.finish_reason || null;
-			const nativeFinishReason = response.response_metadata?.native_finish_reason || null;
-			res.json({
+			const nativeFinishReason = response.response_metadata?.native_finish_reason || finishReason || null;
+			const messageContent = toolCalls && toolCalls.length > 0 ? "" : response.content;
+			let finalResult = {
 				id: `chatcmpl_${Date.now()}`,
 				provider: "OpenAI",
 				object: "chat.completion",
@@ -119,13 +136,19 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 						index: 0,
 						message: {
 							role: "assistant",
-							content: response.content,
+							content: messageContent,
 							refusal,
-							reasoning
+							reasoning,
+							tool_calls: toolCalls
 						},
 					},
 				],
-			});
+			}
+			if ( response?.response_metadata?.usage )
+			{
+				finalResult.usage = response.response_metadata.usage
+			}
+			res.json( finalResult );
 		}
 	}
 	catch ( err )
