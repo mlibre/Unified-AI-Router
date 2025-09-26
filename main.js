@@ -11,9 +11,18 @@ class AIRouter
 		this.providers = providers;
 	}
 
+	createClient ( provider )
+	{
+		return new OpenAI({
+			apiKey: provider.apiKey,
+			baseURL: provider.apiUrl,
+			timeout: 60000,
+		});
+	}
+
 	async chatCompletion ( messages, options = {}, stream = false )
 	{
-		const { stream: streamOption, tools, model, ...restOptions } = options;
+		const { stream: streamOption, tools, ...restOptions } = options;
 		const isStreaming = stream || streamOption;
 
 		logger.info( `Starting chatCompletion with ${this.providers.length} providers (streaming: ${isStreaming})` );
@@ -24,11 +33,7 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const client = new OpenAI({
-					apiKey: provider.apiKey,
-					baseURL: provider.apiUrl,
-					timeout: 60000,
-				});
+				const client = this.createClient( provider );
 
 				const params = {
 					model: provider.model,
@@ -46,7 +51,7 @@ class AIRouter
 						for await ( const chunk of responseStream )
 						{
 							const content = chunk.choices[0]?.delta?.content;
-							const reasoning = chunk.choices[0]?.delta?.reasoning
+							const reasoning = chunk.choices[0]?.delta?.reasoning;
 							const tool_calls_delta = chunk.choices[0]?.delta?.tool_calls;
 							if ( content !== null )
 							{
@@ -78,7 +83,7 @@ class AIRouter
 					{
 						response.reasoning = reasoning
 					}
-					if ( tools !== null )
+					if ( tool_calls !== null )
 					{
 						response.tool_calls = tool_calls
 					}
@@ -97,7 +102,7 @@ class AIRouter
 
 	async chatCompletionWithResponse ( messages, options = {})
 	{
-		const { stream, tools, model, ...restOptions } = options;
+		const { stream, tools, ...restOptions } = options;
 		const isStreaming = stream;
 
 		logger.info( `Starting chatCompletionWithResponse with ${this.providers.length} providers (streaming: ${isStreaming})` );
@@ -108,11 +113,7 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const client = new OpenAI({
-					apiKey: provider.apiKey,
-					baseURL: provider.apiUrl,
-					timeout: 60000,
-				});
+				const client = this.createClient( provider );
 
 				const params = {
 					model: provider.model,
@@ -148,13 +149,9 @@ class AIRouter
 			try
 			{
 				logger.info( `Fetching models for provider: ${provider.name}` );
-				const client = new OpenAI({
-					apiKey: provider.apiKey,
-					baseURL: provider.apiUrl,
-					timeout: 60000,
-				});
+				const client = this.createClient( provider );
 				const listResponse = await client.models.list();
-				const modelList = listResponse.data && listResponse.data.length > 0 ? listResponse.data : listResponse.body || [];
+				const modelList = Array.isArray( listResponse.data ) ? listResponse.data : listResponse.body || [];
 				const model = modelList.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
 				if ( model )
 				{
