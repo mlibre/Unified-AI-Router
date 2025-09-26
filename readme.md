@@ -12,7 +12,6 @@ It supports major providers like OpenAI, Google, Grok, and more, ensuring reliab
 - [📖 Usage](#-usage)
   - [📚 Basic Library Usage](#-basic-library-usage)
   - [🔌 OpenAI-Compatible Server](#-openai-compatible-server)
-    - [Setup](#setup)
   - [🧪 Testing](#-testing)
 - [🔧 Supported Providers](#-supported-providers)
 - [🔑 API Keys](#-api-keys)
