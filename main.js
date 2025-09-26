@@ -94,6 +94,46 @@ class AIRouter
 		}
 		throw new Error( `All providers failed. Last error: ${lastError.message}` );
 	}
+
+	async chatCompletionWithResponse ( messages, options = {}, stream = false )
+	{
+		const { stream: streamOption, tools, model, ...restOptions } = options;
+		const isStreaming = stream || streamOption;
+
+		logger.info( `Starting chatCompletionWithResponse with ${this.providers.length} providers (streaming: ${isStreaming})` );
+		let lastError;
+
+		for ( const provider of this.providers )
+		{
+			try
+			{
+				logger.info( `Attempting with provider: ${provider.name}` );
+				const client = new OpenAI({
+					apiKey: provider.apiKey,
+					baseURL: provider.apiUrl,
+					timeout: 60000,
+				});
+
+				const params = {
+					model: provider.model,
+					messages,
+					...tools && tools.length > 0 ? { tools } : {},
+					stream: isStreaming,
+					...restOptions
+				};
+
+				const { data, response: rawResponse } = await client.chat.completions.create( params ).withResponse();
+				return { data, response: rawResponse }
+			}
+			catch ( error )
+			{
+				lastError = error;
+				logger.error( `Failed with ${provider.name}: ${error.message}` );
+				// Continue to next provider
+			}
+		}
+		throw new Error( `All providers failed. Last error: ${lastError.message}` );
+	}
 }
 
 module.exports = AIRouter;
