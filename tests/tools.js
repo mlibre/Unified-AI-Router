@@ -74,8 +74,12 @@ async function main ()
 {
 	try
 	{
+		const toolMap = {
+			multiply,
+			get_weather: getWeather,
+		};
 		const messages = [
-			{ role: "system", content: "You are a helpful assistant with access to tools for calculations, weather forecasts, and horoscopes. Use the multiply tool for calculations, the get_weather tool for weather information, and the get_horoscope tool for horoscopes." },
+			{ role: "system", content: "You are a helpful assistant with access to tools for calculations and weather forecasts. Use the multiply tool for calculations, the get_weather tool for weather information." },
 			{ role: "user", content: "how is weather in tehran today?" }
 		];
 
@@ -94,18 +98,12 @@ async function main ()
 				let result;
 				try
 				{
-					if ( toolCall.function.name === "multiply" )
-					{
-						result = await multiply( JSON.parse( toolCall.function.arguments ) );
-					}
-					else if ( toolCall.function.name === "get_weather" )
-					{
-						result = await getWeather( JSON.parse( toolCall.function.arguments ) );
-					}
-					else
+					const toolFn = toolMap[toolCall.function.name];
+					if ( !toolFn )
 					{
 						throw new Error( `Unknown tool: ${toolCall.function.name}` );
 					}
+					result = await toolFn( JSON.parse( toolCall.function.arguments ) );
 
 					console.log( `Tool "${toolCall.function.name}" executed with result:`, result );
 					toolResults.push({
