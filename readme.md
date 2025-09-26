@@ -103,7 +103,7 @@ To start the server locally, run:
 npm start
 ```
 
-The server listens at `http://localhost:3000/v1/chat/completions` and supports standard OpenAI endpoints like `/v1/chat/completions`.
+The server listens at `http://localhost:3000/` and supports standard OpenAI endpoints like `/v1/chat/completions`.
 
 ### 🧪 Testing
 
