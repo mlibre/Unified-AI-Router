@@ -4,8 +4,8 @@ const AIRouter = require( "../main" );
 const OpenAI = require( "openai" );
 const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
-const stream = pretty({ colorize: true, ignore: "pid,hostname" });
-const logger = pino({ base: false }, stream );
+const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
+const logger = pino({ base: false }, pinoStream );
 require( "dotenv" ).config({ quiet: true });
 
 const app = express();
