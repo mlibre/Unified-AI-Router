@@ -1,8 +1,8 @@
 const OpenAI = require( "openai" );
 const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
-const stream = pretty({ colorize: true, ignore: "pid,hostname" });
-const logger = pino({ base: false }, stream );
+const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
+const logger = pino({ base: false }, pinoStream );
 
 class AIRouter
 {
@@ -95,10 +95,10 @@ class AIRouter
 		throw new Error( `All providers failed. Last error: ${lastError.message}` );
 	}
 
-	async chatCompletionWithResponse ( messages, options = {}, stream = false )
+	async chatCompletionWithResponse ( messages, options = {})
 	{
-		const { stream: streamOption, tools, model, ...restOptions } = options;
-		const isStreaming = stream || streamOption;
+		const { stream, tools, model, ...restOptions } = options;
+		const isStreaming = stream;
 
 		logger.info( `Starting chatCompletionWithResponse with ${this.providers.length} providers (streaming: ${isStreaming})` );
 		let lastError;
