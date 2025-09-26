@@ -84,7 +84,7 @@ async function main ()
 			tools,
 		});
 
-		console.log( "Horoscope tool example response:", response );
+		console.log( "weather tool example response:", response );
 
 		const toolResults = [];
 		if ( response.tool_calls && response.tool_calls.length > 0 )
@@ -94,20 +94,20 @@ async function main ()
 				let result;
 				try
 				{
-					if ( toolCall.name === "multiply" )
+					if ( toolCall.function.name === "multiply" )
 					{
-						result = await multiply( toolCall.args );
+						result = await multiply( JSON.parse( toolCall.function.arguments ) );
 					}
-					else if ( toolCall.name === "get_weather" )
+					else if ( toolCall.function.name === "get_weather" )
 					{
-						result = await getWeather( toolCall.args );
+						result = await getWeather( JSON.parse( toolCall.function.arguments ) );
 					}
 					else
 					{
-						throw new Error( `Unknown tool: ${toolCall.name}` );
+						throw new Error( `Unknown tool: ${toolCall.function.name}` );
 					}
 
-					console.log( `Tool "${toolCall.name}" executed with result:`, result );
+					console.log( `Tool "${toolCall.function.name}" executed with result:`, result );
 					toolResults.push({
 						tool_call_id: toolCall.id,
 						content: JSON.stringify( result )
@@ -115,7 +115,7 @@ async function main ()
 				}
 				catch ( toolError )
 				{
-					console.error( `Error executing tool "${toolCall.name}":`, toolError.message );
+					console.error( `Error executing tool "${toolCall.function.name}":`, toolError.message );
 					toolResults.push({
 						tool_call_id: toolCall.id,
 						content: `Error: ${toolError.message}`

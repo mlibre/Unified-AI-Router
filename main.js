@@ -47,13 +47,18 @@ class AIRouter
 						{
 							const content = chunk.choices[0]?.delta?.content;
 							const reasoning = chunk.choices[0]?.delta?.reasoning
-							if ( content != undefined )
+							const tool_calls_delta = chunk.choices[0]?.delta?.tool_calls;
+							if ( content !== null )
 							{
 								chunk.content = content
 							}
-							if ( reasoning != undefined )
+							if ( reasoning !== null )
 							{
 								chunk.reasoning = reasoning
+							}
+							if ( tool_calls_delta !== null )
+							{
+								chunk.tool_calls_delta = tool_calls_delta;
 							}
 							yield chunk;
 						}
@@ -65,15 +70,15 @@ class AIRouter
 					const content = response.choices[0]?.message?.content;
 					const reasoning = response.choices[0]?.message?.reasoning;
 					const tool_calls = response.choices[0]?.message?.tool_calls
-					if ( content != undefined )
+					if ( content !== null )
 					{
 						response.content = content
 					}
-					if ( reasoning != undefined )
+					if ( reasoning !== null )
 					{
 						response.reasoning = reasoning
 					}
-					if ( tools != undefined )
+					if ( tools !== null )
 					{
 						response.tool_calls = tool_calls
 					}
