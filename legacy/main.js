@@ -1,4 +1,4 @@
-const OpenAI = require( "openai" );
+const { ChatOpenAI } = require( "@langchain/openai" );
 const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
 const stream = pretty({ colorize: true, ignore: "pid,hostname" });
@@ -24,35 +24,35 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const client = new OpenAI({
+				let llm = new ChatOpenAI({
 					apiKey: provider.apiKey,
-					baseURL: provider.apiUrl,
-					timeout: 60000,
+					model: provider.model,
+					configuration: {
+						baseURL: provider.apiUrl,
+					},
+					...restOptions,
 				});
 
-				const params = {
-					model: provider.model,
-					messages,
-					...tools && tools.length > 0 ? { tools } : {},
-					stream: isStreaming,
-					...restOptions
-				};
+				if ( tools && tools.length > 0 )
+				{
+					llm = llm.bindTools( tools );
+				}
 
 				if ( isStreaming )
 				{
-					const responseStream = await client.chat.completions.create( params );
-					return responseStream;
+					const stream = await llm.stream( messages );
+					return stream;
 				}
 				else
 				{
-					const response = await client.chat.completions.create( params );
+					const response = await llm.invoke( messages, { timeout: 60000 });
 					return response;
 				}
 			}
 			catch ( error )
 			{
 				lastError = error;
-				logger.error( `Failed with ${provider.name}: ${error.message}` );
+				logger.error( `Failed with ${provider.name}:${error.message}` );
 				// Continue to next provider
 			}
 		}
