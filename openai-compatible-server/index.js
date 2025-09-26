@@ -1,6 +1,7 @@
 const express = require( "express" );
 const cors = require( "cors" );
-const AIRouter = require( "../main" ); // your existing class
+const AIRouter = require( "../main" );
+const OpenAI = require( "openai" );
 const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
 const stream = pretty({ colorize: true, ignore: "pid,hostname" });
@@ -11,16 +12,10 @@ const app = express();
 app.use( cors() );
 app.use( express.json() );
 
-/**
- * Initialize router with providers (could load from env/config)
- */
-const providers = require( "../provider" )
 
+const providers = require( "../provider" )
 const aiRouter = new AIRouter( providers );
 
-/**
- * OpenAI-compatible endpoint: POST /v1/chat/completions
- */
 app.post( "/v1/chat/completions", async ( req, res ) =>
 {
 	const { messages, model, stream, ...rest } = req.body;
@@ -72,7 +67,51 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 	}
 });
 
-// Health check
+app.get( "/v1/models", async ( req, res ) =>
+{
+	try
+	{
+		const models = [];
+		for ( const provider of providers )
+		{
+			if ( !provider.apiKey )
+			{
+				logger.warn( `Skipping provider ${provider.name} due to missing API key` );
+				continue;
+			}
+			try
+			{
+				logger.info( `Fetching models for provider: ${provider.name}` );
+				const client = new OpenAI({
+					apiKey: provider.apiKey,
+					baseURL: provider.apiUrl,
+					timeout: 60000,
+				});
+				const listResponse = await client.models.list();
+				const model = listResponse.data.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
+				if ( model )
+				{
+					models.push( model );
+				}
+				else
+				{
+					logger.warn( `Model ${provider.model} not found in provider ${provider.name}` );
+				}
+			}
+			catch ( error )
+			{
+				logger.error( `Failed to list models for provider ${provider.name}: ${error.message}` );
+			}
+		}
+		res.json({ data: models });
+	}
+	catch ( error )
+	{
+		logger.error( `Error in /v1/models: ${error.message}` );
+		res.status( 500 ).json({ error: { message: error.message } });
+	}
+});
+
 app.get( "/health", ( req, res ) => { return res.json({ status: "ok" }) });
 
 // Start server
