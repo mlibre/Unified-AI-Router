@@ -4,7 +4,6 @@ Unified AI Router is a comprehensive toolkit for AI applications, featuring:
 
 - A unified interface for multiple LLM providers with automatic fallback (the core router library)
 - An OpenAI-compatible server for seamless API integration
-- A deployable Telegram bot with Mini App interface
 
 It supports major providers like OpenAI, Google, Grok, and more, ensuring reliability and flexibility.
 
@@ -31,15 +30,14 @@ It supports major providers like OpenAI, Google, Grok, and more, ensuring reliab
 - **OpenAI-Compatible Server**: Drop-in replacement for the OpenAI API, enabling easy integration with existing tools and clients
 - **Streaming and Non-Streaming Support**: Handles both streaming and non-streaming responses
 - **Tool Calling**: Full support for tools in LLM interactions
-- **Telegram Bot Integration**: Deployable as a Telegram bot with an interactive Mini App interface
 
 ## 🛠️ Installation
 
 ```bash
 npm i unified-ai-router
 # OR
-git clone https://github.com/mlibre/AIRouter
-cd AIRouter
+git clone https://github.com/mlibre/Unified-AI-Router
+cd Unified-AI-Router
 npm i
 ```
 
@@ -89,13 +87,13 @@ The server uses the provider configurations defined in [provider.js](provider.js
 
 #### Setup
 
-1. Copy the example environment file:
+1. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey` (referencing the corresponding env variable), `model`, and `apiUrl` for the providers you want to use.
+
+2. Copy the example environment file:
 
    ```bash
    cp .env.example .env
    ```
-
-2. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey` (referencing the corresponding env variable), `model`, and `apiUrl` for the providers you want to use.
 
 3. Edit `.env` and add your API keys for the desired providers (see [🔑 API Keys](#-api-keys) for sources).
 
