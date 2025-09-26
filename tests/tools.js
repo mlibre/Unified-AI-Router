@@ -110,7 +110,8 @@ async function main ()
 					console.log( `Tool "${toolCall.function.name}" executed with result:`, result );
 					toolResults.push({
 						tool_call_id: toolCall.id,
-						content: JSON.stringify( result )
+						content: JSON.stringify( result ),
+						name: toolCall.function.name
 					});
 				}
 				catch ( toolError )
@@ -118,7 +119,8 @@ async function main ()
 					console.error( `Error executing tool "${toolCall.function.name}":`, toolError.message );
 					toolResults.push({
 						tool_call_id: toolCall.id,
-						content: `Error: ${toolError.message}`
+						content: `Error: ${toolError.message}`,
+						name: toolCall.function.name
 					});
 				}
 			}
@@ -137,7 +139,8 @@ async function main ()
 						return {
 							role: "tool",
 							content: tr.content,
-							tool_call_id: tr.tool_call_id
+							tool_call_id: tr.tool_call_id,
+							name: tr.name
 						}
 					})
 				];
