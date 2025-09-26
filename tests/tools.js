@@ -70,17 +70,45 @@ const tools = [
 	},
 ];
 
+const toolMap = {
+	multiply,
+	get_weather: getWeather,
+};
+
+async function executeTool ( toolCall )
+{
+	const toolFn = toolMap[toolCall.function.name];
+	if ( !toolFn )
+	{
+		throw new Error( `Unknown tool: ${toolCall.function.name}` );
+	}
+
+	let result;
+	try
+	{
+		const args = JSON.parse( toolCall.function.arguments );
+		result = await toolFn( args );
+		console.log( `Tool "${toolCall.function.name}" executed with result:`, result );
+	}
+	catch ( toolError )
+	{
+		console.error( `Error executing tool "${toolCall.function.name}":`, toolError.message );
+		result = `Error: ${toolError.message}`;
+	}
+
+	return {
+		tool_call_id: toolCall.id,
+		content: typeof result === "object" ? JSON.stringify( result ) : result,
+		name: toolCall.function.name
+	};
+}
 async function main ()
 {
 	try
 	{
-		const toolMap = {
-			multiply,
-			get_weather: getWeather,
-		};
 		const messages = [
 			{ role: "system", content: "You are a helpful assistant with access to tools for calculations and weather forecasts. Use the multiply tool for calculations, the get_weather tool for weather information." },
-			{ role: "user", content: "how is weather in tehran today?" }
+			{ role: "user", content: "how is weather in tehran today and what 1099*45?" }
 		];
 
 		const response = await llm.chatCompletion( messages, {
@@ -95,32 +123,8 @@ async function main ()
 		{
 			for ( const toolCall of response.tool_calls )
 			{
-				let result;
-				try
-				{
-					const toolFn = toolMap[toolCall.function.name];
-					if ( !toolFn )
-					{
-						throw new Error( `Unknown tool: ${toolCall.function.name}` );
-					}
-					result = await toolFn( JSON.parse( toolCall.function.arguments ) );
-
-					console.log( `Tool "${toolCall.function.name}" executed with result:`, result );
-					toolResults.push({
-						tool_call_id: toolCall.id,
-						content: JSON.stringify( result ),
-						name: toolCall.function.name
-					});
-				}
-				catch ( toolError )
-				{
-					console.error( `Error executing tool "${toolCall.function.name}":`, toolError.message );
-					toolResults.push({
-						tool_call_id: toolCall.id,
-						content: `Error: ${toolError.message}`,
-						name: toolCall.function.name
-					});
-				}
+				const toolResult = await executeTool( toolCall );
+				toolResults.push( toolResult );
 			}
 
 			if ( toolResults.length > 0 )
