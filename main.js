@@ -41,11 +41,37 @@ class AIRouter
 				if ( isStreaming )
 				{
 					const responseStream = await client.chat.completions.create( params );
-					return responseStream;
+					return ( async function* ()
+					{
+						for await ( const chunk of responseStream )
+						{
+							const content = chunk.choices[0]?.delta?.content;
+							const reasoning = chunk.choices[0]?.delta?.reasoning
+							if ( content != undefined )
+							{
+								chunk.content = content
+							}
+							if ( reasoning != undefined )
+							{
+								chunk.reasoning = reasoning
+							}
+							yield chunk;
+						}
+					})();
 				}
 				else
 				{
 					const response = await client.chat.completions.create( params );
+					const content = response.choices[0]?.message?.content;
+					const reasoning = response.choices[0]?.message?.reasoning
+					if ( content != undefined )
+					{
+						response.content = content
+					}
+					if ( reasoning != undefined )
+					{
+						response.reasoning = reasoning
+					}
 					return response;
 				}
 			}

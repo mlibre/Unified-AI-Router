@@ -1,11 +1,17 @@
 module.exports = [
+
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
+		model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
+		apiUrl: "https://openrouter.ai/api/v1",
+	},
 	{
 		name: "openrouter",
 		apiKey: process.env.OPENROUTER_API_KEY,
 		model: "x-ai/grok-4-fast:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
-
 	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
