@@ -1,7 +1,6 @@
 const express = require( "express" );
 const cors = require( "cors" );
 const AIRouter = require( "../main" );
-const OpenAI = require( "openai" );
 const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
 const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
@@ -11,7 +10,6 @@ require( "dotenv" ).config({ quiet: true });
 const app = express();
 app.use( cors() );
 app.use( express.json() );
-
 
 const providers = require( "../provider" )
 const aiRouter = new AIRouter( providers );
@@ -71,39 +69,7 @@ app.get( "/v1/models", async ( req, res ) =>
 {
 	try
 	{
-		const models = [];
-		for ( const provider of providers )
-		{
-			if ( !provider.apiKey )
-			{
-				logger.warn( `Skipping provider ${provider.name} due to missing API key` );
-				continue;
-			}
-			try
-			{
-				logger.info( `Fetching models for provider: ${provider.name}` );
-				const client = new OpenAI({
-					apiKey: provider.apiKey,
-					baseURL: provider.apiUrl,
-					timeout: 60000,
-				});
-				const listResponse = await client.models.list();
-				const modelList = listResponse.data && listResponse.data.length > 0 ? listResponse.data : listResponse.body || [];
-				const model = modelList.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
-				if ( model )
-				{
-					models.push( model );
-				}
-				else
-				{
-					logger.warn( `Model ${provider.model} not found in provider ${provider.name}` );
-				}
-			}
-			catch ( error )
-			{
-				logger.error( `Failed to list models for provider ${provider.name}: ${error.message}` );
-			}
-		}
+		const models = await aiRouter.getModels();
 		res.json({ data: models });
 	}
 	catch ( error )

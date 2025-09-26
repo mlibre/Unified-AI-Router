@@ -134,6 +134,43 @@ class AIRouter
 		}
 		throw new Error( `All providers failed. Last error: ${lastError.message}` );
 	}
+	async getModels ()
+	{
+		const models = [];
+		for ( const provider of this.providers )
+		{
+			if ( !provider.apiKey )
+			{
+				logger.warn( `Skipping provider ${provider.name} due to missing API key` );
+				continue;
+			}
+			try
+			{
+				logger.info( `Fetching models for provider: ${provider.name}` );
+				const client = new OpenAI({
+					apiKey: provider.apiKey,
+					baseURL: provider.apiUrl,
+					timeout: 60000,
+				});
+				const listResponse = await client.models.list();
+				const modelList = listResponse.data && listResponse.data.length > 0 ? listResponse.data : listResponse.body || [];
+				const model = modelList.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
+				if ( model )
+				{
+					models.push( model );
+				}
+				else
+				{
+					logger.warn( `Model ${provider.model} not found in provider ${provider.name}` );
+				}
+			}
+			catch ( error )
+			{
+				logger.error( `Failed to list models for provider ${provider.name}: ${error.message}` );
+			}
+		}
+		return models;
+	}
 }
 
 module.exports = AIRouter;
