@@ -84,7 +84,20 @@ console.log(response);
 
 ### 🔌 OpenAI-Compatible Server
 
-The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.
+The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.  
+The server uses the provider configurations defined in [provider.js](provider.js) file, and requires API keys set in a `.env` file.
+
+#### Setup
+
+1. Copy the example environment file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey` (referencing the corresponding env variable), `model`, and `apiUrl` for the providers you want to use.
+
+3. Edit `.env` and add your API keys for the desired providers (see [🔑 API Keys](#-api-keys) for sources).
 
 To start the server locally, run:
 

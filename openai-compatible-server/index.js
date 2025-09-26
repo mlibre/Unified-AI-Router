@@ -88,7 +88,8 @@ app.get( "/v1/models", async ( req, res ) =>
 					timeout: 60000,
 				});
 				const listResponse = await client.models.list();
-				const model = listResponse.data.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
+				const modelList = listResponse.data && listResponse.data.length > 0 ? listResponse.data : listResponse.body || [];
+				const model = modelList.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
 				if ( model )
 				{
 					models.push( model );
