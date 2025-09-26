@@ -1,104 +1,117 @@
 const AIRouter = require( "../main" );
-const { tool } = require( "langchain" );
-const z = require( "zod" );
 require( "dotenv" ).config({ quiet: true });
 
 const providers = require( "../provider" )
 const llm = new AIRouter( providers );
 
-// Example tool: Multiply two numbers
-const multiplyTool = tool(
-	async ({ a, b }) =>
+// Tool functions
+async function multiply ({ a, b })
+{
+	return {
+		result: a * b,
+	}
+}
+
+async function getWeather ({ city })
+{
+	// Mock weather data for demonstration
+	const mockWeather = {
+		city,
+		temperature: 25,
+		condition: "Sunny",
+		humidity: 50,
+		wind: "10 km/h"
+	};
+	return mockWeather;
+}
+
+const tools = [
 	{
-		return {
-			result: a * b,
-		}
-	},
-	{
+		type: "function",
 		name: "multiply",
 		description: "Multiply two numbers",
-		schema: z.object({
-			a: z.number().describe( "First number" ),
-			b: z.number().describe( "Second number" ),
-		}),
-	}
-);
-
-const weatherTool = tool(
-	async ({ city }) =>
-	{
-		// Mock weather data for demonstration
-		const mockWeather = {
-			city,
-			temperature: 25,
-			condition: "Sunny",
-			humidity: 50,
-			wind: "10 km/h"
-		};
-		return mockWeather;
+		parameters: {
+			type: "object",
+			properties: {
+				a: {
+					type: "number",
+					description: "First number"
+				},
+				b: {
+					type: "number",
+					description: "Second number"
+				},
+			},
+			required: ["a", "b"],
+		},
 	},
 	{
+		type: "function",
 		name: "get_weather",
 		description: "Get the current weather forecast for a given city.",
-		schema: z.object({
-			city: z.string().describe( "The name of the city (e.g., Tehran) to get the weather for." )
-		})
-	}
-);
+		parameters: {
+			type: "object",
+			properties: {
+				city: {
+					type: "string",
+					description: "The name of the city (e.g., Tehran) to get the weather for."
+				}
+			},
+			required: ["city"],
+		},
+	},
+];
+
 async function main ()
 {
 	try
 	{
 		const messages = [
-			{ role: "system", content: "You are a helpful assistant with access to tools for calculations and weather forecasts. Use the multiply tool for calculations and the get_weather tool for weather information." },
-			{ role: "user", content: "What's the weather like in Tehran today?" }
+			{ role: "system", content: "You are a helpful assistant with access to tools for calculations, weather forecasts, and horoscopes. Use the multiply tool for calculations, the get_weather tool for weather information, and the get_horoscope tool for horoscopes." },
+			{ role: "user", content: "What's the horoscope for Taurus today?" }
 		];
 
 		const response = await llm.chatCompletion( messages, {
 			temperature: 0,
-			tools: [multiplyTool, weatherTool],
+			tools,
 		});
 
-		console.log( "Weather tool example response:", response );
+		console.log( "Horoscope tool example response:", response );
 
 		const toolResults = [];
 		if ( response.tool_calls && response.tool_calls.length > 0 )
 		{
 			for ( const toolCall of response.tool_calls )
 			{
-				let selectedTool;
-				if ( toolCall.name === "multiply" )
+				let result;
+				try
 				{
-					selectedTool = multiplyTool;
-				}
-				else if ( toolCall.name === "get_weather" )
-				{
-					selectedTool = weatherTool;
-				}
+					if ( toolCall.name === "multiply" )
+					{
+						result = await multiply( toolCall.args );
+					}
+					else if ( toolCall.name === "get_weather" )
+					{
+						result = await getWeather( toolCall.args );
+					}
+					else
+					{
+						throw new Error( `Unknown tool: ${toolCall.name}` );
+					}
 
-				if ( selectedTool )
-				{
-					try
-					{
-						const result = await selectedTool.call( toolCall.args );
-						console.log( `Tool "${toolCall.name}" executed with result:`, result );
-						toolResults.push({
-							tool_call_id: toolCall.id,
-							content: JSON.stringify( result )
-						});
-					}
-					catch ( toolError )
-					{
-						console.error( `Error executing tool "${toolCall.name}":`, toolError.message );
-						toolResults.push({
-							tool_call_id: toolCall.id,
-							content: `Error: ${toolError.message}`
-						});
-					}
+					console.log( `Tool "${toolCall.name}" executed with result:`, result );
+					toolResults.push({
+						tool_call_id: toolCall.id,
+						content: JSON.stringify( result )
+					});
 				}
-				else
+				catch ( toolError )
 				{
-					console.warn( `Unknown tool: ${toolCall.name}` );
+					console.error( `Error executing tool "${toolCall.name}":`, toolError.message );
+					toolResults.push({
+						tool_call_id: toolCall.id,
+						content: `Error: ${toolError.message}`
+					});
 				}
 			}
 
@@ -122,7 +135,7 @@ async function main ()
 				];
 				const finalResponse = await llm.chatCompletion( updatedMessages, {
 					temperature: 0,
-					tools: [multiplyTool, weatherTool]
+					tools
 				});
 				console.log( "Final response after tool execution:", finalResponse.content || finalResponse );
 			}
