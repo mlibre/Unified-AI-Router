@@ -12,6 +12,7 @@ It supports major providers like OpenAI, Google, Grok, and more, ensuring reliab
 - [📖 Usage](#-usage)
   - [📚 Basic Library Usage](#-basic-library-usage)
   - [🔌 OpenAI-Compatible Server](#-openai-compatible-server)
+    - [Setup](#setup)
   - [🧪 Testing](#-testing)
 - [🔧 Supported Providers](#-supported-providers)
 - [🔑 API Keys](#-api-keys)
@@ -103,7 +104,13 @@ To start the server locally, run:
 npm start
 ```
 
-The server listens at `http://localhost:3000/` and supports standard OpenAI endpoints like `/v1/chat/completions`.
+The server listens at `http://localhost:3000/` and supports the following OpenAI-compatible endpoints:
+
+- `POST /v1/chat/completions` - Chat completions (streaming and non-streaming)
+- `POST /chat/completions` - Chat completions (streaming and non-streaming)
+- `GET /v1/models` - List available models
+- `GET /models` - List available models
+- `GET /health` - Health check
 
 ### 🧪 Testing
 
@@ -135,6 +142,7 @@ node tests/tools.js
 - Vercel
 - Cerebras
 - LLM7
+- Any Other OpenAI Compatible Server
 
 ## 🔑 API Keys
 
@@ -150,7 +158,6 @@ Get your API keys from the following providers:
 - **Vercel AI Gateway**: [vercel.com/docs/ai/ai-gateway](https://vercel.com/docs/ai-gateway)
 - **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
 - **LLM7**: [token.llm7.io](https://token.llm7.io/)
-  - Seems like it does not support tool calling
 
 ## 🔼 Vercel Deployment (Telegram Bot)
 
@@ -212,19 +219,14 @@ curl "https://ai-router-flame.vercel.app/api?register_webhook=true"
 
 After deploying the bot, you need to configure the Telegram Mini App and menu button:
 
-1. **Configure Mini App:**
-   - Go to [@BotFather](https://t.me/botfather)
-   - Send `/mybots` and select your bot
-   - Go to `Bot Settings` → `Configure Mini App`
-   - Set the Mini App URL to: `https://ai-router-flame.vercel.app`
+**Configure Mini App:**
 
-2. **Configure Menu Button:**
-   - Go to [@BotFather](https://t.me/botfather)
-   - Send `/mybots` and select your bot
-   - Go to `Bot Settings` → `Menu Button`
-   - Ensure the URL shown is: `https://ai-router-flame.vercel.app`
+- Go to [@BotFather](https://t.me/botfather)
+- Send `/mybots` and select your bot
+- Go to `Bot Settings` → `Configure Mini App`
+- Set the Mini App URL to: `https://ai-router-flame.vercel.app`
 
-Once configured, users can access the Mini App by sending `/start` or `/app` to your bot, or through the menu button.
+Once configured, users can access the Mini App by sending `/start` or `/app` to your bot.
 
 An example of a deployed bot is accessible on Telegram: [https://t.me/freePulseAIbot](https://t.me/freePulseAIbot)
 
