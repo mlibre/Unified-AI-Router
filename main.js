@@ -134,6 +134,7 @@ class AIRouter
 		}
 		throw new Error( `All providers failed. Last error: ${lastError.message}` );
 	}
+
 	async getModels ()
 	{
 		const models = [];

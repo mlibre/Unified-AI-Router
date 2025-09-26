@@ -31,7 +31,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 
 		try
 		{
-			const result = await aiRouter.chatCompletionWithResponse( messages, { model, ...rest });
+			const result = await aiRouter.chatCompletionWithResponse( messages, { model, stream, ...rest });
 
 			for await ( const chunk of result.data )
 			{
@@ -53,7 +53,7 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 	{
 		try
 		{
-			const result = await aiRouter.chatCompletionWithResponse( messages, { model, ...rest });
+			const result = await aiRouter.chatCompletionWithResponse( messages, { model, stream, ...rest });
 
 			res.json( result.data );
 		}
@@ -75,6 +75,20 @@ app.get( "/v1/models", async ( req, res ) =>
 	catch ( error )
 	{
 		logger.error( `Error in /v1/models: ${error.message}` );
+		res.status( 500 ).json({ error: { message: error.message } });
+	}
+});
+
+app.get( "/models", async ( req, res ) =>
+{
+	try
+	{
+		const models = await aiRouter.getModels();
+		res.json({ data: models });
+	}
+	catch ( error )
+	{
+		logger.error( `Error in /models: ${error.message}` );
 		res.status( 500 ).json({ error: { message: error.message } });
 	}
 });
