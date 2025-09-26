@@ -63,7 +63,8 @@ class AIRouter
 				{
 					const response = await client.chat.completions.create( params );
 					const content = response.choices[0]?.message?.content;
-					const reasoning = response.choices[0]?.message?.reasoning
+					const reasoning = response.choices[0]?.message?.reasoning;
+					const tool_calls = response.choices[0]?.message?.tool_calls
 					if ( content != undefined )
 					{
 						response.content = content
@@ -71,6 +72,10 @@ class AIRouter
 					if ( reasoning != undefined )
 					{
 						response.reasoning = reasoning
+					}
+					if ( tools != undefined )
+					{
+						response.tool_calls = tool_calls
 					}
 					return response;
 				}

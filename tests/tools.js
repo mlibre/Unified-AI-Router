@@ -28,36 +28,44 @@ async function getWeather ({ city })
 const tools = [
 	{
 		type: "function",
-		name: "multiply",
-		description: "Multiply two numbers",
-		parameters: {
-			type: "object",
-			properties: {
-				a: {
-					type: "number",
-					description: "First number"
+		function: {
+			name: "multiply",
+			description: "Multiply two numbers",
+			parameters: {
+				type: "object",
+				properties: {
+					a: {
+						type: "number",
+						description: "First number"
+					},
+					b: {
+						type: "number",
+						description: "Second number"
+					},
 				},
-				b: {
-					type: "number",
-					description: "Second number"
-				},
+				required: ["a", "b"],
+				additionalProperties: false,
 			},
-			required: ["a", "b"],
+			strict: true,
 		},
 	},
 	{
 		type: "function",
-		name: "get_weather",
-		description: "Get the current weather forecast for a given city.",
-		parameters: {
-			type: "object",
-			properties: {
-				city: {
-					type: "string",
-					description: "The name of the city (e.g., Tehran) to get the weather for."
-				}
+		function: {
+			name: "get_weather",
+			description: "Get the current weather forecast for a given city.",
+			parameters: {
+				type: "object",
+				properties: {
+					city: {
+						type: "string",
+						description: "The name of the city (e.g., Tehran) to get the weather for."
+					}
+				},
+				required: ["city"],
+				additionalProperties: false,
 			},
-			required: ["city"],
+			strict: true,
 		},
 	},
 ];
@@ -68,7 +76,7 @@ async function main ()
 	{
 		const messages = [
 			{ role: "system", content: "You are a helpful assistant with access to tools for calculations, weather forecasts, and horoscopes. Use the multiply tool for calculations, the get_weather tool for weather information, and the get_horoscope tool for horoscopes." },
-			{ role: "user", content: "What's the horoscope for Taurus today?" }
+			{ role: "user", content: "how is weather in tehran today?" }
 		];
 
 		const response = await llm.chatCompletion( messages, {
