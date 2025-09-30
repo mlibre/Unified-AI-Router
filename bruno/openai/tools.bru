@@ -1,0 +1,80 @@
+meta {
+  name: tools
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{address}}/chat/completions
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: {{token}}
+}
+
+body:json {
+  {
+    "model": "x-ai/grok-4-fast:free",
+    "messages": [
+      {
+        "role": "user",
+        "content": "What's the weather like in Tehran and Gaza today?"
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get the current weather forecast for a given city.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string",
+                "description": "The name of the city (e.g., Tehran) to get the weather for."
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "multiply",
+          "description": "Multiply two numbers",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "number",
+                "description": "First number"
+              },
+              "b": {
+                "type": "number",
+                "description": "Second number"
+              }
+            },
+            "required": [
+              "a",
+              "b"
+            ]
+          }
+        }
+      }
+    ],
+    "tool_choice": "auto",
+    "stream": false,
+    "temperature":0
+  }
+}
+
+settings {
+  encodeUrl: false
+}
