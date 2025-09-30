@@ -1,4 +1,4 @@
-const AIRouter = require('../../main.js');
+const AIRouter = require('unified-ai-router');
 
 export interface Provider {
   name: string;

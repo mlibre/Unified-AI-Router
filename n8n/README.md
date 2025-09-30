@@ -4,24 +4,18 @@ This is an n8n custom node that integrates the Unified AI Router, providing a un
 
 ## Installation
 
-1. Install the dependencies:
-
-   ```
-   npm install
-   ```
-
-2. Build the node:
-
-   ```
-   npm run build
-   npm link
-   mkdir .n8n/custom
-   cd .n8n/custom
-   npm init
-   npm link @mlibre/n8n-nodes-unified-ai-router
-   ```
-
-3. Install the node in your n8n instance. Copy the `dist` folder to your n8n custom nodes directory, or publish to npm and install globally.
+```bash
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+npm link
+mkdir -p $HOME/.n8n/custom
+cd $HOME/.n8n/custom
+npm init -y
+npm link @mlibre/n8n-nodes-unified-ai-router
+cd $HOME/.n8n/custom/node_modules/@mlibre/n8n-nodes-unified-ai-router
+npm install --production
+```
 
 ## Testing
 
@@ -29,21 +23,16 @@ To test the node locally:
 
 1. Install n8n globally:
 
-   ```
+   ```bash
    npm install n8n -g
-   ```
-
-2. Reset user management:
-
-   ```
    n8n user-management:reset
    ```
 
-3. Start n8n:
+2. Start n8n:
 
-   ```
-   N8N_DIAGNOSTICS_ENABLED=false N8N_SECURE_COOKIE=false n8n
-   ```
+```bash
+N8N_CUSTOM_EXTENSIONS=$HOME/.n8n/custom N8N_DIAGNOSTICS_ENABLED=false N8N_SECURE_COOKIE=false npx n8n
+```
 
 ## Usage
 
