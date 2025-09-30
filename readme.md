@@ -15,10 +15,6 @@ It supports major providers like OpenAI, Google, Grok, and more, ensuring reliab
   - [🧪 Testing](#-testing)
 - [🔧 Supported Providers](#-supported-providers)
 - [🔑 API Keys](#-api-keys)
-- [☁️ Cloudflare Deployment (Telegram Bot)](#️-cloudflare-deployment-telegram-bot)
-  - [📋 Prerequisites](#-prerequisites)
-  - [🚀 Deployment Steps](#-deployment-steps)
-  - [📱 Enable Telegram Mini App](#-enable-telegram-mini-app)
 - [📁 Project Structure](#-project-structure)
 - [📄 License](#-license)
 
