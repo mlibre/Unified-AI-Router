@@ -139,7 +139,7 @@ Ensure `provider.js` is configured with API keys in `.env` (as above). Push to G
    ```bash
    curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
    render login
-   render services  # Manage services
+   render services
    render deploys create --confirm
    ```
 
