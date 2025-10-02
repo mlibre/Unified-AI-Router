@@ -2,12 +2,6 @@ module.exports = [
 	{
 		name: "openrouter",
 		apiKey: process.env.OPENROUTER_API_KEY,
-		model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
-		apiUrl: "https://openrouter.ai/api/v1",
-	},
-	{
-		name: "openrouter",
-		apiKey: process.env.OPENROUTER_API_KEY,
 		model: "x-ai/grok-4-fast:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
@@ -17,13 +11,6 @@ module.exports = [
 		model: "gpt-oss-120b",
 		apiUrl: "https://api.cerebras.ai/v1",
 	},
-	{
-		name: "openrouter",
-		apiKey: process.env.OPENROUTER_API_KEY,
-		model: "z-ai/glm-4.5-air:free",
-		apiUrl: "https://openrouter.ai/api/v1",
-	},
-
 	{
 		name: "vercel",
 		apiKey: process.env.VERCEL_AI_GATEWAY_API_KEY,
@@ -36,12 +23,17 @@ module.exports = [
 		model: "openai/gpt-oss-120b",
 		apiUrl: "https://api.groq.com/openai/v1",
 	},
-
 	{
 		name: "google",
 		apiKey: process.env.GOOGLE_API_KEY,
 		model: "gemini-2.5-pro",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
+	},
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
+		model: "z-ai/glm-4.5-air:free",
+		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
 		name: "google",
