@@ -116,11 +116,11 @@ class AIRouter
 				const client = this.createClient( provider );
 
 				const params = {
-					model: provider.model,
 					messages,
 					...tools && tools.length > 0 ? { tools } : {},
 					stream: isStreaming,
-					...restOptions
+					...restOptions,
+					model: provider.model
 				};
 
 				const { data, response: rawResponse } = await client.chat.completions.create( params ).withResponse();
