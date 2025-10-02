@@ -81,15 +81,15 @@ console.log(response);
 The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.  
 The server uses the provider configurations defined in [provider.js](provider.js) file, and requires API keys set in a `.env` file.
 
-1. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey` (referencing the corresponding env variable), `model`, and `apiUrl` for the providers you want to use.
-
-2. Copy the example environment file:
+1. Copy the example environment file:
 
    ```bash
    cp .env.example .env
    ```
 
-3. Edit `.env` and add your API keys for the desired providers (see [🔑 API Keys](#-api-keys) for sources).
+2. Edit `.env` and add your API keys for the desired providers (see [🔑 API Keys](#-api-keys) for sources).
+
+3. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey` (referencing the corresponding env variable), `model`, and `apiUrl` for the providers you want to use.
 
 To start the server locally, run:
 
