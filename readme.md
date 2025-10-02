@@ -140,7 +140,7 @@ Ensure `provider.js` is configured with API keys in `.env` (as above). Push to G
    curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
    render login
    render services
-   render deploys create --confirm
+   render deploys create srv-d3f7iqmmcj7s73e67feg --commit HEAD --confirm --output text
    ```
 
 3. **Verify**:
