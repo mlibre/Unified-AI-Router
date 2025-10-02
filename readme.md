@@ -123,6 +123,30 @@ node tests/openai-server-stream.js
 node tests/tools.js
 ```
 
+### 🌐 Deploying to Render.com
+
+Ensure `provider.js` is configured with API keys in `.env` (as above). Push to GitHub, then:
+
+1. **Dashboard**:
+   - Create Web Service on [Render.com](https://render.com), connect repo.
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Add env vars (e.g., `OPENAI_API_KEY=sk-...`).
+   - Deploy.
+
+2. **CLI**:
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
+   render login
+   render services  # Manage services
+   ```
+
+3. **Verify**:
+   - Access `https://your-service.onrender.com/models` (e.g., [unified-ai-router.onrender.com/models](https://unified-ai-router.onrender.com/models)).
+
+See [Render docs](https://render.com/docs) for details.
+
 ## 🔧 Supported Providers
 
 - OpenAI
