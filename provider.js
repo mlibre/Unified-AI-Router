@@ -1,10 +1,23 @@
 module.exports = [
 	{
+		name: "gemini",
+		apiKey: process.env.GEMINI_API_KEY_2,
+		model: "gemini-2.5-pro",
+		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
+	},
+	{
 		name: "openrouter",
 		apiKey: process.env.OPENROUTER_API_KEY,
 		model: "x-ai/grok-4-fast:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
+	{
+		name: "cerebras",
+		apiKey: process.env.CEREBRAS_API_KEY_2,
+		model: "gpt-oss-120b",
+		apiUrl: "https://api.cerebras.ai/v1",
+	},
+
 	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
@@ -25,7 +38,7 @@ module.exports = [
 	},
 	{
 		name: "google",
-		apiKey: process.env.GOOGLE_API_KEY,
+		apiKey: process.env.GEMINI_API_KEY,
 		model: "gemini-2.5-pro",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
@@ -37,7 +50,7 @@ module.exports = [
 	},
 	{
 		name: "google",
-		apiKey: process.env.GOOGLE_API_KEY,
+		apiKey: process.env.GEMINI_API_KEY,
 		model: "gemini-2.5-flash",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
@@ -46,6 +59,12 @@ module.exports = [
 		apiKey: process.env.ZAI_API_KEY,
 		model: "glm-4.5-flash",
 		apiUrl: "https://api.z.ai/api/paas/v4",
+	},
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY_2,
+		model: "x-ai/grok-4-fast:free",
+		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
 		name: "openai",

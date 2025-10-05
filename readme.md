@@ -56,7 +56,7 @@ const providers = [
   },
   {
     name: "google",
-    apiKey: process.env.GOOGLE_API_KEY,
+    apiKey: process.env.GEMINI_API_KEY,
     model: "gemini-2.5-pro",
     apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/"
   }
