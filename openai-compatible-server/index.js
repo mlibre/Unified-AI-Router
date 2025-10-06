@@ -11,7 +11,7 @@ const aiRouter = new AIRouter( providers );
 
 const app = express();
 app.use( cors() );
-app.use( express.json() );
+app.use( express.json({ limit: "50mb" }) );
 
 
 app.post( "/v1/chat/completions", async ( req, res ) =>
