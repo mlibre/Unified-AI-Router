@@ -23,15 +23,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Not needed if lastUpdated is not enabled
+      # - uses: pnpm/action-setup@v3 # Uncomment this block if you're using pnpm
+      #   with:
+      #     version: 9 # Not needed if you've set "packageManager" in package.json
+      # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: npm # or pnpm / yarn
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
       - name: Install dependencies
-        run: npm install
+        run: npm install # changed from `npm ci` because package-lock.json might not be present
       - name: Build with VitePress
-        run: npm run docs:build
+        run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -39,61 +45,13 @@ jobs:
 
   # Deployment job
   deploy:
-    needs: build
     environment:
       name: github-pages
-      # url will be set by deployment step output
       url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
     runs-on: ubuntu-latest
+    name: Deploy
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
-
-  # Fail-safe job: if the previous deploy produced no site files,
-  # rebuild and re-deploy. Runs after `deploy`.
-  ensure-dist:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Check for built site
-        id: check-dist
-        run: |
-          if [ -d docs/.vitepress/dist ] && [ "$(ls -A docs/.vitepress/dist 2>/dev/null)" ]; then
-            echo "missing=false" >> $GITHUB_OUTPUT
-            echo "Found docs/.vitepress/dist and it contains files — skipping rebuild."
-          else
-            echo "missing=true" >> $GITHUB_OUTPUT
-            echo "docs/.vitepress/dist missing or empty — will rebuild and redeploy."
-          fi
-
-      # Only run build/upload/deploy if dist is missing/empty
-      - name: Setup Node (for rebuild)
-        if: ${{ steps.check-dist.outputs.missing == 'true' }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies (for rebuild)
-        if: ${{ steps.check-dist.outputs.missing == 'true' }}
-        run: npm install
-
-      - name: Rebuild VitePress site
-        if: ${{ steps.check-dist.outputs.missing == 'true' }}
-        run: npm run docs:build
-
-      - name: Upload rebuilt artifact
-        if: ${{ steps.check-dist.outputs.missing == 'true' }}
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
-
-      - name: Deploy rebuilt site
-        if: ${{ steps.check-dist.outputs.missing == 'true' }}
         uses: actions/deploy-pages@v4
