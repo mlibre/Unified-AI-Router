@@ -155,12 +155,3 @@ node tests/chat.js
 * `Skipping provider ... due to missing API key` — check `.env` and deployment env configuration.
 * `Model <name> not found` — ensure the `model` matches what the provider exposes or remove that provider from `provider.js` until you pick the right model.
 * `All providers failed` — examine provider-specific error logs (the router logs each provider failure) and verify network access / API quotas.
-
----
-
-## Quick checklist before first run
-
-* [ ] `cp .env.example .env` and set API keys
-* [ ] Edit `provider.js` to enable and order the providers you want
-* [ ] `npm install` and `npm start`
-* [ ] Run `node tests/openai-server-non-stream.js` to validate

@@ -4,6 +4,11 @@ export default defineConfig({
 	base: "/Unified-AI-Router/",
 	title: "Unified AI Router",
 	description: "OpenAI-compatible router with multi-provider fallback.",
+	head: [
+		["link", { rel: "icon", href: "favicon.png" }],
+		["link", { rel: "icon", type: "image/png", href: "favicon.png" }],
+		["link", { rel: "apple-touch-icon", href: "favicon.png" }]
+	 ],
 	themeConfig: {
 		nav: [
 			{ text: "Home", link: "/" },
