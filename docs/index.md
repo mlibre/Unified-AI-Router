@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Unified AI Router"
-  text: "A lightweight OpenAI-compatible router that provides unified, high-availability access to multiple LLM providers."
+  text: "A lightweight OpenAI-compatible router in Nodejs"
   tagline: "OpenAI-compatible endpoints, automatic fallback, streaming support, and tool-calling — all in one lightweight package."
   actions:
     - theme: brand
@@ -21,5 +21,5 @@ features:
   - title: Tool calling & streaming
     details: Supports tool-calling metadata and SSE streaming to integrate with existing tooling.
   - title: Easy to self-host
-    details: Run locally or deploy to Render, Vercel, or GitHub Pages for docs.
+    details: Run locally or deploy to cloud host providers.
 ---

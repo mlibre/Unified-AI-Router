@@ -5,7 +5,7 @@ This page walks you through running the OpenAI-compatible server locally and cal
 ## 1) Install
 
 ```bash
-git clone https://github.com/<your-user>/Unified-AI-Router.git
+git clone https://github.com/mlibre/Unified-AI-Router.git
 cd Unified-AI-Router
 npm install
 ````
