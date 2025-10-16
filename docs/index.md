@@ -1,25 +1,25 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
-  name: "Lite OpenAI Compatible Server"
-  text: "The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability. "
-  tagline: My great project tagline
+  name: "Unified AI Router"
+  text: "A lightweight OpenAI-compatible router that provides unified, high-availability access to multiple LLM providers."
+  tagline: "OpenAI-compatible endpoints, automatic fallback, streaming support, and tool-calling — all in one lightweight package."
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Quickstart
+      link: /quickstart
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Docs (API & Examples)
+      link: /overview
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Multi-provider fallback
+    details: If one provider fails, requests automatically fall back to the next available provider.
+  - title: OpenAI-compatible API
+    details: Run a drop-in replacement for the OpenAI chat completion endpoints (streaming & non-streaming).
+  - title: Tool calling & streaming
+    details: Supports tool-calling metadata and SSE streaming to integrate with existing tooling.
+  - title: Easy to self-host
+    details: Run locally or deploy to Render, Vercel, or GitHub Pages for docs.
 ---
-
