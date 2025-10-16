@@ -8,14 +8,14 @@ export default defineConfig({
 		nav: [
 			{ text: "Home", link: "/" },
 			{ text: "Quickstart", link: "/quickstart" },
-			{ text: "Overview", link: "/overview" }
+			{ text: "Configuration", link: "/configuration" }
 		],
 		sidebar: [
 			{
 				text: "Guide",
 				items: [
 					{ text: "Quickstart", link: "/quickstart" },
-					{ text: "Overview & API", link: "/overview" }
+					{ text: "Configuration", link: "/configuration" }
 				]
 			}
 		],
