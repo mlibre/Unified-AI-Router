@@ -8,7 +8,7 @@ This page focuses on how to configure the router for local development and produ
 
 * Explain which environment variables the project expects and best practices for storing them.
 * Show how to author `provider.js` entries: enabling/disabling providers, ordering (fallback), and useful fields.
-* Provide examples for local, staging, and cloud deployments (Vercel / Render / GitHub Actions).
+* Provide examples for local, staging, and cloud deployments (Render.com, ...).
 * Troubleshooting tips when providers fail or models are not found.
 
 ---
@@ -27,7 +27,6 @@ cp .env.example .env
 * `OPENAI_API_KEY` — OpenAI API key
 * `GEMINI_API_KEY` — Google Gemini API key
 * `OPENROUTER_API_KEY` — OpenRouter key
-* `VERCEL_AI_GATEWAY_API_KEY` — Vercel AI Gateway key
 * `COHERE_API_KEY`, `CEREBRAS_API_KEY`, `ZAI_API_KEY`, `GROK_API_KEY`, `QROQ_API_KEY`, `LLM7_API_KEY` — other providers
 * `PORT` — optional, default 3000
 
@@ -36,7 +35,7 @@ cp .env.example .env
 ### Security & deployment
 
 * Do **not** commit `.env` to Git. It is in `.gitignore` by default.
-* For cloud deployments, set the same variables in your provider’s environment configuration (Render, Vercel, GitHub Actions secrets, etc.).
+* For cloud deployments, set the same variables in your provider’s environment configuration (Render, etc.).
 * Rotate keys regularly and use least-privileged keys where provider supports them.
 
 ---
@@ -60,7 +59,7 @@ Each provider object supports (at minimum) these fields:
 
 * `apiKey` should reference the environment variable (use `process.env.X`). If the env var is missing the router will skip that provider and log a warning.
 * `model` should match the provider’s model name exactly. If a provider uses a different naming scheme, use the exact ID that the provider’s API expects.
-* `apiUrl` is used to create the OpenAI-compatible client; if a provider exposes a compatibility endpoint (like OpenRouter or Vercel Ai Gateway), set it accordingly.
+* `apiUrl` is used to create the OpenAI-compatible client; if a provider exposes a compatibility endpoint (like OpenRouter), set it accordingly.
 * Duplicate `name` values are allowed but can make logs confusing; prefer unique names like `openai`, `openai-alt`.
 
 ### Example `provider.js` snippet
@@ -146,8 +145,7 @@ node tests/chat.js
 
 ## Deployment tips
 
-* **Render** / **Vercel**: Add the same env variables to service settings. Use `npm start` as the start command (project `package.json` already sets this).
-* **GitHub Actions / Pages**: only needed for building docs; server deployment still requires a host for Node.
+* **Render**: Add the same env variables to service settings. Use `npm start` as the start command (project `package.json` already sets this).
 * If you change `.env` or `provider.js`, restart the Node process.
 
 ---
