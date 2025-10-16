@@ -16,7 +16,10 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node openai-compatible-server/index.js"
+    "start": "node openai-compatible-server/index.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "ai",
@@ -46,5 +49,8 @@
     "openai": "^6.1.0",
     "pino": "^9.9.0",
     "pino-pretty": "^13.1.1"
+  },
+  "devDependencies": {
+    "vitepress": "^2.0.0-alpha.12"
   }
 }
