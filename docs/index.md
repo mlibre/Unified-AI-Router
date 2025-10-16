@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Unified AI Router"
-  text: "A lightweight OpenAI-compatible router in Nodejs"
+  text: "A lightweight OpenAI-compatible server in Nodejs"
   tagline: "OpenAI-compatible endpoints, automatic fallback, streaming support, and tool-calling — all in one lightweight package."
   actions:
     - theme: brand
