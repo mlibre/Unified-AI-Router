@@ -17,7 +17,6 @@ module.exports = [
 		model: "gpt-oss-120b",
 		apiUrl: "https://api.cerebras.ai/v1",
 	},
-
 	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,

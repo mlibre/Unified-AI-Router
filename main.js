@@ -50,22 +50,29 @@ class AIRouter
 					{
 						for await ( const chunk of responseStream )
 						{
-							const content = chunk.choices[0]?.delta?.content;
-							const reasoning = chunk.choices[0]?.delta?.reasoning;
-							const tool_calls_delta = chunk.choices[0]?.delta?.tool_calls;
-							if ( content !== null )
+							try
 							{
-								chunk.content = content
+								const content = chunk.choices[0]?.delta?.content;
+								const reasoning = chunk.choices[0]?.delta?.reasoning;
+								const tool_calls_delta = chunk.choices[0]?.delta?.tool_calls;
+								if ( content !== null )
+								{
+									chunk.content = content
+								}
+								if ( reasoning !== null )
+								{
+									chunk.reasoning = reasoning
+								}
+								if ( tool_calls_delta !== null )
+								{
+									chunk.tool_calls_delta = tool_calls_delta;
+								}
+								yield chunk;
 							}
-							if ( reasoning !== null )
+							catch ( error )
 							{
-								chunk.reasoning = reasoning
+								console.log( error );
 							}
-							if ( tool_calls_delta !== null )
-							{
-								chunk.tool_calls_delta = tool_calls_delta;
-							}
-							yield chunk;
 						}
 					})();
 				}

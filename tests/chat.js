@@ -20,7 +20,7 @@ async function getResponse ()
 
 		for await ( const chunk of stream )
 		{
-			process.stdout.write( chunk.reasoning || chunk.content );
+			console.log( chunk.reasoning || chunk.content );
 		}
 	}
 	catch ( error )
