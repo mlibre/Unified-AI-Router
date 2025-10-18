@@ -25,7 +25,7 @@ async function getResponse ()
 	}
 	catch ( error )
 	{
-		console.error( "All providers failed:", error.message );
+		console.error( "All providers failed: ", error.message );
 	}
 }
 
