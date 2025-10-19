@@ -25,7 +25,9 @@ export default defineConfig({
 			}
 		],
 		socialLinks: [
-			{ icon: "github", link: "https://github.com/mlibre/Unified-AI-Router" }
+			{ icon: "github", link: "https://github.com/mlibre/Unified-AI-Router" },
+			{ icon: "npm", link: "https://www.npmjs.com/package/unified-ai-router" }
+
 		]
 	}
 })

@@ -2,10 +2,10 @@
 
 Unified AI Router is a comprehensive toolkit for AI applications, featuring:
 
-- A unified interface for multiple LLM providers with automatic fallback (the core router library)
 - An OpenAI-compatible server for seamless API integration
+- A unified interface for multiple LLM providers with automatic fallback
 
-It supports major providers like OpenAI, Google, Grok, and more, ensuring reliability and flexibility.
+It supports all the OpenAI-compatible servers, including major providers like OpenAI, Google, Grok, Litellm, Vllm, Ollama and more, ensuring reliability and flexibility.
 
 - [🚀 Features](#-features)
 - [🛠️ Installation](#️-installation)
@@ -20,10 +20,10 @@ It supports major providers like OpenAI, Google, Grok, and more, ensuring reliab
 
 ## 🚀 Features
 
-- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Cerebras, and LLM7
-- **Automatic Fallback**: If one provider fails, automatically tries the next
-- **Simple API**: Easy-to-use interface for all supported providers
+- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Cerebras, LLM7 and etc
+- **Automatic Fallback**: If one provider fails for **any reason**, automatically tries the next
 - **OpenAI-Compatible Server**: Drop-in replacement for the OpenAI API, enabling easy integration with existing tools and clients
+- **Simple API**: Easy-to-use interface for all supported providers
 - **Streaming and Non-Streaming Support**: Handles both streaming and non-streaming responses
 - **Tool Calling**: Full support for tools in LLM interactions
 
@@ -44,7 +44,7 @@ npm i
 This is the core AIRouter library - a JavaScript class that provides a unified interface for multiple LLM providers.
 
 ```javascript
-const AIRouter = require("./main");
+const AIRouter = require("unified-ai-router");
 require("dotenv").config();
 
 const providers = [
