@@ -9,8 +9,6 @@ This page focuses on how to configure the router for local development and produ
 * Provide examples for local, staging, and cloud deployments (Render.com, ...).
 * Troubleshooting tips when providers fail or models are not found.
 
----
-
 ## .env (environment variables)
 
 The repository includes a `.env.example` file with common keys. Copy it to `.env` and fill the keys for the providers you plan to use:
@@ -35,8 +33,6 @@ cp .env.example .env
 * Do **not** commit `.env` to Git. It is in `.gitignore` by default.
 * For cloud deployments, set the same variables in your provider’s environment configuration (Render, etc.).
 * Rotate keys regularly and use least-privileged keys where provider supports them.
-
----
 
 ## `provider.js` — how it works
 
@@ -103,21 +99,15 @@ module.exports = [
 }
 ```
 
----
-
 ## Model selection and compatibility
 
 * Choose a `model` that the provider actually exposes. The router attempts to list models via the provider client using `client.models.list()` — if the model is not found it will warn in logs.
 * Some providers require different model name formats (e.g. `models/gpt-4` vs `gpt-4`). If in doubt, query the provider’s models endpoint or check their docs.
 
----
-
 ## Tool-calling and streaming
 
 * If you plan to use **tools** (the project supports OpenAI-style tool metadata), pass `tools` into `chatCompletion` calls and make sure the chosen provider supports tool-calling. Not all providers do.
 * Streaming is enabled by passing `stream: true` to the endpoint or API call. Ensure the provider supports SSE/streaming and model supports streaming.
-
----
 
 ## Local testing & examples
 
@@ -139,14 +129,10 @@ node tests/openai-server-stream.js
 node tests/chat.js
 ```
 
----
-
 ## Deployment tips
 
 * **Render**: Add the same env variables to service settings. Use `npm start` as the start command (project `package.json` already sets this).
 * If you change `.env` or `provider.js`, restart the Node process.
-
----
 
 ## Troubleshooting
 
