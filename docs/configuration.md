@@ -2,8 +2,6 @@
 
 This page focuses on how to configure the router for local development and production deployments: setting environment variables (`.env`) and customizing `provider.js`.
 
----
-
 ## Goals
 
 * Explain which environment variables the project expects and best practices for storing them.
