@@ -4,11 +4,63 @@ const pretty = require( "pino-pretty" );
 const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, pinoStream );
 
+const CircuitBreaker = require( "opossum" ); // <-- added
+
 class AIRouter
 {
 	constructor ( providers )
 	{
 		this.providers = providers;
+
+		const defaultCircuitOptions = {
+			timeout: 300000, // time in ms before action considered failed
+			errorThresholdPercentage: 50, // % of failures before opening the circuit
+			resetTimeout: 9000000, // time in ms to wait before trying again
+		};
+
+		for ( const provider of this.providers )
+		{
+			// allow provider to override circuit options
+			const circuitOptions = Object.assign({}, defaultCircuitOptions, provider.circuitOptions || {});
+
+			// action receives an object: { params, withResponse }
+			const action = async ({ params, withResponse }) =>
+			{
+				const client = this.createClient( provider );
+
+				// If caller requested .withResponse() use it
+				if ( withResponse )
+				{
+					// return whatever .withResponse() returns (assumed promise resolving to { data, response })
+					return client.chat.completions.create( params ).withResponse();
+				}
+
+				// Normal create (may return Promise resolving to response OR an async iterable for streaming)
+				return client.chat.completions.create( params );
+			};
+
+			const breaker = new CircuitBreaker( action, circuitOptions );
+
+			// simple logging for breaker transitions
+			breaker.on( "open", ( ) =>
+			{
+				return logger.warn( `Circuit open for provider: ${provider.name}` )
+			});
+			breaker.on( "halfOpen", () => { return logger.info( `Circuit half-open for provider: ${provider.name}` ) });
+			breaker.on( "close", () => { return logger.info( `Circuit closed for provider: ${provider.name}` ) });
+			breaker.on( "fallback", () => { return logger.warn( `Fallback triggered for provider: ${provider.name}` ) });
+			breaker.on( "failure", ( err ) =>
+			{
+				logger.error({ provider: provider.name, event: "failure", error: err.message }, "Breaker failure event" );
+			 });
+			// optional fallback: we throw so the router will continue to next provider
+			breaker.fallback( ( err ) =>
+			{
+				throw new Error( `Circuit open for ${provider.name}` );
+			});
+
+			provider.breaker = breaker;
+		}
 	}
 
 	createClient ( provider )
@@ -33,8 +85,6 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const client = this.createClient( provider );
-
 				const params = {
 					messages,
 					...tools && tools.length > 0 ? { tools } : {},
@@ -42,10 +92,11 @@ class AIRouter
 					...restOptions,
 					model: provider.model
 				};
-
+				const result = await provider.breaker.fire({ params, withResponse: false });
+				logger.info( `Successful with provider: ${provider.name}` );
 				if ( isStreaming )
 				{
-					const responseStream = await client.chat.completions.create( params );
+					const responseStream = result;
 					return ( async function* ()
 					{
 						for await ( const chunk of responseStream )
@@ -78,7 +129,7 @@ class AIRouter
 				}
 				else
 				{
-					const response = await client.chat.completions.create( params );
+					const response = result;
 					const content = response.choices[0]?.message?.content;
 					const reasoning = response.choices[0]?.message?.reasoning;
 					const tool_calls = response.choices[0]?.message?.tool_calls
@@ -104,7 +155,7 @@ class AIRouter
 				// Continue to next provider
 			}
 		}
-		throw new Error( `All providers failed. Last error: ${lastError.message}` );
+		throw new Error( `All providers failed. Last error: ${lastError?.message || "unknown"}` );
 	}
 
 	async chatCompletionWithResponse ( messages, options = {})
@@ -120,7 +171,6 @@ class AIRouter
 			try
 			{
 				logger.info( `Attempting with provider: ${provider.name}` );
-				const client = this.createClient( provider );
 
 				const params = {
 					messages,
@@ -130,7 +180,8 @@ class AIRouter
 					model: provider.model
 				};
 
-				const { data, response: rawResponse } = await client.chat.completions.create( params ).withResponse();
+				const { data, response: rawResponse } = await provider.breaker.fire({ params, withResponse: true });
+				logger.info( `Successful with provider: ${provider.name}` );
 				return { data, response: rawResponse }
 			}
 			catch ( error )
@@ -140,7 +191,7 @@ class AIRouter
 				// Continue to next provider
 			}
 		}
-		throw new Error( `All providers failed. Last error: ${lastError.message}` );
+		throw new Error( `All providers failed. Last error: ${lastError?.message || "unknown"}` );
 	}
 
 	async getModels ()

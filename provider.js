@@ -6,22 +6,16 @@ module.exports = [
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
 	{
-		name: "gemini_3",
-		apiKey: process.env.GEMINI_API_KEY_3,
-		model: "gemini-2.5-pro",
-		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
-	},
-	{
 		name: "gemini_2",
 		apiKey: process.env.GEMINI_API_KEY_2,
 		model: "gemini-2.5-pro",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
 	{
-		name: "vercel",
-		apiKey: process.env.VERCEL_AI_GATEWAY_API_KEY,
-		model: "openai/gpt-oss-120b",
-		apiUrl: "https://ai-gateway.vercel.sh/v1",
+		name: "gemini_3",
+		apiKey: process.env.GEMINI_API_KEY_3,
+		model: "gemini-2.5-pro",
+		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
 	{
 		name: "cerebras_2",
