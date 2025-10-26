@@ -16,6 +16,8 @@ hero:
 features:
   - title: Multi-provider fallback
     details: If one provider fails, requests automatically fall back to the next available provider.
+  - title: Circuit breaker protection
+    details: Built-in fault tolerance with automatic circuit breaking for each provider to prevent cascading failures.
   - title: OpenAI-compatible API
     details: Run a drop-in replacement for the OpenAI chat completion endpoints (streaming & non-streaming).
   - title: Tool calling & streaming

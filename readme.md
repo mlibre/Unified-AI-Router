@@ -22,6 +22,7 @@ It supports all the OpenAI-compatible servers, including major providers like Op
 
 - **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Cerebras, LLM7 and etc
 - **Automatic Fallback**: If one provider fails for **any reason**, automatically tries the next
+- **Circuit Breaker**: Built-in fault tolerance with automatic circuit breaking for each provider to prevent cascading failures
 - **OpenAI-Compatible Server**: Drop-in replacement for the OpenAI API, enabling easy integration with existing tools and clients
 - **Simple API**: Easy-to-use interface for all supported providers
 - **Streaming and Non-Streaming Support**: Handles both streaming and non-streaming responses

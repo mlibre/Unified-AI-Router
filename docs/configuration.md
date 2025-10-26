@@ -45,9 +45,21 @@ Each provider object supports (at minimum) these fields:
   name: "openai",               // simple identifier for logs/debug
   apiKey: process.env.OPENAI_API_KEY,
   model: "gpt-4",               // model id to request from this provider
-  apiUrl: "https://api.openai.com/v1", // base URL for provider-compatible OpenAI endpoints
+  apiUrl: "https://api.openai.com/v1", // base URL for provider-compatible OpenAI endpoints,
 }
 ```
+
+### Circuit Breaker Configuration
+
+The router includes built-in circuit breaker protection for each provider using the "opossum" library. This provides fault tolerance by automatically stopping requests to a provider that's experiencing issues and preventing cascading failures.
+
+Default circuit breaker options:
+
+* **timeout**: 300000ms (5 minutes) - time before action is considered failed
+* **errorThresholdPercentage**: 50% - percentage of failures before opening the circuit
+* **resetTimeout**: 9000000ms (15 minutes) - time to wait before trying the provider again  
+
+You can override these options per provider by passing `circuitOptions`.
 
 ### Important notes
 

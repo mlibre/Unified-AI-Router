@@ -18,28 +18,34 @@ module.exports = [
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
 	{
-		name: "cerebras_2",
-		apiKey: process.env.CEREBRAS_API_KEY_2,
-		model: "gpt-oss-120b",
-		apiUrl: "https://api.cerebras.ai/v1",
-	},
-	{
 		name: "cerebras",
 		apiKey: process.env.CEREBRAS_API_KEY,
 		model: "gpt-oss-120b",
 		apiUrl: "https://api.cerebras.ai/v1",
 	},
 	{
-		name: "openrouter_2",
-		apiKey: process.env.OPENROUTER_API_KEY_2,
+		name: "cerebras_2",
+		apiKey: process.env.CEREBRAS_API_KEY_2,
+		model: "gpt-oss-120b",
+		apiUrl: "https://api.cerebras.ai/v1",
+	},
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
+		model: "qwen/qwen3-coder:free",
+		apiUrl: "https://openrouter.ai/api/v1",
+	},
+	{
+		name: "openrouter",
+		apiKey: process.env.OPENROUTER_API_KEY,
 		model: "z-ai/glm-4.5-air:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
-		name: "qroq",
-		apiKey: process.env.QROQ_API_KEY,
-		model: "openai/gpt-oss-120b",
-		apiUrl: "https://api.groq.com/openai/v1",
+		name: "openrouter_2",
+		apiKey: process.env.OPENROUTER_API_KEY_2,
+		model: "z-ai/glm-4.5-air:free",
+		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
 		name: "openrouter_2",
@@ -50,8 +56,20 @@ module.exports = [
 	{
 		name: "openrouter_3",
 		apiKey: process.env.OPENROUTER_API_KEY_3,
+		model: "qwen/qwen3-coder:free",
+		apiUrl: "https://openrouter.ai/api/v1",
+	},
+	{
+		name: "openrouter_3",
+		apiKey: process.env.OPENROUTER_API_KEY_3,
 		model: "z-ai/glm-4.5-air:free",
 		apiUrl: "https://openrouter.ai/api/v1",
+	},
+	{
+		name: "qroq",
+		apiKey: process.env.QROQ_API_KEY,
+		model: "openai/gpt-oss-120b",
+		apiUrl: "https://api.groq.com/openai/v1",
 	},
 	{
 		name: "gemini_1",
