@@ -192,11 +192,6 @@ class AIRouter
 		const models = [];
 		for ( const provider of this.providers )
 		{
-			if ( !provider.apiKey )
-			{
-				logger.warn( `Skipping provider ${provider.name} due to missing API key` );
-				continue;
-			}
 			try
 			{
 				logger.info( `Fetching models for provider: ${provider.name}` );
@@ -225,35 +220,60 @@ class AIRouter
 	{
 		const healthCheckPromises = this.providers.map( async ( provider ) =>
 		{
+			const maskApiKey = ( apiKey ) =>
+			{
+				if ( !apiKey || typeof apiKey !== "string" || apiKey.length < 8 )
+				{
+					return "Invalid API Key";
+				}
+				return `${apiKey.substring( 0, 4 )}...${apiKey.substring( apiKey.length - 4 )}`;
+			};
+
 			try
 			{
-				if ( !provider.apiKey )
-				{
-					throw new Error( "Missing API key" );
-				}
 				const client = this.createClient( provider );
 				await client.chat.completions.create({
 					messages: [{ role: "user", content: "test" }],
 					model: provider.model,
 					max_tokens: 1,
 				});
-				return { name: provider.name, status: "ok" };
+				return {
+					name: provider.name,
+					status: "ok",
+					apiKey: maskApiKey( provider.apiKey ),
+				};
 			}
 			catch ( error )
 			{
-				return { name: provider.name, status: "error", reason: error.message };
+				return {
+					name: provider.name,
+					status: "error",
+					reason: error.message,
+					apiKey: maskApiKey( provider.apiKey ),
+				};
 			}
 		});
 
 		const results = await Promise.allSettled( healthCheckPromises );
-		return results.map( result =>
+		const processedResults = results.map( result =>
 		{
 			if ( result.status === "fulfilled" )
 			{
 				return result.value;
 			}
-			// This case should ideally not be hit due to the try/catch inside the map
-			return { name: "unknown", status: "error", reason: result.reason.message };
+			return {
+				name: "unknown",
+				status: "error",
+				reason: result.reason.message,
+				apiKey: "N/A",
+			};
+		});
+
+		return processedResults.sort( ( a, b ) =>
+		{
+			if ( a.status === "ok" && b.status !== "ok" ) return -1;
+			if ( a.status !== "ok" && b.status === "ok" ) return 1;
+			return 0;
 		});
 	}
 
