@@ -5,8 +5,8 @@ const pretty = require( "pino-pretty" );
 const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, pinoStream );
 require( "dotenv" ).config({ quiet: true });
-const AIRouter = require( "../main" );
-const providers = require( "../provider" )
+const AIRouter = require( "./main" );
+const providers = require( "./provider" )
 const aiRouter = new AIRouter( providers );
 
 const app = express();
@@ -46,7 +46,6 @@ app.post( "/v1/chat/completions", async ( req, res ) =>
 			res.write( `data: ${JSON.stringify({ error: { message: err.message } })}\n\n` );
 			res.write( "data: [DONE]\n\n" );
 		}
-
 		res.end();
 	}
 	else

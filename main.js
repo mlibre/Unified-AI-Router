@@ -4,7 +4,7 @@ const pretty = require( "pino-pretty" );
 const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, pinoStream );
 
-const CircuitBreaker = require( "opossum" ); // <-- added
+const CircuitBreaker = require( "opossum" );
 
 class AIRouter
 {
@@ -13,29 +13,22 @@ class AIRouter
 		this.providers = providers;
 
 		const defaultCircuitOptions = {
-			timeout: 300000, // time in ms before action considered failed
-			errorThresholdPercentage: 50, // % of failures before opening the circuit
-			resetTimeout: 9000000, // time in ms to wait before trying again
+			timeout: 300000,
+			errorThresholdPercentage: 50,
+			resetTimeout: 9000000,
 		};
-
 		for ( const provider of this.providers )
 		{
-			// allow provider to override circuit options
 			const circuitOptions = Object.assign({}, defaultCircuitOptions, provider.circuitOptions || {});
 
-			// action receives an object: { params, withResponse }
 			const action = async ({ params, withResponse }) =>
 			{
 				const client = this.createClient( provider );
 
-				// If caller requested .withResponse() use it
 				if ( withResponse )
 				{
-					// return whatever .withResponse() returns (assumed promise resolving to { data, response })
 					return client.chat.completions.create( params ).withResponse();
 				}
-
-				// Normal create (may return Promise resolving to response OR an async iterable for streaming)
 				return client.chat.completions.create( params );
 			};
 
