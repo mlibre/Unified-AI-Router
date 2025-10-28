@@ -56,33 +56,6 @@ class AIRouter
 		}
 	}
 
-	_initializeProviders ( providers )
-	{
-		const allProviders = [];
-		for ( const p of providers )
-		{
-			if ( Array.isArray( p.apiKey ) )
-			{
-				p.apiKey.forEach( ( key, i ) =>
-				{
-					if ( key )
-					{
-						allProviders.push({
-							...p,
-							apiKey: key,
-							name: `${p.name}_${i + 1}`
-						});
-					}
-				});
-			}
-			else if ( p.apiKey )
-			{
-				allProviders.push( p );
-			}
-		}
-		return allProviders;
-	}
-
 	createClient ( provider )
 	{
 		return new OpenAI({
@@ -246,6 +219,69 @@ class AIRouter
 			}
 		}
 		return models;
+	}
+
+	async checkProvidersStatus ()
+	{
+		const healthCheckPromises = this.providers.map( async ( provider ) =>
+		{
+			try
+			{
+				if ( !provider.apiKey )
+				{
+					throw new Error( "Missing API key" );
+				}
+				const client = this.createClient( provider );
+				await client.chat.completions.create({
+					messages: [{ role: "user", content: "test" }],
+					model: provider.model,
+					max_tokens: 1,
+				});
+				return { name: provider.name, status: "ok" };
+			}
+			catch ( error )
+			{
+				return { name: provider.name, status: "error", reason: error.message };
+			}
+		});
+
+		const results = await Promise.allSettled( healthCheckPromises );
+		return results.map( result =>
+		{
+			if ( result.status === "fulfilled" )
+			{
+				return result.value;
+			}
+			// This case should ideally not be hit due to the try/catch inside the map
+			return { name: "unknown", status: "error", reason: result.reason.message };
+		});
+	}
+
+	_initializeProviders ( providers )
+	{
+		const allProviders = [];
+		for ( const p of providers )
+		{
+			if ( Array.isArray( p.apiKey ) )
+			{
+				p.apiKey.forEach( ( key, i ) =>
+				{
+					if ( key )
+					{
+						allProviders.push({
+							...p,
+							apiKey: key,
+							name: `${p.name}_${i + 1}`
+						});
+					}
+				});
+			}
+			else if ( p.apiKey )
+			{
+				allProviders.push( p );
+			}
+		}
+		return allProviders;
 	}
 }
 

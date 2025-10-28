@@ -85,6 +85,20 @@ app.get( "/models", handleGetModels );
 
 app.get( "/health", ( req, res ) => { return res.json({ status: "ok" }) });
 
+app.get( "/providers/status", async ( req, res ) =>
+{
+	try
+	{
+		const statuses = await aiRouter.checkProvidersStatus();
+		res.json({ data: statuses });
+	}
+	catch ( error )
+	{
+		logger.error( `Error in /v1/providers/status: ${error.message}` );
+		res.status( 500 ).json({ error: { message: error.message } });
+	}
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen( PORT, () =>
