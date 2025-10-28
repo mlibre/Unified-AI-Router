@@ -1,3 +1,4 @@
+const http = require( "http" );
 const express = require( "express" );
 const cors = require( "cors" );
 const pino = require( "pino" );
@@ -99,9 +100,27 @@ app.get( "/providers/status", async ( req, res ) =>
 	}
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen( PORT, () =>
 {
 	logger.info( `🚀 OpenAI-compatible API listening at http://localhost:${PORT}/v1/chat/completions` );
+
+	setTimeout( () =>
+	{
+		const url = `http://localhost:${PORT}/health`;
+		http.get( url, ( res ) =>
+		{
+			if ( res.statusCode === 200 )
+			{
+				logger.info( "Keep-alive ping successful." );
+			}
+			else
+			{
+				logger.error( `Keep-alive ping failed with status code: ${res.statusCode}` );
+			}
+		}).on( "error", ( err ) =>
+		{
+			logger.error( "Error sending keep-alive ping:", err.message );
+		});
+	}, 14 * 60 * 1000 ); // 14 minutes
 });
