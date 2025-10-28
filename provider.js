@@ -1,6 +1,6 @@
 module.exports = [
 	{
-		name: "gemini",
+		name: "gemini_pro",
 		apiKey: [
 			process.env.GEMINI_API_KEY,
 			process.env.GEMINI_API_KEY_2,
@@ -46,7 +46,7 @@ module.exports = [
 		apiUrl: "https://api.groq.com/openai/v1",
 	},
 	{
-		name: "gemini_2",
+		name: "gemini_flash",
 		apiKey: [
 			process.env.GEMINI_API_KEY,
 			process.env.GEMINI_API_KEY_2,
