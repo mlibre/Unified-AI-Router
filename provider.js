@@ -36,13 +36,18 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY,
 			process.env.OPENROUTER_API_KEY_2,
 			process.env.OPENROUTER_API_KEY_3,
+			process.env.OPENROUTER_API_KEY_4,
+			process.env.OPENROUTER_API_KEY_5
 		],
 		model: "z-ai/glm-4.5-air:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
 		name: "qroq",
-		apiKey: process.env.QROQ_API_KEY,
+		apiKey: [
+			process.env.QROQ_API_KEY,
+			process.env.QROQ_API_KEY_2
+		],
 		model: "openai/gpt-oss-120b",
 		apiUrl: "https://api.groq.com/openai/v1",
 	},
