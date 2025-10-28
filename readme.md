@@ -2,8 +2,8 @@
 
 Unified AI Router is a comprehensive toolkit for AI applications, featuring:
 
-- An OpenAI-compatible server for seamless API integration
-- A unified interface for multiple LLM providers with automatic fallback
+- An **OpenAI-compatible** server for seamless API integration
+- A **unified interface** for multiple LLM providers with **automatic fallback**
 
 It supports all the OpenAI-compatible servers, including major providers like OpenAI, Google, Grok, Litellm, Vllm, Ollama and more, ensuring reliability and flexibility.
 
@@ -77,6 +77,19 @@ const response = await llm.chatCompletion(messages, {
 console.log(response);
 ```
 
+You can also provide an array of API keys for a single provider definition.
+
+```javascript
+const providers = [
+  {
+    name: "openai",
+    apiKey: [process.env.OPENAI_API_KEY_1, process.env.OPENAI_API_KEY_2],
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1"
+  }
+];
+```
+
 ### 🔌 OpenAI-Compatible Server
 
 The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.  
@@ -90,7 +103,7 @@ The server uses the provider configurations defined in [provider.js](provider.js
 
 2. Edit `.env` and add your API keys for the desired providers (see [🔑 API Keys](#-api-keys) for sources).
 
-3. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey` (referencing the corresponding env variable), `model`, and `apiUrl` for the providers you want to use.
+3. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey`, `model`, and `apiUrl` for the providers you want to use.
 
 To start the server locally, run:
 
@@ -105,6 +118,7 @@ The server listens at `http://localhost:3000/` and supports the following OpenAI
 - `GET /v1/models` - List available models
 - `GET /models` - List available models
 - `GET /health` - Health check
+- `GET /v1/providers/status` - Check the status of all configured providers
 
 ### 🧪 Testing
 
