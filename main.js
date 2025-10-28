@@ -10,7 +10,7 @@ class AIRouter
 {
 	constructor ( providers )
 	{
-		this.providers = providers;
+		this.providers = this._initializeProviders( providers );
 
 		const defaultCircuitOptions = {
 			timeout: 300000,
@@ -54,6 +54,33 @@ class AIRouter
 
 			provider.breaker = breaker;
 		}
+	}
+
+	_initializeProviders ( providers )
+	{
+		const allProviders = [];
+		for ( const p of providers )
+		{
+			if ( Array.isArray( p.apiKey ) )
+			{
+				p.apiKey.forEach( ( key, i ) =>
+				{
+					if ( key )
+					{
+						allProviders.push({
+							...p,
+							apiKey: key,
+							name: `${p.name}_${i + 1}`
+						});
+					}
+				});
+			}
+			else if ( p.apiKey )
+			{
+				allProviders.push( p );
+			}
+		}
+		return allProviders;
 	}
 
 	createClient ( provider )
