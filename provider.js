@@ -24,6 +24,7 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY,
 			process.env.OPENROUTER_API_KEY_2,
 			process.env.OPENROUTER_API_KEY_3,
+			process.env.OPENROUTER_API_KEY_4
 		],
 		model: "qwen/qwen3-coder:free",
 		apiUrl: "https://openrouter.ai/api/v1",
@@ -45,8 +46,12 @@ module.exports = [
 		apiUrl: "https://api.groq.com/openai/v1",
 	},
 	{
-		name: "gemini_1",
-		apiKey: process.env.GEMINI_API_KEY,
+		name: "gemini_2",
+		apiKey: [
+			process.env.GEMINI_API_KEY,
+			process.env.GEMINI_API_KEY_2,
+			process.env.GEMINI_API_KEY_3,
+		],
 		model: "gemini-2.5-flash",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
