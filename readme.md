@@ -180,15 +180,8 @@ Get your API keys from the following providers:
 
 - `main.js` - Core AIRouter library implementing the unified interface and fallback logic
 - `provider.js` - Configuration for supported AI providers
-- `openai-compatible-server/index.js` - OpenAI-compatible API server
+- `openai-server.js` - OpenAI-compatible API server
 - `tests/` - Comprehensive tests for the library, server, and tools
-- `bruno/` - Bruno API collection for testing endpoints
-- `cloud-flare/` - Ready-to-deploy Cloudflare Pages setup for the Telegram bot
-  - `functions/api/index.js` - Telegram webhook handler
-  - `functions/api/search.js` - Search proxy endpoint
-  - `public/` - Mini App frontend (HTML, CSS, JS)
-  - `src/config.js` - Bot configuration
-  - `src/telegram.js` - Telegram API integration
 
 ## 📄 License
 
