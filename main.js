@@ -248,7 +248,7 @@ class AIRouter
 				return {
 					name: provider.name,
 					status: "error",
-					reason: error.message,
+					reason: error.message.substring( 0, 100 ),
 					apiKey: maskApiKey( provider.apiKey ),
 				};
 			}
@@ -264,7 +264,7 @@ class AIRouter
 			return {
 				name: "unknown",
 				status: "error",
-				reason: result.reason.message,
+				reason: result.reason.message.substring( 0, 100 ),
 				apiKey: "N/A",
 			};
 		});
