@@ -25,7 +25,8 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_2,
 			process.env.OPENROUTER_API_KEY_3,
 			process.env.OPENROUTER_API_KEY_4,
-			process.env.OPENROUTER_API_KEY_5
+			process.env.OPENROUTER_API_KEY_5,
+			process.env.OPENROUTER_API_KEY_6
 		],
 		model: "qwen/qwen3-coder:free",
 		apiUrl: "https://openrouter.ai/api/v1",
@@ -37,7 +38,8 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_2,
 			process.env.OPENROUTER_API_KEY_3,
 			process.env.OPENROUTER_API_KEY_4,
-			process.env.OPENROUTER_API_KEY_5
+			process.env.OPENROUTER_API_KEY_5,
+			process.env.OPENROUTER_API_KEY_6
 		],
 		model: "z-ai/glm-4.5-air:free",
 		apiUrl: "https://openrouter.ai/api/v1",
