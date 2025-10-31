@@ -159,7 +159,7 @@ Ensure `provider.js` is configured with API keys in `.env` (as above). Push to G
    ```
 
 3. **Verify**:
-   - Access `https://your-service.onrender.com/models` (e.g., [unified-ai-router.onrender.com/models](https://unified-ai-router.onrender.com/models)).
+   - Access `https://your-service.onrender.com/models`.
 
 See [Render docs](https://render.com/docs) for details.
 
