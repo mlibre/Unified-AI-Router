@@ -5,6 +5,7 @@ module.exports = [
 			process.env.GEMINI_API_KEY,
 			process.env.GEMINI_API_KEY_2,
 			process.env.GEMINI_API_KEY_3,
+			process.env.GEMINI_API_KEY_4,
 		],
 		model: "gemini-2.5-pro",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
@@ -59,13 +60,17 @@ module.exports = [
 			process.env.GEMINI_API_KEY,
 			process.env.GEMINI_API_KEY_2,
 			process.env.GEMINI_API_KEY_3,
+			process.env.GEMINI_API_KEY_4,
 		],
 		model: "gemini-2.5-flash",
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	},
 	{
 		name: "z.ai",
-		apiKey: process.env.ZAI_API_KEY,
+		apiKey: [
+			process.env.ZAI_API_KEY,
+			process.env.ZAI_API_KEY_2
+		],
 		model: "glm-4.5-flash",
 		apiUrl: "https://api.z.ai/api/paas/v4",
 	},
