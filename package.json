@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "A unified interface for multiple LLM providers with automatic fallback. This project includes an OpenAI-compatible server and a deployable Telegram bot with a Mini App interface. It supports major providers like OpenAI, Google, Grok, and more, ensuring reliability and flexibility for your AI applications.",
   "license": "ISC",
   "author": "mlibre",

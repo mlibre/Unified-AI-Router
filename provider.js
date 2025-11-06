@@ -1,5 +1,15 @@
 module.exports = [
 	{
+		name: "qroq",
+		apiKey: [
+			process.env.QROQ_API_KEY,
+			process.env.QROQ_API_KEY_2,
+			process.env.QROQ_API_KEY_3
+		],
+		model: "openai/gpt-oss-120b",
+		apiUrl: "https://api.groq.com/openai/v1",
+	},
+	{
 		name: "gemini_pro",
 		apiKey: [
 			process.env.GEMINI_API_KEY,
@@ -15,9 +25,29 @@ module.exports = [
 		apiKey: [
 			process.env.CEREBRAS_API_KEY,
 			process.env.CEREBRAS_API_KEY_2,
+			process.env.CEREBRAS_API_KEY_3,
 		],
 		model: "gpt-oss-120b",
 		apiUrl: "https://api.cerebras.ai/v1",
+	},
+	{
+		name: "llm7",
+		apiKey: process.env.LLM7_API_KEY,
+		model: "deepseek-v3.1",
+		apiUrl: "https://api.llm7.io/v1",
+	},
+	{
+		name: "openrouter_qwen",
+		apiKey: [
+			process.env.OPENROUTER_API_KEY,
+			process.env.OPENROUTER_API_KEY_2,
+			process.env.OPENROUTER_API_KEY_3,
+			process.env.OPENROUTER_API_KEY_4,
+			process.env.OPENROUTER_API_KEY_5,
+			process.env.OPENROUTER_API_KEY_6
+		],
+		model: "minimax/minimax-m2:free",
+		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
 		name: "openrouter_qwen",
@@ -33,6 +63,17 @@ module.exports = [
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
+		name: "gemini_flash",
+		apiKey: [
+			process.env.GEMINI_API_KEY,
+			process.env.GEMINI_API_KEY_2,
+			process.env.GEMINI_API_KEY_3,
+			process.env.GEMINI_API_KEY_4,
+		],
+		model: "gemini-2.5-flash",
+		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
+	},
+	{
 		name: "openrouter_glm",
 		apiKey: [
 			process.env.OPENROUTER_API_KEY,
@@ -46,26 +87,6 @@ module.exports = [
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
-		name: "qroq",
-		apiKey: [
-			process.env.QROQ_API_KEY,
-			process.env.QROQ_API_KEY_2
-		],
-		model: "openai/gpt-oss-120b",
-		apiUrl: "https://api.groq.com/openai/v1",
-	},
-	{
-		name: "gemini_flash",
-		apiKey: [
-			process.env.GEMINI_API_KEY,
-			process.env.GEMINI_API_KEY_2,
-			process.env.GEMINI_API_KEY_3,
-			process.env.GEMINI_API_KEY_4,
-		],
-		model: "gemini-2.5-flash",
-		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
-	},
-	{
 		name: "z.ai",
 		apiKey: [
 			process.env.ZAI_API_KEY,
@@ -73,11 +94,5 @@ module.exports = [
 		],
 		model: "glm-4.5-flash",
 		apiUrl: "https://api.z.ai/api/paas/v4",
-	},
-	{
-		name: "llm7", // does not support tool calling
-		apiKey: process.env.LLM7_API_KEY,
-		model: "gpt-o4-mini-2025-04-16",
-		apiUrl: "https://api.llm7.io/v1",
-	},
+	}
 ];
