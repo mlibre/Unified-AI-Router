@@ -63,6 +63,14 @@ module.exports = [
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	{
+		name: "github",
+		apiKey: [
+			process.env.GITHUB_API_KEY_1,
+		],
+		model: "openai/gpt-4.1",
+		apiUrl: "https://models.github.ai/inference",
+	},
+	{
 		name: "gemini_flash",
 		apiKey: [
 			process.env.GEMINI_API_KEY,
