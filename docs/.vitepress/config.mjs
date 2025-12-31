@@ -4,7 +4,7 @@ export default defineConfig({
 	base: "https://mlibre.github.io/Unified-AI-Router/",
 	server: {
    	host: true,
-   }
+   },
 	title: "Unified AI Router",
 	description: "OpenAI-compatible router with multi-provider fallback.",
 	head: [
