@@ -1,30 +1,31 @@
 const OpenAI = require( "openai" );
 const pino = require( "pino" );
 const pretty = require( "pino-pretty" );
-const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
-const logger = pino({ base: false }, pinoStream );
-
 const CircuitBreaker = require( "opossum" );
+
+const logger = pino({ base: false }, pretty({ colorize: true, ignore: "pid,hostname" }) );
 
 class AIRouter
 {
 	constructor ( providers )
 	{
 		this.providers = this._initializeProviders( providers );
+		this._setupCircuitBreakers();
+	}
 
+	_setupCircuitBreakers ()
+	{
 		const defaultCircuitOptions = {
 			timeout: 300000,
 			errorThresholdPercentage: 50,
-			resetTimeout: 9000000,
+			resetTimeout: 9000000
 		};
+
 		for ( const provider of this.providers )
 		{
-			const circuitOptions = Object.assign({}, defaultCircuitOptions, provider.circuitOptions || {});
-
 			const action = async ({ params, withResponse }) =>
 			{
 				const client = this.createClient( provider );
-
 				if ( withResponse )
 				{
 					return client.chat.completions.create( params ).withResponse();
@@ -32,22 +33,32 @@ class AIRouter
 				return client.chat.completions.create( params );
 			};
 
-			const breaker = new CircuitBreaker( action, circuitOptions );
+			const options = { ...defaultCircuitOptions, ...provider.circuitOptions };
+			const breaker = new CircuitBreaker( action, options );
 
-			// simple logging for breaker transitions
-			breaker.on( "open", ( ) =>
+			// Expanded logging for readability
+			breaker.on( "open", () =>
 			{
-				return logger.warn( `Circuit open for provider: ${provider.name}` )
+				logger.info( `Circuit open for ${provider.name}` );
 			});
-			breaker.on( "halfOpen", () => { return logger.info( `Circuit half-open for provider: ${provider.name}` ) });
-			breaker.on( "close", () => { return logger.info( `Circuit closed for provider: ${provider.name}` ) });
-			breaker.on( "fallback", () => { return logger.warn( `Fallback triggered for provider: ${provider.name}` ) });
+			breaker.on( "halfOpen", () =>
+			{
+				logger.info( `Circuit half-open for ${provider.name}` );
+			});
+			breaker.on( "close", () =>
+			{
+				logger.info( `Circuit closed for ${provider.name}` );
+			});
+			breaker.on( "fallback", () =>
+			{
+				logger.warn( `Fallback triggered for ${provider.name}` );
+			});
 			breaker.on( "failure", ( err ) =>
 			{
-				logger.error({ provider: provider.name, event: "failure", error: err.message }, "Breaker failure event" );
-			 });
-			// optional fallback: we throw so the router will continue to next provider
-			breaker.fallback( ( err ) =>
+				logger.error({ provider: provider.name, error: err.message }, "Breaker failure" );
+			});
+
+			breaker.fallback( () =>
 			{
 				throw new Error( `Circuit open for ${provider.name}` );
 			});
@@ -61,7 +72,7 @@ class AIRouter
 		return new OpenAI({
 			apiKey: provider.apiKey,
 			baseURL: provider.apiUrl,
-			timeout: 60000,
+			timeout: 60000
 		});
 	}
 
@@ -70,46 +81,47 @@ class AIRouter
 		const { stream: streamOption, tools, ...restOptions } = options;
 		const isStreaming = stream || streamOption;
 
-		logger.info( `Starting chatCompletion with ${this.providers.length} providers (streaming: ${isStreaming})` );
-		let lastError;
-
 		for ( const provider of this.providers )
 		{
 			try
 			{
-				logger.info( `Attempting with provider: ${provider.name}` );
 				const params = {
 					messages,
-					...tools && tools.length > 0 ? { tools } : {},
-					stream: isStreaming,
 					...restOptions,
-					model: provider.model
+					model: provider.model,
+					stream: isStreaming
 				};
+
+				if ( tools && tools.length > 0 )
+				{
+					params.tools = tools;
+				}
+
 				const result = await provider.breaker.fire({ params, withResponse: false });
-				logger.info( `Successful with provider: ${provider.name}` );
+
 				if ( isStreaming )
 				{
-					const responseStream = result;
 					return ( async function* ()
 					{
-						for await ( const chunk of responseStream )
+						for await ( const chunk of result )
 						{
 							try
 							{
-								const content = chunk.choices[0]?.delta?.content;
-								const reasoning = chunk.choices[0]?.delta?.reasoning;
-								const tool_calls_delta = chunk.choices[0]?.delta?.tool_calls;
-								if ( content !== null )
+								const delta = chunk.choices[0]?.delta;
+								if ( delta )
 								{
-									chunk.content = content
-								}
-								if ( reasoning !== null )
-								{
-									chunk.reasoning = reasoning
-								}
-								if ( tool_calls_delta !== null )
-								{
-									chunk.tool_calls_delta = tool_calls_delta;
+									if ( delta.content !== null && delta.content !== undefined )
+									{
+										chunk.content = delta.content;
+									}
+									if ( delta.reasoning !== null && delta.reasoning !== undefined )
+									{
+										chunk.reasoning = delta.reasoning;
+									}
+									if ( delta.tool_calls !== null && delta.tool_calls !== undefined )
+									{
+										chunk.tool_calls_delta = delta.tool_calls;
+									}
 								}
 								yield chunk;
 							}
@@ -120,35 +132,26 @@ class AIRouter
 						}
 					})();
 				}
-				else
+
+				// Non-streaming response handling
+				const response = result;
+				const message = response.choices[0]?.message;
+
+				if ( message )
 				{
-					const response = result;
-					const content = response.choices[0]?.message?.content;
-					const reasoning = response.choices[0]?.message?.reasoning;
-					const tool_calls = response.choices[0]?.message?.tool_calls
-					if ( content !== null )
-					{
-						response.content = content
-					}
-					if ( reasoning !== null )
-					{
-						response.reasoning = reasoning
-					}
-					if ( tool_calls !== null )
-					{
-						response.tool_calls = tool_calls
-					}
-					return response;
+					if ( message.content !== null ) response.content = message.content;
+					if ( message.reasoning !== null ) response.reasoning = message.reasoning;
+					if ( message.tool_calls !== null ) response.tool_calls = message.tool_calls;
 				}
+
+				return response;
 			}
 			catch ( error )
 			{
-				lastError = error;
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
-				// Continue to next provider
 			}
 		}
-		throw new Error( `All providers failed. Last error: ${lastError?.message || "unknown"}` );
+		throw new Error( "All providers failed" );
 	}
 
 	async chatCompletionWithResponse ( messages, options = {})
@@ -156,35 +159,30 @@ class AIRouter
 		const { stream, tools, ...restOptions } = options;
 		const isStreaming = stream;
 
-		logger.info( `Starting chatCompletionWithResponse with ${this.providers.length} providers (streaming: ${isStreaming})` );
-		let lastError;
-
 		for ( const provider of this.providers )
 		{
 			try
 			{
-				logger.info( `Attempting with provider: ${provider.name}` );
-
 				const params = {
 					messages,
-					...tools && tools.length > 0 ? { tools } : {},
-					stream: isStreaming,
 					...restOptions,
-					model: provider.model
+					model: provider.model,
+					stream: isStreaming
 				};
 
-				const { data, response: rawResponse } = await provider.breaker.fire({ params, withResponse: true });
-				logger.info( `Successful with provider: ${provider.name}` );
-				return { data, response: rawResponse }
+				if ( tools && tools.length > 0 )
+				{
+					params.tools = tools;
+				}
+
+				return await provider.breaker.fire({ params, withResponse: true });
 			}
 			catch ( error )
 			{
-				lastError = error;
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
-				// Continue to next provider
 			}
 		}
-		throw new Error( `All providers failed. Last error: ${lastError?.message || "unknown"}` );
+		throw new Error( "All providers failed" );
 	}
 
 	async getModels ()
@@ -194,11 +192,19 @@ class AIRouter
 		{
 			try
 			{
-				logger.info( `Fetching models for provider: ${provider.name}` );
 				const client = this.createClient( provider );
 				const listResponse = await client.models.list();
-				const modelList = Array.isArray( listResponse.data ) ? listResponse.data : listResponse.body || [];
-				const model = modelList.find( m => { return m.id === provider.model || m.id === `models/${provider.model}` });
+
+				// Handle different API response structures
+				const modelList = Array.isArray( listResponse.data )
+					? listResponse.data
+					: listResponse.body || [];
+
+				const model = modelList.find( m =>
+				{
+					return m.id === provider.model || m.id === `models/${provider.model}`;
+				});
+
 				if ( model )
 				{
 					models.push( model );
@@ -210,7 +216,7 @@ class AIRouter
 			}
 			catch ( error )
 			{
-				logger.error( `Failed to list models for provider ${provider.name}: ${error.message}` );
+				logger.error( `Failed to list models for ${provider.name}: ${error.message}` );
 			}
 		}
 		return models;
@@ -218,29 +224,30 @@ class AIRouter
 
 	async checkProvidersStatus ()
 	{
-		const healthCheckPromises = this.providers.map( async ( provider ) =>
+		const maskApiKey = ( key ) =>
 		{
-			const maskApiKey = ( apiKey ) =>
+			if ( key && key.length >= 8 )
 			{
-				if ( !apiKey || typeof apiKey !== "string" || apiKey.length < 8 )
-				{
-					return "Invalid API Key";
-				}
-				return `${apiKey.substring( 0, 4 )}...${apiKey.substring( apiKey.length - 4 )}`;
-			};
+				return `${key.substring( 0, 4 )}...${key.substring( key.length - 4 )}`;
+			}
+			return "Invalid API Key";
+		};
 
+		const promises = this.providers.map( async ( provider ) =>
+		{
 			try
 			{
 				const client = this.createClient( provider );
 				await client.chat.completions.create({
 					messages: [{ role: "user", content: "test" }],
 					model: provider.model,
-					max_tokens: 1,
+					max_tokens: 1
 				});
+
 				return {
 					name: provider.name,
 					status: "ok",
-					apiKey: maskApiKey( provider.apiKey ),
+					apiKey: maskApiKey( provider.apiKey )
 				};
 			}
 			catch ( error )
@@ -249,23 +256,24 @@ class AIRouter
 					name: provider.name,
 					status: "error",
 					reason: error.message.substring( 0, 100 ),
-					apiKey: maskApiKey( provider.apiKey ),
+					apiKey: maskApiKey( provider.apiKey )
 				};
 			}
 		});
 
-		const results = await Promise.allSettled( healthCheckPromises );
-		const processedResults = results.map( result =>
+		const results = await Promise.allSettled( promises );
+
+		const processedResults = results.map( ( r ) =>
 		{
-			if ( result.status === "fulfilled" )
+			if ( r.status === "fulfilled" )
 			{
-				return result.value;
+				return r.value;
 			}
 			return {
 				name: "unknown",
 				status: "error",
-				reason: result.reason.message.substring( 0, 100 ),
-				apiKey: "N/A",
+				reason: r.reason.message.substring( 0, 100 ),
+				apiKey: "N/A"
 			};
 		});
 
@@ -280,6 +288,7 @@ class AIRouter
 	_initializeProviders ( providers )
 	{
 		const allProviders = [];
+
 		for ( const p of providers )
 		{
 			if ( Array.isArray( p.apiKey ) )
