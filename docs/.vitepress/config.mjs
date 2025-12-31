@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
-	base: "/Unified-AI-Router/",
+	base: "https://mlibre.github.io/Unified-AI-Router/",
 	title: "Unified AI Router",
 	description: "OpenAI-compatible router with multi-provider fallback.",
 	head: [
