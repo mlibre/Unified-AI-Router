@@ -3,7 +3,7 @@
 Unified AI Router is a comprehensive toolkit for AI applications, featuring:
 
 - An **OpenAI-compatible** server for seamless API integration
-- A **unified interface** for multiple LLM providers with **automatic fallback**
+- A **Unified Interface** for multiple LLM providers with **Automatic Fallback**
 
 It supports all the OpenAI-compatible servers, including major providers like OpenAI, Google, Grok, Litellm, Vllm, Ollama and more, ensuring reliability and flexibility.
 
@@ -13,6 +13,7 @@ It supports all the OpenAI-compatible servers, including major providers like Op
   - [📚 Basic Library Usage](#-basic-library-usage)
   - [🔌 OpenAI-Compatible Server](#-openai-compatible-server)
   - [🧪 Testing](#-testing)
+  - [🌐 Deploying to Render.com](#-deploying-to-rendercom)
 - [🔧 Supported Providers](#-supported-providers)
 - [🔑 API Keys](#-api-keys)
 - [📁 Project Structure](#-project-structure)
@@ -40,7 +41,40 @@ npm i
 
 ## 📖 Usage
 
-### 📚 Basic Library Usage
+### 🔌 OpenAI-Compatible Server
+
+The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.  
+The server uses the provider configurations defined in [provider.js](provider.js) file, and requires API keys set in a `.env` file.
+
+1. Prepare  `.env`:
+
+  ```bash
+  cp .env.example .env
+  nano .env
+  ```
+
+1. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey`, `model`, and `apiUrl` for the providers you want to use.
+
+  ```bash
+  nano provider.js
+  ```
+
+To start the server locally, run:
+
+```bash
+npm start
+```
+
+The server listens at `http://localhost:3000/` and supports the following OpenAI-compatible endpoints:
+
+- `POST /v1/chat/completions` - Chat completions (streaming and non-streaming)
+- `POST /chat/completions` - Chat completions (streaming and non-streaming)
+- `GET /v1/models` - List available models
+- `GET /models` - List available models
+- `GET /health` - Health check
+- `GET /v1/providers/status` - Check the status of all configured providers
+
+### 📚 Library Usage
 
 This is the core AIRouter library - a JavaScript class that provides a unified interface for multiple LLM providers.
 
@@ -90,39 +124,9 @@ const providers = [
 ];
 ```
 
-### 🔌 OpenAI-Compatible Server
-
-The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.  
-The server uses the provider configurations defined in [provider.js](provider.js) file, and requires API keys set in a `.env` file.
-
-1. Copy the example environment file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Edit `.env` and add your API keys for the desired providers (see [🔑 API Keys](#-api-keys) for sources).
-
-3. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey`, `model`, and `apiUrl` for the providers you want to use.
-
-To start the server locally, run:
-
-```bash
-npm start
-```
-
-The server listens at `http://localhost:3000/` and supports the following OpenAI-compatible endpoints:
-
-- `POST /v1/chat/completions` - Chat completions (streaming and non-streaming)
-- `POST /chat/completions` - Chat completions (streaming and non-streaming)
-- `GET /v1/models` - List available models
-- `GET /models` - List available models
-- `GET /health` - Health check
-- `GET /v1/providers/status` - Check the status of all configured providers
-
 ### 🧪 Testing
 
-The project includes tests for the core library and the OpenAI-compatible server. To run the tests, use the following commands:
+The project includes tests for the core library and the OpenAI-compatible server.
 
 ```bash
 # Test chat completion

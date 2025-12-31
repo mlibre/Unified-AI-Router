@@ -37,7 +37,7 @@ module.exports = [
 		apiUrl: "https://api.llm7.io/v1",
 	},
 	{
-		name: "openrouter_qwen",
+		name: "openrouter_minimax",
 		apiKey: [
 			process.env.OPENROUTER_API_KEY,
 			process.env.OPENROUTER_API_KEY_2,
