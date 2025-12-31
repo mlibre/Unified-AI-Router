@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
-	base: "https://mlibre.github.io/Unified-AI-Router/",
+	base: "/Unified-AI-Router/",
 	server: {
    	host: true,
    },
