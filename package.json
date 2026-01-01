@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "3.5.12",
+  "version": "3.5.13",
   "description": "A unified interface for multiple LLM providers with automatic fallback. This project includes an OpenAI-compatible server and a deployable Telegram bot with a Mini App interface. It supports major providers like OpenAI, Google, Grok, and more, ensuring reliability and flexibility for your AI applications.",
   "license": "ISC",
   "author": "mlibre",
@@ -17,6 +17,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node openai-server.js",
+    "repomix": "repomix . --ignore 'docs/public,docs/.vitepress/dist,/node_modules/,/.git/,./public/fonts/,public/saan-nuzul.json,public/khamenei-interpretations/,scripts/,public/quran.json,/*.png,/.ttf,**/.woff2,dist/,build/,/package-lock.json,/yarn.lock,.github/'",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
