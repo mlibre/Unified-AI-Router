@@ -34,7 +34,7 @@
 **Lightweight Architecture**: Feature MUST maintain minimal dependencies and optimize memory footprint. Performance impact MUST be justified.
 **OpenAI-Compatibility**: Any API changes MUST preserve strict OpenAI compatibility for seamless integration.
 **Multi-Provider Fallback**: New features MUST not break existing fallback mechanisms and circuit breaker patterns.
-**Simple and Clear Code**: Implementation MUST prioritize readability over cleverness with clear naming and single responsibilities.
+**Simple and Clear Code**: Implementation MUST prioritize readability and robustness over cleverness with clear naming and refactoring for simpler, shorter, cleaner solutions.
 **Developer-Centric Documentation**: All features MUST include comprehensive documentation with quickstart guides and configuration examples.
 
 ## Project Structure

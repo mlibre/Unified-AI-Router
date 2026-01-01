@@ -158,7 +158,7 @@ Examples of foundational tasks (adjust based on your project):
 **Purpose**: Improvements that affect multiple user stories
 
 - [ ] TXXX [P] Documentation updates in docs/ - ensure Developer-Centric Documentation compliance
-- [ ] TXXX Code cleanup and refactoring - verify Simple and Clear Code compliance
+- [ ] TXXX Code cleanup and refactoring - verify Simple and Clear Code compliance with refactoring for simpler, shorter, cleaner solutions
 - [ ] TXXX Performance optimization across all stories - validate Lightweight Architecture compliance
 - [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
 - [ ] TXXX Security hardening

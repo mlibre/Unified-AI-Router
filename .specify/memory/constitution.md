@@ -1,8 +1,8 @@
 <!-- Sync Impact Report:
-Version change: 1.0.0 → 1.1.0
-Modified principles: None (new principles added)
-Added sections: I. Lightweight Architecture, II. OpenAI-Compatibility, III. Multi-Provider Fallback, IV. Simple and Clear Code, V. Developer-Centric Documentation
-Removed sections: None
+Version change: 1.0.0 → 1.2.0
+Modified principles: IV. Simple and Clear Code (enhanced with refactoring guidelines)
+Added sections: I. Lightweight Architecture, II. OpenAI-Compatibility, III. Multi-Provider Fallback, IV. Simple and Clear Code, VI. Developer-Centric Documentation
+Removed sections: V. Robust and Complete Implementation
 Templates requiring updates: ✅ plan-template.md, ✅ spec-template.md, ✅ tasks-template.md
 Follow-up TODOs: None
 -->
@@ -24,9 +24,9 @@ Automatic fallback MUST be implemented for all provider failures including netwo
 
 ### IV. Simple and Clear Code
 
-Code MUST be simple, clear, short, and readable. Complex one-liners MUST be avoided in favor of straightforward, maintainable solutions. Functions MUST have single responsibilities and clear naming. Comments MUST explain "why" not "what". Refactoring MUST prioritize readability over cleverness.
+Code MUST be simple, clear, and readable. Complex one-liners MUST be avoided in favor of straightforward, maintainable solutions. Functions MUST have clear naming. Refactoring MUST prioritize readability and robustness over cleverness. If a new solution can be simpler, shorter, and cleaner, refactor the code to achieve this goal.
 
-### V. Developer-Centric Documentation
+### VI. Developer-Centric Documentation
 
 All documentation MUST be developer-focused with clear technical explanations. VitePress MUST be used for documentation generation with comprehensive API references. Quickstart guides MUST enable developers to run locally within 5 minutes. Configuration examples MUST cover all supported providers and deployment scenarios.
 
@@ -61,4 +61,4 @@ All documentation MUST be developer-focused with clear technical explanations. V
 - MINOR: New providers, features, or non-breaking enhancements
 - PATCH: Bug fixes, documentation updates, performance improvements
 
-**Version**: 1.1.0 | **Ratified**: 2026-01-01 | **Last Amended**: 2026-01-01
+**Version**: 1.2.0 | **Ratified**: 2026-01-01 | **Last Amended**: 2026-01-01

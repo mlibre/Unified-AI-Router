@@ -95,7 +95,7 @@
 - **FR-006**: Feature MUST comply with Lightweight Architecture principle - minimal dependencies and optimized memory footprint
 - **FR-007**: Feature MUST maintain OpenAI-Compatibility for seamless integration with existing tools
 - **FR-008**: Feature MUST not break existing Multi-Provider Fallback mechanisms and circuit breaker patterns
-- **FR-009**: Implementation MUST follow Simple and Clear Code principle with readable, maintainable solutions
+- **FR-009**: Implementation MUST follow Simple and Clear Code principle with readable, maintainable solutions and prioritize refactoring for simpler, shorter, cleaner code
 - **FR-010**: Feature MUST include comprehensive Developer-Centric Documentation with quickstart guides
 
 *Example of marking unclear requirements:*
