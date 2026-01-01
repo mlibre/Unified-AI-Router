@@ -16,7 +16,7 @@ Node.js applications MUST remain lightweight and high-performance. Dependencies 
 
 ### II. OpenAI-Compatibility
 
-All API endpoints MUST maintain strict OpenAI compatibility for seamless integration with existing tools and clients. The `/v1/chat/completions` endpoint MUST support both streaming and non-streaming responses. All OpenAI-compatible servers MUST be supported without modification. Backward compatibility MUST be preserved across all minor version updates.
+Project must have OpenAI compatibility endpoints for seamless integration with existing tools and clients API. The `/v1/chat/completions` endpoint MUST support both streaming and non-streaming responses. All OpenAI-compatible servers MUST be supported without modification. Backward compatibility MUST be preserved across all minor version updates.
 
 ### III. Multi-Provider Fallback Reliability
 
