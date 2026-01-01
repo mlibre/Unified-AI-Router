@@ -2,7 +2,7 @@
 
 * Always write code that is simple and clear.
 * Avoid tricky one-liners.
-* Refactor if a solution can be simpler, cleaner, or more elegant.
+* Refactor if a solution can be simpler, shorter, cleaner.
 * Prefer short, readable, and straightforward solutions.
 * Keep logic easy to follow.
 * Use meaningful names.
