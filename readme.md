@@ -23,7 +23,6 @@
   * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
 * [Advanced Configuration](#advanced-configuration)
   * [Custom Circuit Breaker Settings](#custom-circuit-breaker-settings)
-  * [Provider Status Checking](#provider-status-checking)
 * [💡 Examples](#-examples)
   * [Complete Chat Application](#complete-chat-application)
 * [🏗️ Architecture Overview](#️-architecture-overview)
@@ -278,15 +277,6 @@ const providers = [
 ];
 ```
 
-### Provider Status Checking
-
-```javascript
-// Check health of all configured providers
-const status = await llm.checkProvidersStatus();
-console.log(status);
-// Output: [{ name: "openai", status: "ok", apiKey: "sk-...abcd" }, ...]
-```
-
 ---
 
 ## 💡 Examples
@@ -517,7 +507,7 @@ const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
 
 ### Project Structure
 
-```
+```bash
 Unified-AI-Router/
 ├── openai-server.js     # 🚀 OpenAI-compatible server (MAIN COMPONENT)
 ├── main.js              # Core AIRouter library
