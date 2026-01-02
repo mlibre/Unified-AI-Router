@@ -23,12 +23,12 @@ Keep this managed block intact so `openspec update` can refresh the instructions
 
 ## I. Lightweight Architecture
 
-Codes, logic, and architecture MUST remain lightweight. Dependencies MUST be minimal and purposeful.
+Code, logic, and architecture MUST remain lightweight. Dependencies MUST be minimal and purposeful.
 
 ## II. Simple and Minimalist Implementation
 
 Code MUST be simple, clear, and readable. Prefer straightforward, maintainable solutions over complex ones.  
-Codebase MUST be kept minimal. Avoid clever, Tricky one-liners in favor of clear, readable alternatives.
+Keep the codebase minimal: avoid clever or tricky one-liners in favor of clarity.
 
 ## III. Developer-Centric Documentation
 
