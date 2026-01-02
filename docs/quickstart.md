@@ -29,6 +29,8 @@ npm start
 
 By default the server listens on `http://localhost:3000` and supports these OpenAI-compatible endpoints:
 
+* `POST /v1/responses` — OpenAI Responses API (streaming & non-streaming)
+* `POST /responses` — same as above (alternate path)
 * `POST /v1/chat/completions` — streaming & non-streaming chat completions
 * `POST /chat/completions` — same as above (alternate path)
 * `GET /v1/models` & `GET /models` — lists models available from providers
@@ -42,6 +44,26 @@ Use `curl` or your HTTP client to test a simple chat completion:
 curl -s -X POST http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{ "messages": [{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"Say hello." }], "model":"gpt-3.5-turbo" }'
+```
+
+### 4a) Quick test Responses API (non-streaming)
+
+Test the new Responses API endpoint:
+
+```bash
+curl -s -X POST http://localhost:3000/v1/responses \
+  -H "Content-Type: application/json" \
+  -d '{ "input": "Tell me something interesting about AI.", "model":"gpt-3.5-turbo" }'
+```
+
+### 4b) Quick test Responses API (streaming)
+
+Test streaming responses:
+
+```bash
+curl -s -X POST http://localhost:3000/v1/responses \
+  -H "Content-Type: application/json" \
+  -d '{ "input": "Say hello in exactly 3 words.", "model":"gpt-3.5-turbo", "stream": true }'
 ```
 
 ## 5) Next steps

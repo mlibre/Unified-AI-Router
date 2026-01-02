@@ -129,6 +129,12 @@ module.exports = [
 node tests/openai-server-non-stream.js
 ```
 
+* Responses API non-streaming test:
+
+```bash
+node tests/openai-responses-non-stream.js
+```
+
 * Streaming test:
 
 ```bash

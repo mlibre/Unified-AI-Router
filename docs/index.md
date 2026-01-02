@@ -19,7 +19,7 @@ features:
   - title: Circuit breaker protection
     details: Built-in fault tolerance with automatic circuit breaking for each provider to prevent cascading failures.
   - title: OpenAI-compatible API
-    details: Run a drop-in replacement for the OpenAI chat completion endpoints (streaming & non-streaming).
+    details: Run a drop-in replacement for OpenAI endpoints including chat completions and responses API (streaming & non-streaming).
   - title: Tool calling & streaming
     details: Supports tool-calling metadata and SSE streaming to integrate with existing tooling.
   - title: Easy to self-host
