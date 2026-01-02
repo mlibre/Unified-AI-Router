@@ -26,7 +26,7 @@
 * [⚙️ Configuration](#️-configuration)
   * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
 * [💡 Examples](#-examples)
-* [💡 Complete Chat Application](#-complete-chat-application)
+  * [🏗️ Complete Chat Application](#️-complete-chat-application)
 * [🏗️ Architecture Overview](#️-architecture-overview)
 * [🚀 Deployment](#-deployment)
   * [🏗️ Render.com Deployment](#️-rendercom-deployment)
@@ -92,7 +92,18 @@ cp .env.example .env
 ### 3. Start Using the Server
 
 ```bash
-# Start the server (after configuring .env and provider.js)
+# Configure environment
+cp .env.example .env
+
+# Edit .env and add your API keys:
+# OPEN_ROUTER_API_KEY=your-key-here
+# PORT=3000 # Optional: server port (default: 3000)
+
+# edit provider.js
+# Define which providers to use and in what order
+# Example provider.js is provided in the repository
+
+# Start the server
 npm start
 
 # Test it works
@@ -100,7 +111,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "messages": [{"role": "user", "content": "Hello!"}],
-    "model": "WILL_BE_MANGED_BY_PROVIDERJS"
+    "model": "no_need" # Model will be managed by provider.js
   }'
 ```
 
@@ -143,12 +154,19 @@ console.log(response.content);
 
 The server provides a OpenAI-compatible API with all the reliability features built-in.
 
-Start the server
+Start the server:
 
 ```bash
 # Configure environment
 cp .env.example .env
-# Add your API keys to .env
+
+# Edit .env and add your API keys:
+# OPENROUTER_API_KEY=your-openrouter-key-here
+# PORT=3000 # Optional: server port (default: 3000)
+
+# edit provider.js
+# Define which providers to use and in what order
+# Example provider.js is provided in the repository
 
 # Start the server
 npm start
@@ -172,7 +190,7 @@ The server supports function calling with streaming responses:
 curl -X POST http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gemini-2.5-pro",
+    "model": "no_need_to_mention",
     "messages": [
       {
         "role": "system",
@@ -184,29 +202,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
       }
     ],
     "tools": [
-      {
-        "type": "function",
-        "function": {
-          "name": "multiply",
-          "description": "Multiply two numbers",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "a": {
-                "type": "number",
-                "description": "First number"
-              },
-              "b": {
-                "type": "number",
-                "description": "Second number"
-              }
-            },
-            "required": ["a", "b"],
-            "additionalProperties": false
-          },
-          "strict": true
-        }
-      },
       {
         "type": "function",
         "function": {
@@ -243,7 +238,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 | Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
 | Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
 | Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
-| Any OpenAI-Compatible Server | `http://address/` (your URL)                               | Any model supported by your server |
+| Any OpenAI-Compatible Server | `http://server-url/`                                       | Any model supported by your server |
 | Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
 
 **Get API Keys:**
@@ -373,7 +368,7 @@ const providers = [
 
 ## 💡 Examples
 
-## 💡 Complete Chat Application
+### 🏗️ Complete Chat Application
 
 ```javascript
 const AIRouter = require("unified-ai-router");
