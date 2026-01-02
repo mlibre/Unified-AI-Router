@@ -52,9 +52,9 @@ Building reliable AI applications shouldn't require choosing between providers o
 * **🔄 Automatic Failover**: If one provider fails, seamlessly switches to the next
 * **🛡️ Circuit Breaker Protection**: Prevents cascading failures across your infrastructure
 * **⚡ OpenAI Compatibility**: Drop-in replacement for any OpenAI-compatible client
-* **🌐 Multi-Provider Support**: Works with 10+ AI providers
-* **📡 Streaming & Tools**: Full support for streaming responses and tool calling
-* **🎯 Zero Configuration**: Get started in under 5 minutes
+* **🌐 Multi-Provider Support**: Works with 10+ AI providers and any OpenAI-compatible server
+* **🚀 Production Server**: Ready-to-deploy OpenAI-compatible API server with built-in reliability
+* **📚 Library Component**: Core AIRouter library for direct integration in your applications
 
 **Perfect for**: Production AI applications, chatbots, content generation, code assistants, and any system requiring reliable AI access.
 
@@ -86,6 +86,7 @@ cp .env.example .env
 # OPENAI_API_KEY=sk-...
 # GEMINI_API_KEY=...
 # OPENROUTER_API_KEY=...
+# OTHER_API_KEY=... # Any OpenAI-Compatible provider
 
 # Configure providers (edit provider.js)
 # The server uses provider.js to define which providers to try and in what order
@@ -448,14 +449,15 @@ module.exports = [
 
 ### Supported Providers
 
-| Provider      | API Base URL                                               | Model Examples                |
-| ------------- | ---------------------------------------------------------- | ----------------------------- |
-| OpenAI        | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`      |
-| OpenRouter    | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet` |
-| Groq          | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`     |
-| Google Gemini | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`              |
-| Cohere        | `https://api.cohere.ai/v1`                                 | `command-r-plus`              |
-| Cerebras      | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                |
+| Provider                     | API Base URL                                               | Model Examples                     |
+| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
+| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
+| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet`      |
+| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
+| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
+| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
+| Any OpenAI-Compatible Server | `http://address/` (your URL)                               | Any model supported by your server |
+| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
 
 **Get API Keys:**
 
@@ -465,6 +467,7 @@ module.exports = [
 * **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
 * **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
 * **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
+* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
 
 ---
 
