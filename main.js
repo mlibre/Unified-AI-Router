@@ -23,7 +23,8 @@ class AIRouter
 
 		for ( const provider of this.providers )
 		{
-			const action = async ({ params, withResponse }) =>
+			// Chat Completions action
+			const chatAction = async ({ params, withResponse }) =>
 			{
 				const client = this.createClient( provider );
 				if ( withResponse )
@@ -31,6 +32,26 @@ class AIRouter
 					return client.chat.completions.create( params ).withResponse();
 				}
 				return client.chat.completions.create( params );
+			};
+
+			// Responses API action
+			const responsesAction = async ({ params, withResponse }) =>
+			{
+				const client = this.createClient( provider );
+				if ( withResponse )
+				{
+					return client.responses.create( params ).withResponse();
+				}
+				return client.responses.create( params );
+			};
+
+			const action = async ({ params, withResponse, isResponses = false }) =>
+			{
+				if ( isResponses )
+				{
+					return responsesAction({ params, withResponse });
+				}
+				return chatAction({ params, withResponse });
 			};
 
 			const options = { ...defaultCircuitOptions, ...provider.circuitOptions };
@@ -74,6 +95,81 @@ class AIRouter
 			baseURL: provider.apiUrl,
 			timeout: 60000
 		});
+	}
+
+	async responses ( input, options = {}, stream = false )
+	{
+		const { stream: streamOption, tools, ...restOptions } = options;
+		const isStreaming = stream || streamOption;
+
+		for ( const provider of this.providers )
+		{
+			try
+			{
+				const params = {
+					input,
+					...restOptions,
+					model: provider.model,
+					stream: isStreaming
+				};
+
+				if ( tools && tools.length > 0 )
+				{
+					params.tools = tools;
+				}
+
+				const result = await provider.breaker.fire({ params, withResponse: false, isResponses: true });
+
+				if ( isStreaming )
+				{
+					return ( async function* ()
+					{
+						for await ( const chunk of result )
+						{
+							yield chunk;
+						}
+					})();
+				}
+
+				return result;
+			}
+			catch ( error )
+			{
+				logger.error( `Failed with ${provider.name}: ${error.message}` );
+			}
+		}
+		throw new Error( "All providers failed" );
+	}
+
+	async responsesWithResponse ( input, options = {})
+	{
+		const { stream, tools, ...restOptions } = options;
+		const isStreaming = stream;
+
+		for ( const provider of this.providers )
+		{
+			try
+			{
+				const params = {
+					input,
+					...restOptions,
+					model: provider.model,
+					stream: isStreaming
+				};
+
+				if ( tools && tools.length > 0 )
+				{
+					params.tools = tools;
+				}
+
+				return await provider.breaker.fire({ params, withResponse: true, isResponses: true });
+			}
+			catch ( error )
+			{
+				logger.error( `Failed with ${provider.name}: ${error.message}` );
+			}
+		}
+		throw new Error( "All providers failed" );
 	}
 
 	async chatCompletion ( messages, options = {}, stream = false )
