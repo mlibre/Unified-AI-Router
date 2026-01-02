@@ -36,7 +36,7 @@ By default the server listens on `http://localhost:3000` and supports these Open
 * `GET /v1/models` & `GET /models` — lists models available from providers
 * `GET /health` — health check
 
-## 4) Quick test (non-streaming)
+## 4) Chat Completions Test
 
 Use `curl` or your HTTP client to test a simple chat completion:
 
@@ -46,7 +46,7 @@ curl -s -X POST http://localhost:3000/v1/chat/completions \
   -d '{ "messages": [{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"Say hello." }], "model":"gpt-3.5-turbo" }'
 ```
 
-### 4a) Quick test Responses API (non-streaming)
+## 5) Responses API Test
 
 Test the new Responses API endpoint:
 
@@ -56,7 +56,7 @@ curl -s -X POST http://localhost:3000/v1/responses \
   -d '{ "input": "Tell me something interesting about AI.", "model":"gpt-3.5-turbo" }'
 ```
 
-### 4b) Quick test Responses API (streaming)
+## 6) Responses API Streaming Test
 
 Test streaming responses:
 
@@ -66,7 +66,7 @@ curl -s -X POST http://localhost:3000/v1/responses \
   -d '{ "input": "Say hello in exactly 3 words.", "model":"gpt-3.5-turbo", "stream": true }'
 ```
 
-## 5) Next steps
+## 7) Next steps
 
 * Configure additional providers in `provider.js` and set env keys.
 * Try streaming by setting `stream: true` when calling the endpoint.

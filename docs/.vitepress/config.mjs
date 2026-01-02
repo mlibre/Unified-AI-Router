@@ -4,9 +4,9 @@ export default defineConfig({
 	base: "/Unified-AI-Router/",
 	server: {
    	host: true,
-   },
+	},
 	title: "Unified AI Router",
-	description: "OpenAI-compatible router with multi-provider fallback.",
+	description: "OpenAI-compatible router with multi-provider fallback, supporting both Chat Completions and Responses API.",
 	head: [
 		["link", { rel: "icon", href: "favicon.png" }],
 		["link", { rel: "icon", type: "image/png", href: "favicon.png" }],
