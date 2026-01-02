@@ -21,6 +21,7 @@
   * [🏗️ Provider Configuration (`provider.js`)](#️-provider-configuration-providerjs)
 * [🚀 Running Server](#-running-server)
   * [🛠️ Tool Calling Example](#️-tool-calling-example)
+  * [💬 Simple Chat Example](#-simple-chat-example)
 * [📋 Supported Providers](#-supported-providers)
 * [📚 Library Usage](#-library-usage)
   * [💬 Basic Chat Completion](#-basic-chat-completion)
@@ -274,6 +275,142 @@ curl -X POST http://localhost:3000/v1/chat/completions \
     "temperature": 0.7,
     "stream": true
   }'
+```
+
+**Expected Response:**
+
+```json
+{
+  "id": "gen-1767373622-GrCl6IaMadukHESGLXrg",
+  "provider": "Xiaomi",
+  "model": "xiaomi/mimo-v2-flash:free",
+  "object": "chat.completion",
+  "created": 1767373622,
+  "choices": [
+    {
+      "logprobs": null,
+      "finish_reason": "tool_calls",
+      "native_finish_reason": "tool_calls",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "I'll check the weather for both Mashhad and Tehran for you.",
+        "refusal": null,
+        "reasoning": null,
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_b7e5a323a134468c8b068401",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\": \"Mashhad\"}"
+            }
+          },
+          {
+            "type": "function",
+            "index": 1,
+            "id": "call_d26d59f9fdec4ef0b33cfc1e",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\": \"Tehran\"}"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 410,
+    "completion_tokens": 57,
+    "total_tokens": 467,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+    }
+  }
+}
+```
+
+### 💬 Simple Chat Example
+
+**Request:**
+
+```json
+{
+  "model": "any-model",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "hey"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+```
+
+**Response:**
+
+```json
+{
+  "id": "gen-1767375039-pUm7PBSoyXFJtS6AVAup",
+  "provider": "Xiaomi",
+  "model": "xiaomi/mimo-v2-flash:free",
+  "object": "chat.completion",
+  "created": 1767375039,
+  "choices": [
+    {
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help you today?",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 20,
+    "completion_tokens": 10,
+    "total_tokens": 30,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+    }
+  }
+}
 ```
 
 ---
