@@ -5,6 +5,7 @@
 
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mlibre/Unified-AI-Router/main?label=Unified%20AI%20Router)  
 **The OpenAI-Compatible API Server & Library for Reliable AI Applications**  
+
 *Production-ready Express server and Node.js library with multi-provider AI routing, automatic fallback, and circuit breakers*
 
 </div>
@@ -15,6 +16,9 @@
   * [2. Quick Configuration](#2-quick-configuration)
   * [3. Start Using the Server](#3-start-using-the-server)
   * [4. Library Usage](#4-library-usage)
+* [⚙️ Configuration](#️-configuration)
+  * [Environment Configuration (`.env`)](#environment-configuration-env)
+  * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
 * [🚀 Running Server](#-running-server)
   * [Tool Calling Example](#tool-calling-example)
 * [📋 Supported Providers](#-supported-providers)
@@ -23,8 +27,6 @@
   * [Streaming Responses](#streaming-responses)
   * [Tool Calling](#tool-calling)
   * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
-* [⚙️ Configuration](#️-configuration)
-  * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
 * [💡 Examples](#-examples)
   * [🏗️ Complete Chat Application](#️-complete-chat-application)
 * [🏗️ Architecture Overview](#️-architecture-overview)
@@ -53,8 +55,6 @@ Building reliable AI applications shouldn't require choosing between providers o
 * **🚀 Production Server**: Ready-to-deploy OpenAI-compatible API server with built-in reliability
 * **📚 Library Component**: Core AIRouter library for direct integration in your applications
 
-**Perfect for**: Production AI applications, chatbots, content generation, code assistants, and any system requiring reliable AI access.
-
 ---
 
 ## ⚡ Quick Start
@@ -80,30 +80,15 @@ npm install
 cp .env.example .env
 
 # Edit .env and add at least one API key:
-# OPENAI_API_KEY=sk-...
-# GEMINI_API_KEY=...
 # OPENROUTER_API_KEY=...
-# OTHER_API_KEY=... # Any OpenAI-Compatible provider
 
-# Configure providers (edit provider.js)
+# edit provider.js
 # The server uses provider.js to define which providers to try and in what order
 ```
 
 ### 3. Start Using the Server
 
 ```bash
-# Configure environment
-cp .env.example .env
-
-# Edit .env and add your API keys:
-# OPEN_ROUTER_API_KEY=your-key-here
-# PORT=3000 # Optional: server port (default: 3000)
-
-# edit provider.js
-# Define which providers to use and in what order
-# Example provider.js is provided in the repository
-
-# Start the server
 npm start
 
 # Test it works
@@ -122,7 +107,6 @@ If you prefer using the library directly in your code:
 ```javascript
 const AIRouter = require("unified-ai-router");
 
-// Configure providers (tries in order)
 const providers = [
   {
     name: "openai",
@@ -147,6 +131,72 @@ const response = await llm.chatCompletion([
 
 console.log(response.content);
 ```
+
+---
+
+## ⚙️ Configuration
+
+Before running the server, you need to configure both your environment variables and provider settings.
+
+### Environment Configuration (`.env`)
+
+Copy the environment template and add your API keys:
+
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit .env and add your API keys:
+# OPENAI_API_KEY=sk-your-openai-key-here
+# OPENROUTER_API_KEY=your-openrouter-key-here
+# GEMINI_API_KEY=your-gemini-key-here
+# PORT=3000 # Optional: server port (default: 3000)
+```
+
+### Provider Configuration (`provider.js`)
+
+The `provider.js` file defines which AI providers to use and in what order. The server will try providers sequentially until one succeeds.
+
+**Basic provider configuration:**
+
+```javascript
+module.exports = [
+  {
+    name: "openrouter",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    model: "anthropic/claude-3.5-sonnet",
+    apiUrl: "https://openrouter.ai/api/v1"
+  },
+  {
+    name: "openai",
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "model",
+    apiUrl: "https://api.openai.com/v1",
+    circuitOptions: {
+      timeout: 30000,           // 30 second timeout
+      errorThresholdPercentage: 50, // Open after 50% failures
+      resetTimeout: 300000      // Try again after 5 minutes
+    }
+  },
+  {
+    name: "openai-compatible-server",
+    apiKey: process.env.SERVER_API_KEY, // Optional: depends on the server
+    model: "name",
+    apiUrl: "http://localhost:4000/v1" 
+  }
+  // Add more providers...
+];
+```
+
+**Configuration options:**
+
+* `name`: Provider identifier for logging and fallback
+* `apiKey`: API key from environment variables
+* `model`: Default model for this provider
+* `apiUrl`: Provider's API base URL
+* `circuitOptions`: Advanced reliability settings (optional)
+
+**Provider priority**: Providers are tried in order - if the first fails, it automatically tries the next.
 
 ---
 
@@ -343,28 +393,6 @@ const providers = [
   }
 ];
 ```
-
-## ⚙️ Configuration
-
-### Provider Configuration (`provider.js`)
-
-```javascript
-const providers = [
-  {
-    name: "openai",
-    apiKey: process.env.OPENAI_API_KEY,
-    model: "gpt-4",
-    apiUrl: "https://api.openai.com/v1",
-    circuitOptions: {
-      timeout: 60000,        // 60 second timeout
-      errorThresholdPercentage: 30, // Open circuit after 30% failures
-      resetTimeout: 300000   // Try again after 5 minutes
-    }
-  }
-];
-```
-
----
 
 ## 💡 Examples
 
