@@ -1,5 +1,7 @@
 # Core Principles
 
+You should ALWAYS follow these rules
+
 ## I. Lightweight Architecture
 
 Code, logic, and architecture MUST remain lightweight. Dependencies MUST be minimal and purposeful.
@@ -13,6 +15,10 @@ Keep the codebase minimal: avoid clever or tricky one-liners in favor of clarity
 
 All documentation MUST be developer-focused, with clear, concise technical explanations. Quickstart guides MUST enable local setup in under 5 minutes.
 
-# Other Notes
+## IV. Change Management
 
-If you make changes, update `package.json` to reflect them.
+If you made changes, update `package.json` and documentation (markdown files) to reflect them.
+
+## V. Comprehensive Change Analysis
+
+When implementing or fixing code, always verify changes are correct by analyzing related files and dependencies.
