@@ -2,8 +2,7 @@
 Version change: 1.1.0 → 2.0.0
 Modified principles: II. OpenAI-Compatibility → REMOVED, III. Multi-Provider Fallback Reliability → REMOVED
 Added sections: none
-Removed sections: II. OpenAI-Compatibility, III. Multi-Provider Fallback Reliability
-Templates requiring updates: ✅ .specify/templates/plan-template.md
+
 Follow-up TODOs: Update README.md and docs/quickstart.md to remove OpenAI-compatibility emphasis
 -->
 
