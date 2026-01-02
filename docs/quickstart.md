@@ -61,5 +61,4 @@ curl -X POST http://localhost:3000/v1/responses \
 ## Next
 
 - Configure more providers in `provider.js`
-- Run tests: `node tests/openai-responses-non-stream.js`
 - Check provider status: `GET /v1/providers/status`

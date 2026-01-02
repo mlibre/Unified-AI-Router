@@ -79,9 +79,6 @@ Override per provider:
 # Non-streaming
 node tests/openai-server-non-stream.js
 
-# Responses API
-node tests/openai-responses-non-stream.js
-
 # Streaming  
 node tests/openai-server-stream.js
 
