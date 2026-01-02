@@ -21,7 +21,7 @@
   * [Streaming Responses](#streaming-responses)
   * [Tool Calling](#tool-calling)
   * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
-* [Advanced Configuration](#advanced-configuration)
+* [Configuration](#configuration)
   * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
   * [Supported Providers](#supported-providers)
   * [Custom Circuit Breaker Settings](#custom-circuit-breaker-settings)
@@ -255,7 +255,7 @@ const providers = [
 ];
 ```
 
-## Advanced Configuration
+## Configuration
 
 ### Provider Configuration (`provider.js`)
 
