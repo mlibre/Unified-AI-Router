@@ -52,6 +52,7 @@ Unified AI Router is a toolkit providing an OpenAI-compatible server and unified
 **AI Provider Integration**: Supports OpenAI, Google Gemini, Grok, OpenRouter, Qroq, Cohere, Cerebras, LLM7, and any OpenAI-compatible servers.
 
 **Key Features**:
+
 - Multi-provider support with automatic fallback
 - Circuit breaker for fault tolerance
 - OpenAI-compatible API endpoints
@@ -69,6 +70,7 @@ Unified AI Router is a toolkit providing an OpenAI-compatible server and unified
 ## External Dependencies
 
 **AI Providers**:
+
 - OpenAI API
 - Google Generative Language API (Gemini)
 - OpenRouter API
@@ -79,6 +81,7 @@ Unified AI Router is a toolkit providing an OpenAI-compatible server and unified
 - Other OpenAI-compatible providers
 
 **Infrastructure**:
+
 - Render.com deployment support
 - Environment-based configuration
 - Health check endpoints
