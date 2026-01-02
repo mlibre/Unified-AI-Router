@@ -22,9 +22,12 @@
 * [🚀 Running Server](#-running-server)
   * [🛠️ Tool Calling Example](#️-tool-calling-example)
   * [💬 Simple Chat Example](#-simple-chat-example)
+  * [🗣️ Responses API Example](#️-responses-api-example)
 * [📚 Library Usage](#-library-usage)
   * [💬 Basic Chat Completion](#-basic-chat-completion)
-  * [🌊 Streaming Responses](#-streaming-responses)
+  * [🌊 Chat Completion Streaming](#-chat-completion-streaming)
+  * [🗣️ Responses API](#️-responses-api)
+  * [🌊 Responses API Streaming](#-responses-api-streaming)
   * [🛠️ Tool Calling](#️-tool-calling)
   * [🔀 Multiple API Keys for Load Balancing](#-multiple-api-keys-for-load-balancing)
 * [📋 Supported Providers](#-supported-providers)
@@ -211,6 +214,8 @@ The server provides these endpoints at `http://localhost:3000`:
 
 | Endpoint                    | Description                                  |
 | --------------------------- | -------------------------------------------- |
+| `POST /v1/responses`        | Responses API (OpenAI-compatible)            |
+| `POST /responses`           | Alternative responses API path               |
 | `POST /v1/chat/completions` | Chat completions (streaming & non-streaming) |
 | `POST /chat/completions`    | Alternative chat completions path            |
 | `GET /v1/models`            | List available models                        |
@@ -398,6 +403,90 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 }
 ```
 
+### 🗣️ Responses API Example
+
+The server also supports OpenAI's Responses API with the same reliability features:
+
+```bash
+curl -X POST http://localhost:3000/v1/responses \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "no_need_to_mention",
+    "input": "Tell me a short story about AI.",
+    "temperature": 0.7,
+    "stream": false
+  }'
+```
+
+**Expected Response:**
+
+```json
+{
+  "object": "response",
+  "id": "gen-1767387778-jshLoROQPnUYsIWuUEZ0",
+  "created_at": 1767387778,
+  "model": "xiaomi/mimo-v2-flash:free",
+  "error": null,
+  "output_text": "Once upon a time, there was an AI that learned to dream...",
+  "output": [
+    {
+      "role": "assistant",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "Once upon a time, there was an AI that learned to dream...",
+          "annotations": []
+        }
+      ],
+      "id": "msg_tmp_q5d6cj4d5nq"
+    }
+  ],
+  "usage": {
+    "input_tokens": 48,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 100,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 148,
+    "cost": 0
+  }
+}
+```
+
+**Streaming Responses API:**
+
+```bash
+curl -X POST http://localhost:3000/v1/responses \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "no_need_to_mention",
+    "input": "Say hello in exactly 3 words.",
+    "stream": true
+  }' \
+  --no-buffer
+```
+
+**Expected Streaming Response:**
+
+```json
+data: {"type":"response.created","response":{...}}
+
+data: {"type":"response.output_text.delta","delta":"Hi"}
+
+data: {"type":"response.output_text.delta","delta":" there,"}
+
+data: {"type":"response.output_text.delta","delta":" friend"}
+
+data: {"type":"response.completed","response":{...}}
+
+data: [DONE]
+```
+
 ---
 
 ## 📚 Library Usage
@@ -432,7 +521,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.content);
 ```
 
-### 🌊 Streaming Responses
+### 🌊 Chat Completion Streaming
 
 ```javascript
 const stream = await llm.chatCompletion(messages, {
@@ -443,6 +532,38 @@ const stream = await llm.chatCompletion(messages, {
 for await (const chunk of stream) {
   if (chunk.content) {
     process.stdout.write(chunk.content);
+  }
+}
+```
+
+### 🗣️ Responses API
+
+```javascript
+// Basic Responses API usage
+const response = await llm.responses(
+  "Tell me about artificial intelligence.",
+  {
+    temperature: 0.7,
+    max_tokens: 500
+  }
+);
+
+console.log(response.output_text);
+```
+
+### 🌊 Responses API Streaming
+
+```javascript
+const stream = await llm.responses(
+  "Write a poem about coding.",
+  {
+    stream: true  // Enable streaming
+  }
+);
+
+for await (const chunk of stream) {
+  if (chunk.type === 'response.output_text.delta') {
+    process.stdout.write(chunk.delta);
   }
 }
 ```

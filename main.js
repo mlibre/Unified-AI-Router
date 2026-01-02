@@ -97,10 +97,10 @@ class AIRouter
 		});
 	}
 
-	async responses ( input, options = {}, stream = false )
+	async responses ( input, options = {})
 	{
-		const { stream: streamOption, tools, ...restOptions } = options;
-		const isStreaming = stream || streamOption;
+		const { stream, tools, ...restOptions } = options;
+		const isStreaming = stream;
 
 		for ( const provider of this.providers )
 		{
@@ -172,10 +172,10 @@ class AIRouter
 		throw new Error( "All providers failed" );
 	}
 
-	async chatCompletion ( messages, options = {}, stream = false )
+	async chatCompletion ( messages, options = {})
 	{
-		const { stream: streamOption, tools, ...restOptions } = options;
-		const isStreaming = stream || streamOption;
+		const { stream, tools, ...restOptions } = options;
+		const isStreaming = stream;
 
 		for ( const provider of this.providers )
 		{
