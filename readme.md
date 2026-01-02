@@ -22,18 +22,15 @@
 * [🚀 Running Server](#-running-server)
   * [🛠️ Tool Calling Example](#️-tool-calling-example)
   * [💬 Simple Chat Example](#-simple-chat-example)
-* [📋 Supported Providers](#-supported-providers)
-* [📚 Library Usage](#-library-usage)
+* [� Library Usage](#-library-usage)
   * [💬 Basic Chat Completion](#-basic-chat-completion)
   * [🌊 Streaming Responses](#-streaming-responses)
   * [🛠️ Tool Calling](#️-tool-calling)
   * [🔀 Multiple API Keys for Load Balancing](#-multiple-api-keys-for-load-balancing)
-* [💡 Examples](#-examples)
-  * [🏗️ Complete Chat Application](#️-complete-chat-application)
+* [📋 Supported Providers](#-supported-providers)
 * [🏗️ Architecture Overview](#️-architecture-overview)
 * [🚀 Deployment](#-deployment)
   * [🏗️ Render.com Deployment](#️-rendercom-deployment)
-* [⚙️ Environment Variables](#️-environment-variables)
 * [📊 Comparison with Direct OpenAI API](#-comparison-with-direct-openai-api)
   * [🎯 Using Direct OpenAI API](#-using-direct-openai-api)
   * [🔗 Using Unified AI Router](#-using-unified-ai-router)
@@ -403,30 +400,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 ---
 
-## 📋 Supported Providers
-
-| Provider                     | API Base URL                                               | Model Examples                     |
-| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
-| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
-| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `xiaomi/mimo-v2-flash:free`        |
-| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
-| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
-| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
-| Any OpenAI-Compatible Server | `http://server-url/`                                       | Any model supported by your server |
-| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
-
-**Get API Keys:**
-
-* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
-* **Grok**: [console.x.ai](https://console.x.ai/)
-* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
-* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
-* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
-
----
-
 ## 📚 Library Usage
 
 ### 💬 Basic Chat Completion
@@ -518,54 +491,27 @@ const providers = [
 ];
 ```
 
-## 💡 Examples
+## 📋 Supported Providers
 
-### 🏗️ Complete Chat Application
+| Provider                     | API Base URL                                               | Model Examples                     |
+| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
+| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
+| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `xiaomi/mimo-v2-flash:free`        |
+| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
+| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
+| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
+| Any OpenAI-Compatible Server | `http://server-url/`                                       | Any model supported by your server |
+| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
 
-```javascript
-const AIRouter = require("unified-ai-router");
-require("dotenv").config();
+**Get API Keys:**
 
-class ChatApp {
-  constructor() {
-    const providers = require("./provider"); // Your provider config
-    this.llm = new AIRouter(providers);
-    this.conversationHistory = [];
-  }
-
-  async chat(userMessage) {
-    this.conversationHistory.push({
-      role: "user",
-      content: userMessage
-    });
-
-    try {
-      const response = await this.llm.chatCompletion(
-        this.conversationHistory,
-        {
-          temperature: 0.8,
-          max_tokens: 1000
-        }
-      );
-
-      this.conversationHistory.push({
-        role: "assistant",
-        content: response.content
-      });
-
-      return response.content;
-    } catch (error) {
-      console.error("All providers failed:", error.message);
-      return "I'm sorry, I'm having trouble connecting to AI services right now.";
-    }
-  }
-}
-
-// Usage
-const chat = new ChatApp();
-const reply = await chat.chat("What's the weather like today?");
-console.log(reply);
-```
+* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
+* **Grok**: [console.x.ai](https://console.x.ai/)
+* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
+* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
+* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
 
 ---
 
@@ -626,27 +572,6 @@ Unified AI Router follows a **fail-fast, quick-recovery** architecture:
    curl https://your-app.onrender.com/models
    ```
 
-## ⚙️ Environment Variables
-
-Required API keys (add only what you need):
-
-```bash
-# Primary providers
-OPENAI_API_KEY=sk-...
-GEMINI_API_KEY=...
-OPENROUTER_API_KEY=...
-
-# Backup providers  
-QROQ_API_KEY=...
-CEREBRAS_API_KEY=...
-COHERE_API_KEY=...
-
-# Load balancing (multiple keys for same provider)
-OPENAI_API_KEY_1=sk-...
-OPENAI_API_KEY_2=sk-...
-OPENAI_API_KEY_3=sk-...
-```
-
 ## 📊 Comparison with Direct OpenAI API
 
 ### 🎯 Using Direct OpenAI API
@@ -693,7 +618,7 @@ const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
 
 ```bash
 Unified-AI-Router/
-├── openai-server.js     # 🚀 OpenAI-compatible server (MAIN COMPONENT)
+├── openai-server.js     # OpenAI-compatible server
 ├── main.js              # Core AIRouter library
 ├── provider.js          # Provider configurations
 ├── package.json         # Dependencies and scripts
