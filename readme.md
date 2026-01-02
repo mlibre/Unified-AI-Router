@@ -12,21 +12,21 @@
 
 * [🎯 Why Unified AI Router?](#-why-unified-ai-router)
 * [⚡ Quick Start](#-quick-start)
-  * [1. Installation](#1-installation)
-  * [2. Quick Configuration](#2-quick-configuration)
-  * [3. Start Using the Server](#3-start-using-the-server)
-  * [4. Library Usage](#4-library-usage)
+  * [📦 1. Installation](#-1-installation)
+  * [⚙️ 2. Quick Configuration](#️-2-quick-configuration)
+  * [🚀 3. Start Using the Server](#-3-start-using-the-server)
+  * [📚 4. Library Usage](#-4-library-usage)
 * [⚙️ Configuration](#️-configuration)
-  * [Environment Configuration (`.env`)](#environment-configuration-env)
-  * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
+  * [🔧 Environment Configuration (`.env`)](#-environment-configuration-env)
+  * [🏗️ Provider Configuration (`provider.js`)](#️-provider-configuration-providerjs)
 * [🚀 Running Server](#-running-server)
-  * [Tool Calling Example](#tool-calling-example)
+  * [🛠️ Tool Calling Example](#️-tool-calling-example)
 * [📋 Supported Providers](#-supported-providers)
 * [📚 Library Usage](#-library-usage)
-  * [Basic Chat Completion](#basic-chat-completion)
-  * [Streaming Responses](#streaming-responses)
-  * [Tool Calling](#tool-calling)
-  * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
+  * [💬 Basic Chat Completion](#-basic-chat-completion)
+  * [🌊 Streaming Responses](#-streaming-responses)
+  * [🛠️ Tool Calling](#️-tool-calling)
+  * [🔀 Multiple API Keys for Load Balancing](#-multiple-api-keys-for-load-balancing)
 * [💡 Examples](#-examples)
   * [🏗️ Complete Chat Application](#️-complete-chat-application)
 * [🏗️ Architecture Overview](#️-architecture-overview)
@@ -34,11 +34,11 @@
   * [🏗️ Render.com Deployment](#️-rendercom-deployment)
 * [⚙️ Environment Variables](#️-environment-variables)
 * [📊 Comparison with Direct OpenAI API](#-comparison-with-direct-openai-api)
-  * [Using Direct OpenAI API](#using-direct-openai-api)
-  * [Using Unified AI Router](#using-unified-ai-router)
+  * [🎯 Using Direct OpenAI API](#-using-direct-openai-api)
+  * [🔗 Using Unified AI Router](#-using-unified-ai-router)
 * [🏗️ Project Structure](#️-project-structure)
 * [🧪 Testing](#-testing)
-  * [Running the Test Suite](#running-the-test-suite)
+  * [🧪 Running the Test Suite](#-running-the-test-suite)
 * [📄 License](#-license)
 * [🔗 Links](#-links)
 
@@ -61,7 +61,7 @@ Building reliable AI applications shouldn't require choosing between providers o
 
 Get your first AI response in under 5 minutes:
 
-### 1. Installation
+### 📦 1. Installation
 
 ```bash
 git clone https://github.com/mlibre/Unified-AI-Router.git
@@ -72,7 +72,7 @@ npm install
 npm install unified-ai-router
 ```
 
-### 2. Quick Configuration
+### ⚙️ 2. Quick Configuration
 
 ```bash
 # Copy environment template
@@ -85,7 +85,7 @@ cp .env.example .env
 # The server uses provider.js to define which providers to try and in what order
 ```
 
-### 3. Start Using the Server
+### 🚀 3. Start Using the Server
 
 ```bash
 npm start
@@ -99,7 +99,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   }'
 ```
 
-### 4. Library Usage
+### 📚 4. Library Usage
 
 If you prefer using the library directly in your code:
 
@@ -137,7 +137,7 @@ console.log(response.content);
 
 Before running the server, you must configure both your environment variables and provider settings.
 
-### Environment Configuration (`.env`)
+### 🔧 Environment Configuration (`.env`)
 
 Copy the environment template and add your API keys:
 
@@ -152,7 +152,7 @@ cp .env.example .env
 # PORT=3000 # Optional: server port (default: 3000)
 ```
 
-### Provider Configuration (`provider.js`)
+### 🏗️ Provider Configuration (`provider.js`)
 
 The `provider.js` file defines which AI providers to use and in what order. The server will try providers sequentially until one succeeds.
 
@@ -231,7 +231,7 @@ The server provides these endpoints at `http://localhost:3000`:
 | `GET /health`               | Health check endpoint                        |
 | `GET /v1/providers/status`  | Provider status and health                   |
 
-### Tool Calling Example
+### 🛠️ Tool Calling Example
 
 The server supports function calling with streaming responses:
 
@@ -304,7 +304,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 ## 📚 Library Usage
 
-### Basic Chat Completion
+### 💬 Basic Chat Completion
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -334,7 +334,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.content);
 ```
 
-### Streaming Responses
+### 🌊 Streaming Responses
 
 ```javascript
 const stream = await llm.chatCompletion(messages, {
@@ -349,7 +349,7 @@ for await (const chunk of stream) {
 }
 ```
 
-### Tool Calling
+### 🛠️ Tool Calling
 
 ```javascript
 const tools = [
@@ -376,7 +376,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.tool_calls);
 ```
 
-### Multiple API Keys for Load Balancing
+### 🔀 Multiple API Keys for Load Balancing
 
 ```javascript
 const providers = [
@@ -524,7 +524,7 @@ OPENAI_API_KEY_3=sk-...
 
 ## 📊 Comparison with Direct OpenAI API
 
-### Using Direct OpenAI API
+### 🎯 Using Direct OpenAI API
 
 ```javascript
 const OpenAI = require("openai");
@@ -542,7 +542,7 @@ const response = await client.chat.completions.create({
 // ❌ No multi-provider support
 ```
 
-### Using Unified AI Router
+### 🔗 Using Unified AI Router
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -596,7 +596,7 @@ The project includes comprehensive tests covering:
 * **Tool Calling**: Function calling capabilities
 * **Error Handling**: Failure scenarios and fallbacks
 
-### Running the Test Suite
+### 🧪 Running the Test Suite
 
 ```bash
 # Install dependencies
