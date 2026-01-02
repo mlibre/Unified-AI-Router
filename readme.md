@@ -117,7 +117,7 @@ const providers = [
   {
     name: "openrouter", 
     apiKey: process.env.OPENROUTER_API_KEY,
-    model: "anthropic/claude-3.5-sonnet",
+    model: "xiaomi/mimo-v2-flash:free",
     apiUrl: "https://openrouter.ai/api/v1"
   }
 ];
@@ -164,7 +164,7 @@ module.exports = [
   {
     name: "openrouter",
     apiKey: process.env.OPENROUTER_API_KEY,
-    model: "anthropic/claude-3.5-sonnet",
+    model: "xiaomi/mimo-v2-flash:free",
     apiUrl: "https://openrouter.ai/api/v1"
   },
   {
@@ -204,21 +204,9 @@ module.exports = [
 
 The server provides a OpenAI-compatible API with all the reliability features built-in.
 
-Start the server:
+After configuring `.env` and `provider.js` (as explained in the Configuration section), start the server:
 
 ```bash
-# Configure environment
-cp .env.example .env
-
-# Edit .env and add your API keys:
-# OPENROUTER_API_KEY=your-openrouter-key-here
-# PORT=3000 # Optional: server port (default: 3000)
-
-# edit provider.js
-# Define which providers to use and in what order
-# Example provider.js is provided in the repository
-
-# Start the server
 npm start
 ```
 
@@ -420,7 +408,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 | Provider                     | API Base URL                                               | Model Examples                     |
 | ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
 | OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
-| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet`      |
+| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `xiaomi/mimo-v2-flash:free`        |
 | Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
 | Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
 | Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
