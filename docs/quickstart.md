@@ -1,73 +1,65 @@
-# Quickstart — Run locally in minutes
+# Quickstart
 
-This page walks you through running the OpenAI-compatible server locally and calling the `/v1/chat/completions` endpoint.
+Install, configure, and test in 5 minutes.
 
-## 1) Install
+## Install
 
 ```bash
 git clone https://github.com/mlibre/Unified-AI-Router.git
 cd Unified-AI-Router
 npm install
-````
+```
 
-## 2) Configure API keys
-
-Copy the example env file and populate the keys for the providers you want to use:
+## Configure
 
 ```bash
 cp .env.example .env
-# edit .env and add keys (OPENAI_API_KEY, GEMINI_API_KEY, etc.)
+# Edit .env and add OPENROUTER_API_KEY or other provider keys
 ```
 
-Edit `provider.js` to enable or reorder providers (the router tries them in array order).
+Edit `provider.js` to set your providers.
 
-## 3) Start the server
+## Run
 
 ```bash
 npm start
 ```
 
-By default the server listens on `http://localhost:3000` and supports these OpenAI-compatible endpoints:
+Server starts on `http://localhost:3000` with these endpoints:
 
-* `POST /v1/responses` — OpenAI Responses API (streaming & non-streaming)
-* `POST /responses` — same as above (alternate path)
-* `POST /v1/chat/completions` — streaming & non-streaming chat completions
-* `POST /chat/completions` — same as above (alternate path)
-* `GET /v1/models` & `GET /models` — lists models available from providers
-* `GET /health` — health check
+- `POST /v1/responses` - OpenAI Responses API
+- `POST /v1/chat/completions` - Chat Completions API
+- `GET /v1/models` - List models
+- `GET /health` - Health check
 
-## 4) Chat Completions Test
+## Test
 
-Use `curl` or your HTTP client to test a simple chat completion:
+**Chat Completions:**
 
 ```bash
-curl -s -X POST http://localhost:3000/v1/chat/completions \
+curl -X POST http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{ "messages": [{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"Say hello." }], "model":"gpt-3.5-turbo" }'
+  -d '{"messages": [{"role":"user","content":"Hello"}], "model":"no_need"}'
 ```
 
-## 5) Responses API Test
-
-Test the new Responses API endpoint:
+**Responses API:**
 
 ```bash
-curl -s -X POST http://localhost:3000/v1/responses \
+curl -X POST http://localhost:3000/v1/responses \
   -H "Content-Type: application/json" \
-  -d '{ "input": "Tell me something interesting about AI.", "model":"gpt-3.5-turbo" }'
+  -d '{"input": "Hello", "model":"no_need"}'
 ```
 
-## 6) Responses API Streaming Test
-
-Test streaming responses:
+**Streaming:**
 
 ```bash
-curl -s -X POST http://localhost:3000/v1/responses \
+curl -X POST http://localhost:3000/v1/responses \
   -H "Content-Type: application/json" \
-  -d '{ "input": "Say hello in exactly 3 words.", "model":"gpt-3.5-turbo", "stream": true }'
+  -d '{"input": "Say hello in 3 words", "model":"gpt-3.5-turbo", "stream": true}'
 ```
 
-## 7) Next steps
+## Next
 
-* Configure additional providers in `provider.js` and set env keys.
-* Try streaming by setting `stream: true` when calling the endpoint.
-* See `tests/` for example scripts that exercise streaming, non-streaming, and tools.
+- Configure more providers in `provider.js`
+- Run tests: `node tests/openai-responses-non-stream.js`
+- Check provider status: `GET /v1/providers/status`
