@@ -4,8 +4,8 @@
 <div align="center">
 
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mlibre/Unified-AI-Router/main?label=Unified%20AI%20Router)  
-**The OpenAI-Compatible API Server for Reliable AI Applications**  
-*Production-ready Express server with multi-provider AI routing, automatic fallback, and circuit breakers*
+**The OpenAI-Compatible API Server & Library for Reliable AI Applications**  
+*Production-ready Express server and Node.js library with multi-provider AI routing, automatic fallback, and circuit breakers*
 
 </div>
 
