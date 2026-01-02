@@ -288,7 +288,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   ```json
   {
     "messages": [{"role": "user", "content": "Hello"}],
-    "model": "gpt-4",
+    "model": "model",
     "stream": false,
     "temperature": 0.7
   }
@@ -296,7 +296,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 - **Response Format**: OpenAI-compatible response
 - **Streaming**: SSE streaming support with examples
-- **Error Handling**: Error codes and messages
 
 #### /v1/models
 
@@ -325,7 +324,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 - **Framework**: VitePress (Vue.js-based)
 - **Responsive Design**: Mobile-first approach
-- **Performance**: Fast loading, optimized images
 - **Accessibility**: WCAG 2.1 AA compliance
 - **SEO**: Proper meta tags, structured data
 
@@ -375,72 +373,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 - **Concepts**: Explanatory content
 - **Examples**: Working code samples
 - **Troubleshooting**: Problem-solving guides
-
-## Success Metrics
-
-### User Experience Metrics
-
-- **Time to First Success**: < 5 minutes for basic setup
-- **Bounce Rate**: < 30% on documentation pages
-- **Search Usage**: High usage of search functionality
-- **Return Visits**: High rate of return visits
-
-### Business Metrics
-
-- **GitHub Stars**: Increase in repository stars
-- **NPM Downloads**: Growth in package downloads
-- **Community Engagement**: Issues, PRs, discussions
-- **Production Adoption**: Case studies and testimonials
-
-## Implementation Timeline
-
-### Phase 1: Foundation (Week 1-2)
-
-- Set up VitePress structure
-- Create basic navigation and layout
-- Implement hero landing page
-- Create quickstart guide
-
-### Phase 2: Core Documentation (Week 3-4)
-
-- Complete configuration section
-- Implement API reference
-- Add provider-specific documentation
-- Create deployment guides
-
-### Phase 3: Polish and Optimization (Week 5)
-
-- Add interactive elements
-- Optimize performance
-- Implement search functionality
-- Add analytics and monitoring
-
-### Phase 4: Launch and Iteration (Week 6+)
-
-- Deploy to production
-- Gather user feedback
-- Iterate based on usage patterns
-- Add advanced features
-
-## Maintenance Plan
-
-### Content Updates
-
-- **Weekly**: Review and update code examples
-- **Monthly**: Update provider information and API changes
-- **Quarterly**: Review and update best practices
-
-### Technical Maintenance
-
-- **Weekly**: Check broken links and functionality
-- **Monthly**: Update dependencies and security patches
-- **As Needed**: Performance optimization and feature additions
-
-### Community Engagement
-
-- **Monitor**: GitHub issues and discussions
-- **Respond**: To user questions and feedback
-- **Improve**: Based on community suggestions
 
 ## Risk Mitigation
 
