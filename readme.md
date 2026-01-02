@@ -4,7 +4,7 @@
 <div align="center">
 
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mlibre/Unified-AI-Router/main?label=Unified%20AI%20Router)  
-**The OpenAI-Compatible API Server & Library for Reliable AI Applications**  
+**The OpenAI-Compatible API Server & SDK for Reliable AI Applications**  
 
 *Production-ready Express server and Node.js library with multi-provider AI routing, automatic fallback, and circuit breakers*
 
@@ -64,13 +64,12 @@ Get your first AI response in under 5 minutes:
 ### 1. Installation
 
 ```bash
-# Using npm
-npm install unified-ai-router
-
-# Or from source
 git clone https://github.com/mlibre/Unified-AI-Router.git
 cd Unified-AI-Router
 npm install
+
+# Or Using npm (for SDK usage)
+npm install unified-ai-router
 ```
 
 ### 2. Quick Configuration
@@ -136,7 +135,7 @@ console.log(response.content);
 
 ## ⚙️ Configuration
 
-Before running the server, you need to configure both your environment variables and provider settings.
+Before running the server, you must configure both your environment variables and provider settings.
 
 ### Environment Configuration (`.env`)
 
