@@ -1,6 +1,6 @@
 # Core Principles
 
-The following principles MUST be followed when working with this project:
+The following principles MUST be followed always:
 
 ## I. Lightweight Architecture
 
