@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides detailed technical specifications for implementing the Unified AI Router website using VitePress. It includes file structure, component specifications, API integration details, and deployment requirements.
+This document provides technical specifications for implementing the Unified AI Router website using VitePress.
 
 ## Technology Stack
 
@@ -32,22 +32,11 @@ This document provides detailed technical specifications for implementing the Un
 docs/
 ├── .vitepress/
 │   ├── config.mjs          # Main configuration file
-│   ├── theme/             # Custom theme components (optional)
-│   │   ├── index.js       # Theme entry point
-│   │   └── components/    # Custom components (optional)
-│   │       ├── ApiTester.vue
-│   │       ├── ConfigGenerator.vue
-│   │       └── ProviderStatus.vue
 │   └── dist/              # Built files (generated)
 ├── public/                # Static assets
 │   ├── favicon.png
 │   ├── favicon_io/        # Favicon files
-│   ├── images/           # Documentation images
-│   │   ├── architecture.png
-│   │   ├── circuit-breaker.png
-│   │   └── provider-flow.png
-│   └── scripts/          # Client-side scripts (optional)
-│       └── api-tester.js
+│   └── images/           # Documentation images
 ├── index.md              # Hero landing page
 ├── quickstart.md         # Quickstart guide
 ├── configuration.md      # Configuration documentation
@@ -62,7 +51,6 @@ docs/
 │   ├── openai.md
 │   ├── google-gemini.md
 │   ├── grok.md
-│   ├── openrouter.md
 │   └── other-providers.md
 └── deployment/           # Deployment guides
     ├── index.md
@@ -142,7 +130,6 @@ const responseTime = ref('')
 const loading = ref(false)
 
 const baseUrl = computed(() => {
-  // Get base URL from environment or use localhost
   return window.location.origin
 })
 
@@ -317,259 +304,6 @@ const sendRequest = async () => {
   white-space: pre-wrap;
   max-height: 400px;
   overflow: auto;
-}
-</style>
-```
-
-**File**: `docs/.vitepress/theme/components/ConfigGenerator.vue` (Optional)
-
-```vue
-<template>
-  <div class="config-generator">
-    <div class="generator-header">
-      <h3>Generate Provider Configuration</h3>
-      <p>Configure your AI providers with this interactive tool</p>
-    </div>
-    
-    <div class="generator-body">
-      <div class="providers-list">
-        <div
-          v-for="provider in providers"
-          :key="provider.name"
-          class="provider-card"
-          :class="{ active: selectedProviders.includes(provider.name) }"
-          @click="toggleProvider(provider.name)"
-        >
-          <div class="provider-info">
-            <h4>{{ provider.displayName }}</h4>
-            <p>{{ provider.description }}</p>
-          </div>
-          <div class="provider-actions">
-            <input
-              type="checkbox"
-              :checked="selectedProviders.includes(provider.name)"
-              @change="toggleProvider(provider.name)"
-            />
-          </div>
-        </div>
-      </div>
-      
-      <div class="config-output">
-        <h4>Generated Configuration</h4>
-        <div class="config-actions">
-          <button @click="copyToClipboard" class="copy-btn">
-            {{ copySuccess ? 'Copied!' : 'Copy to Clipboard' }}
-          </button>
-          <button @click="downloadConfig" class="download-btn">
-            Download provider.js
-          </button>
-        </div>
-        <pre class="config-code">{{ generatedConfig }}</pre>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref, computed } from 'vue'
-
-const selectedProviders = ref(['openai'])
-
-const providers = [
-  {
-    name: 'openai',
-    displayName: 'OpenAI',
-    description: 'GPT-4, GPT-3.5, and function calling support',
-    config: {
-      name: 'openai',
-      apiKey: 'process.env.OPENAI_API_KEY',
-      model: 'gpt-4',
-      apiUrl: 'https://api.openai.com/v1'
-    }
-  },
-  {
-    name: 'google',
-    displayName: 'Google Gemini',
-    description: 'Gemini Pro and Flash models',
-    config: {
-      name: 'google',
-      apiKey: 'process.env.GEMINI_API_KEY',
-      model: 'gemini-pro',
-      apiUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/'
-    }
-  },
-  {
-    name: 'grok',
-    displayName: 'Grok',
-    description: 'xAI Grok models',
-    config: {
-      name: 'grok',
-      apiKey: 'process.env.GROK_API_KEY',
-      model: 'grok-beta',
-      apiUrl: 'https://api.x.ai/v1'
-    }
-  },
-  {
-    name: 'openrouter',
-    displayName: 'OpenRouter',
-    description: 'Access to multiple AI models',
-    config: {
-      name: 'openrouter',
-      apiKey: 'process.env.OPENROUTER_API_KEY',
-      model: 'mistralai/mistral-small',
-      apiUrl: 'https://openrouter.ai/api/v1'
-    }
-  }
-]
-
-const generatedConfig = computed(() => {
-  const selected = providers.filter(p => selectedProviders.value.includes(p.name))
-  return `module.exports = [\n${selected.map(p => `  {\n    name: "${p.config.name}",\n    apiKey: ${p.config.apiKey},\n    model: "${p.config.model}",\n    apiUrl: "${p.config.apiUrl}"\n  }`).join(',\n')}\n];`
-})
-
-const toggleProvider = (providerName) => {
-  const index = selectedProviders.value.indexOf(providerName)
-  if (index > -1) {
-    selectedProviders.value.splice(index, 1)
-  } else {
-    selectedProviders.value.push(providerName)
-  }
-}
-
-const copySuccess = ref(false)
-
-const copyToClipboard = async () => {
-  try {
-    await navigator.clipboard.writeText(generatedConfig.value)
-    copySuccess.value = true
-    setTimeout(() => copySuccess.value = false, 2000)
-  } catch (err) {
-    console.error('Failed to copy:', err)
-  }
-}
-
-const downloadConfig = () => {
-  const blob = new Blob([generatedConfig.value], { type: 'text/javascript' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'provider.js'
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
-</script>
-
-<style scoped>
-.config-generator {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
-  background: var(--vp-c-bg-soft);
-}
-
-.generator-header h3 {
-  margin: 0 0 10px 0;
-}
-
-.generator-header p {
-  margin: 0;
-  color: var(--vp-c-text-2);
-}
-
-.generator-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-@media (max-width: 768px) {
-  .generator-body {
-    grid-template-columns: 1fr;
-  }
-}
-
-.providers-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.provider-card {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--vp-c-bg);
-}
-
-.provider-card:hover {
-  border-color: var(--vp-c-brand);
-  transform: translateY(-1px);
-}
-
-.provider-card.active {
-  border-color: var(--vp-c-brand);
-  background: var(--vp-c-brand-dimm);
-}
-
-.provider-info h4 {
-  margin: 0 0 5px 0;
-  color: var(--vp-c-text-1);
-}
-
-.provider-info p {
-  margin: 0;
-  color: var(--vp-c-text-2);
-  font-size: 14px;
-}
-
-.config-output {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  padding: 20px;
-  background: var(--vp-c-bg);
-}
-
-.config-actions {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.copy-btn, .download-btn {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.copy-btn:hover, .download-btn:hover {
-  background: var(--vp-c-brand);
-  color: white;
-  border-color: var(--vp-c-brand);
-}
-
-.config-code {
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  padding: 15px;
-  font-family: 'Courier New', monospace;
-  font-size: 14px;
-  white-space: pre;
-  overflow-x: auto;
-  max-height: 300px;
-  overflow-y: auto;
 }
 </style>
 ```
@@ -775,8 +509,6 @@ jobs:
 - Uptime monitoring for deployed instances
 - API response time monitoring
 - Error rate tracking
-
-This technical specification provides a comprehensive blueprint for implementing the Unified AI Router website with all necessary technical details, component specifications, and deployment requirements.
 
 ## Summary
 

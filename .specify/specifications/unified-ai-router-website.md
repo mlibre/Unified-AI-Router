@@ -3,16 +3,16 @@
 ## Project Overview
 
 **Project Name**: Unified AI Router Website
-**Purpose**: Primary documentation and landing page for developers implementing an OpenAI-compatible router with automatic fallback
-**Target Audience**: Developers, DevOps engineers, SREs, and technical decision-makers
+**Purpose**: Documentation and landing page for OpenAI-compatible router with automatic fallback
+**Target Audience**: Developers, DevOps engineers, SREs
 **Technology Stack**: VitePress (Vue.js-based static site generator)
 
 ## Core Goals
 
-1. **Developer Education**: Help developers understand how to implement an OpenAI-compatible router with automatic fallback
+1. **Developer Education**: Help developers implement OpenAI-compatible router with automatic fallback
 2. **Quick Onboarding**: Enable developers to get started in under 5 minutes
-3. **Comprehensive Documentation**: Provide detailed configuration and API reference materials
-4. **Trust Building**: Demonstrate reliability through circuit breaker explanations and provider status monitoring
+3. **Comprehensive Documentation**: Provide configuration and API reference materials
+4. **Trust Building**: Demonstrate reliability through circuit breaker explanations
 
 ## User Journeys
 
@@ -29,7 +29,7 @@
 **Steps**:
 
 1. Land on hero page with clear value proposition
-2. Click "Get Started" or "Quickstart" button
+2. Click "Get Started" button
 3. Follow 3-step installation guide
 4. Copy example code
 5. Test with provided curl command
@@ -37,7 +37,7 @@
 ### Journey 2: Multi-Provider Configuration (15 minutes)
 
 **User**: Backend developer integrating multiple AI providers
-**Goal**: Configure OpenAI, Gemini, and Grok providers in provider.js
+**Goal**: Configure OpenAI, Gemini, and Grok providers
 **Success Criteria**:
 
 - Understand provider configuration format
@@ -65,8 +65,8 @@
 
 **Steps**:
 
-1. Navigate to "Advanced Configuration" or "Reliability" section
-2. Read circuit breaker explanation with diagrams
+1. Navigate to "Advanced Configuration" section
+2. Read circuit breaker explanation
 3. Review monitoring endpoints
 4. Understand failure scenarios and recovery
 
@@ -92,7 +92,6 @@
 │   ├── OpenAI
 │   ├── Google Gemini
 │   ├── Grok
-│   ├── OpenRouter
 │   └── Other Providers
 └── Deployment
     ├── Local Development
@@ -112,12 +111,6 @@
 - Providers
 - Deployment
 
-**Secondary Navigation** (Sidebar):
-
-- Quick Links
-- Related Documentation
-- Community Links
-
 ## Page Specifications
 
 ### 1. Hero Landing Page
@@ -135,26 +128,9 @@
 
 #### Feature Highlights (3-column grid)
 
-1. **Multi-Provider Fallback**
-   - Icon: Network/Router
-   - Description: "If one provider fails, automatically try the next"
-   - Key Benefit: "99.9% uptime guarantee"
-
-2. **Circuit Breaker Protection**
-   - Icon: Shield/Lock
-   - Description: "Built-in fault tolerance prevents cascading failures"
-   - Key Benefit: "Automatic recovery and protection"
-
-3. **OpenAI Compatible**
-   - Icon: API/Code
-   - Description: "Drop-in replacement for OpenAI API endpoints"
-   - Key Benefit: "Zero code changes required"
-
-#### Quick Stats
-
-- "Used by 1000+ developers"
-- "Supports 10+ providers"
-- "5-minute setup time"
+1. **Multi-Provider Fallback**: "If one provider fails, automatically try the next"
+2. **Circuit Breaker Protection**: "Built-in fault tolerance prevents cascading failures"
+3. **OpenAI Compatible**: "Drop-in replacement for OpenAI API endpoints"
 
 #### Code Example Preview
 
@@ -167,12 +143,6 @@ const router = new AIRouter([
 
 const response = await router.chatCompletion(messages);
 ```
-
-#### Testimonials/Use Cases
-
-- "Reduced our AI downtime by 95%"
-- "Easy migration from single provider"
-- "Perfect for production environments"
 
 ### 2. Quickstart Guide
 
@@ -192,26 +162,17 @@ npm install
 
 #### Configuration (Step 2)
 
-1. **Environment Variables**
-
-   ```bash
-   cp .env.example .env
-   # Add your API keys
-   ```
-
-2. **Provider Setup**
-
-   ```javascript
-   // provider.js
-   module.exports = [
-     {
-       name: "openai",
-       apiKey: process.env.OPENAI_API_KEY,
-       model: "gpt-4",
-       apiUrl: "https://api.openai.com/v1"
-     }
-   ];
-   ```
+```javascript
+// provider.js
+module.exports = [
+  {
+    name: "openai",
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1"
+  }
+];
+```
 
 #### Running (Step 3)
 
@@ -231,49 +192,16 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   }'
 ```
 
-#### Verification
-
-- Health check endpoint
-- Provider status endpoint
-- Test script execution
-
 ### 3. Configuration Section
 
 **Purpose**: Detailed configuration guide for complex setups
 
 **Subsections**:
 
-#### Environment Variables (.env)
-
-- **Required Variables**: OPENAI_API_KEY, GEMINI_API_KEY, etc.
-- **Optional Variables**: PORT, LOG_LEVEL, CIRCUIT_BREAKER_TIMEOUT
-- **Security Best Practices**: Key rotation, least privilege
-- **Example .env file** with all supported providers
-
-#### Provider Configuration (provider.js)
-
-- **Configuration Format**: Detailed explanation of each field
-- **Provider Examples**: Complete examples for each supported provider
-- **Multiple Keys**: How to configure multiple API keys per provider
-- **Ordering**: How fallback order works
-- **Validation**: How to test provider configuration
-
-#### Circuit Breaker Settings
-
-- **How It Works**: Explanation of circuit breaker pattern
-- **Configuration Options**:
-  - `timeout`: Request timeout (default: 300000ms)
-  - `errorThresholdPercentage`: Failure threshold (default: 50%)
-  - `resetTimeout`: Recovery time (default: 9000000ms)
-- **Monitoring**: How to monitor circuit breaker status
-- **Troubleshooting**: Common issues and solutions
-
-#### Multi-Provider Setup
-
-- **Best Practices**: Provider ordering, key management
-- **Load Balancing**: How to distribute load across providers
-- **Cost Optimization**: Choosing cost-effective providers
-- **Performance Tuning**: Optimizing for speed vs. cost
+- Environment Variables (.env)
+- Provider Configuration (provider.js)
+- Circuit Breaker Settings
+- Multi-Provider Setup
 
 ### 4. API Reference
 
@@ -283,40 +211,26 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 - **Method**: POST
 - **Description**: Chat completion endpoint (streaming and non-streaming)
-- **Request Format**:
-
-  ```json
-  {
-    "messages": [{"role": "user", "content": "Hello"}],
-    "model": "model",
-    "stream": false,
-    "temperature": 0.7
-  }
-  ```
-
+- **Request Format**: OpenAI-compatible JSON
 - **Response Format**: OpenAI-compatible response
-- **Streaming**: SSE streaming support with examples
 
 #### /v1/models
 
 - **Method**: GET
 - **Description**: List available models from all providers
 - **Response Format**: Array of model objects
-- **Usage**: How to use with different providers
 
 #### /health
 
 - **Method**: GET
 - **Description**: Health check endpoint
 - **Response**: Status object
-- **Monitoring**: Integration with monitoring tools
 
 #### /v1/providers/status
 
 - **Method**: GET
 - **Description**: Check status of all configured providers
 - **Response**: Detailed status including circuit breaker state
-- **Monitoring**: Real-time provider health monitoring
 
 ## Technical Requirements
 
@@ -330,7 +244,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 ### Content Requirements
 
 - **Code Examples**: Working, tested code snippets
-- **Interactive Demos**: Live API testing where possible
 - **Downloadable Resources**: Configuration templates, scripts
 - **Version Compatibility**: Clear version requirements
 
@@ -338,7 +251,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 - **GitHub Integration**: Links to repository, issues
 - **NPM Integration**: Package information, download stats
-- **Analytics**: Usage tracking (privacy-focused)
 - **Search**: Full-text search across documentation
 
 ## Design System
@@ -348,7 +260,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 - **Color Scheme**: Professional tech colors (blues, grays, accent colors)
 - **Typography**: Clean, readable fonts
 - **Icons**: Consistent icon set for features and actions
-- **Imagery**: Technical diagrams, code screenshots
 
 ### Component Library
 
@@ -373,27 +284,3 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 - **Concepts**: Explanatory content
 - **Examples**: Working code samples
 - **Troubleshooting**: Problem-solving guides
-
-## Risk Mitigation
-
-### Technical Risks
-
-- **Dependency Updates**: Regular dependency management
-- **Breaking Changes**: Version compatibility testing
-- **Performance Issues**: Regular performance monitoring
-
-### Content Risks
-
-- **Outdated Information**: Regular content review schedule
-- **Inaccurate Examples**: Testing all code examples
-- **Missing Documentation**: User feedback collection
-
-### Business Risks
-
-- **Low Adoption**: Marketing and community building
-- **Competitor Changes**: Regular market analysis
-- **Provider Changes**: Flexible architecture for provider updates
-
-## Conclusion
-
-This specification provides a comprehensive roadmap for creating a developer-focused website that effectively communicates the value of Unified AI Router and enables developers to quickly implement and configure the solution. The focus on user experience, comprehensive documentation, and ongoing maintenance will ensure the site remains valuable and up-to-date as the project evolves.
