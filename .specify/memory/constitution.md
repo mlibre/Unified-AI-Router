@@ -1,3 +1,12 @@
+<!-- Sync Impact Report
+Version change: 1.0.0 → 1.0.0
+Modified principles: none
+Added sections: none
+Removed sections: none
+Templates requiring updates: none (all aligned)
+Follow-up TODOs: none
+-->
+
 # Unified AI Router Constitution
 
 ## Core Principles
@@ -30,4 +39,4 @@ All documentation MUST be developer-focused with clear and concise technical exp
 - MINOR: New providers, features, or non-breaking enhancements
 - PATCH: Bug fixes, documentation updates, performance improvements
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-01 | **Last Amended**: 2026-01-01
+**Version**: 1.0.0 | **Ratified**: 2026-01-01 | **Last Amended**: 2026-01-02

@@ -31,11 +31,7 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-**Lightweight Architecture**: Feature MUST maintain minimal dependencies and optimize memory footprint. Performance impact MUST be justified.
-**OpenAI-Compatibility**: Any API changes MUST preserve strict OpenAI compatibility for seamless integration.
-**Multi-Provider Fallback**: New features MUST not break existing fallback mechanisms and circuit breaker patterns.
-**Simple and Clear Code**: Implementation MUST prioritize readability and robustness over cleverness with clear naming and refactoring for simpler, shorter, cleaner solutions.
-**Developer-Centric Documentation**: All features MUST include comprehensive documentation with quickstart guides and configuration examples.
+[Gates determined based on constitution file]
 
 ## Project Structure
 
@@ -102,7 +98,7 @@ directories captured above]
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-| Violation                  | Why Needed         | Simpler Alternative Rejected Because |
-| -------------------------- | ------------------ | ------------------------------------ |
-| [e.g., 4th project]        | [current need]     | [why 3 projects insufficient]        |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient]  |
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

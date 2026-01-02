@@ -10,8 +10,6 @@ description: "Task list template for feature implementation"
 
 **Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
 
-**Constitution Compliance**: All tasks MUST verify compliance with Lightweight Architecture, OpenAI-Compatibility, Multi-Provider Fallback, Simple and Clear Code, and Developer-Centric Documentation principles.
-
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
 ## Format: `[ID] [P?] [Story] Description`
@@ -53,8 +51,6 @@ description: "Task list template for feature implementation"
 - [ ] T001 Create project structure per implementation plan
 - [ ] T002 Initialize [language] project with [framework] dependencies
 - [ ] T003 [P] Configure linting and formatting tools
-- [ ] T004 [P] Verify Lightweight Architecture compliance - minimal dependencies and memory optimization
-- [ ] T005 [P] Setup OpenAI-Compatibility validation framework
 
 ---
 
@@ -66,15 +62,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T010 Setup database schema and migrations framework
-- [ ] T011 [P] Implement authentication/authorization framework
-- [ ] T012 [P] Setup API routing and middleware structure
-- [ ] T013 Create base models/entities that all stories depend on
-- [ ] T014 Configure error handling and logging infrastructure
-- [ ] T015 Setup environment configuration management
-- [ ] T016 [P] Implement Multi-Provider Fallback mechanisms and circuit breaker patterns
-- [ ] T017 [P] Setup OpenAI-Compatibility validation and testing framework
-- [ ] T018 Verify Simple and Clear Code compliance - establish coding standards and review process
+- [ ] T004 Setup database schema and migrations framework
+- [ ] T005 [P] Implement authentication/authorization framework
+- [ ] T006 [P] Setup API routing and middleware structure
+- [ ] T007 Create base models/entities that all stories depend on
+- [ ] T008 Configure error handling and logging infrastructure
+- [ ] T009 Setup environment configuration management
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -157,14 +150,12 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] TXXX [P] Documentation updates in docs/ - ensure Developer-Centric Documentation compliance
-- [ ] TXXX Code cleanup and refactoring - verify Simple and Clear Code compliance with refactoring for simpler, shorter, cleaner solutions
-- [ ] TXXX Performance optimization across all stories - validate Lightweight Architecture compliance
+- [ ] TXXX [P] Documentation updates in docs/
+- [ ] TXXX Code cleanup and refactoring
+- [ ] TXXX Performance optimization across all stories
 - [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
 - [ ] TXXX Security hardening
-- [ ] TXXX Run quickstart.md validation - ensure 5-minute setup requirement
-- [ ] TXXX Verify OpenAI-Compatibility across all implemented features
-- [ ] TXXX Test Multi-Provider Fallback scenarios and circuit breaker functionality
+- [ ] TXXX Run quickstart.md validation
 
 ---
 
