@@ -31,7 +31,12 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Lightweight Architecture**: Dependencies must remain minimal and purposeful; avoid adding heavy frameworks or unnecessary libraries.
+- **OpenAI-Compatibility**: All chat-related endpoints MUST support both streaming and non-streaming responses for seamless integration.
+- **Multi-Provider Fallback Reliability**: Automatic fallback MUST be implemented for provider failures; circuit breaker patterns MUST be applied to prevent cascading failures.
+- **Simple and Clear Code**: Code MUST be simple, clear, and readable; complex solutions MUST be avoided in favor of straightforward, maintainable code.
+- **Developer-Centric Documentation**: All documentation MUST be developer-focused with clear and concise technical explanations; quickstart guides MUST enable developers to run locally within 5 minutes.
+- **Minimal Code**: Code MUST be kept minimal; tricky one-liners MUST be avoided in favor of clear, readable alternatives.
 
 ## Project Structure
 
@@ -98,7 +103,7 @@ directories captured above]
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| Violation                  | Why Needed         | Simpler Alternative Rejected Because |
+| -------------------------- | ------------------ | ------------------------------------ |
+| [e.g., 4th project]        | [current need]     | [why 3 projects insufficient]        |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient]  |
