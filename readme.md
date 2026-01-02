@@ -22,16 +22,13 @@
   * [Tool Calling](#tool-calling)
   * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
 * [Advanced Configuration](#advanced-configuration)
-  * [Custom Circuit Breaker Settings](#custom-circuit-breaker-settings)
 * [💡 Examples](#-examples)
   * [Complete Chat Application](#complete-chat-application)
 * [🏗️ Architecture Overview](#️-architecture-overview)
 * [🚀 Deployment](#-deployment)
   * [Render.com Deployment](#rendercom-deployment)
   * [Environment Variables](#environment-variables)
-* [🔧 Configuration](#-configuration)
-  * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
-  * [Supported Providers](#supported-providers)
+
 * [📊 Comparison with Direct OpenAI API](#-comparison-with-direct-openai-api)
   * [Using Direct OpenAI API](#using-direct-openai-api)
   * [Using Unified AI Router](#using-unified-ai-router)
@@ -259,6 +256,59 @@ const providers = [
 
 ## Advanced Configuration
 
+### Provider Configuration (`provider.js`)
+
+```javascript
+module.exports = [
+  {
+    name: "primary",
+    apiKey: process.env.PRIMARY_API_KEY,
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1",
+    circuitOptions: {
+      timeout: 30000,           // 30 second timeout
+      errorThresholdPercentage: 50, // Open after 50% failures
+      resetTimeout: 300000      // Try again after 5 minutes
+    }
+  },
+  {
+    name: "backup",
+    apiKey: process.env.BACKUP_API_KEY,
+    model: "claude-3-sonnet",
+    apiUrl: "https://openrouter.ai/api/v1"
+  },
+  {
+    name: "openai-compatible-proxy",
+    apiKey: process.env.PROXY_API_KEY, // Optional: depends on your proxy
+    model: "gpt-3.5-turbo",
+    apiUrl: "http://localhost:4000/v1" // Your OpenAI-compatible proxy URL
+  }
+  // Add more providers...
+];
+```
+
+### Supported Providers
+
+| Provider                     | API Base URL                                               | Model Examples                     |
+| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
+| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
+| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet`      |
+| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
+| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
+| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
+| Any OpenAI-Compatible Server | `http://address/` (your URL)                               | Any model supported by your server |
+| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
+
+**Get API Keys:**
+
+* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
+* **Grok**: [console.x.ai](https://console.x.ai/)
+* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
+* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
+* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
+
 ### Custom Circuit Breaker Settings
 
 ```javascript
@@ -408,59 +458,6 @@ OPENAI_API_KEY_2=sk-...
 OPENAI_API_KEY_3=sk-...
 ```
 
----
-
-## 🔧 Configuration
-
-### Provider Configuration (`provider.js`)
-
-```javascript
-module.exports = [
-  {
-    name: "primary",
-    apiKey: process.env.PRIMARY_API_KEY,
-    model: "gpt-4",
-    apiUrl: "https://api.openai.com/v1",
-    circuitOptions: {
-      timeout: 30000,           // 30 second timeout
-      errorThresholdPercentage: 50, // Open after 50% failures
-      resetTimeout: 300000      // Try again after 5 minutes
-    }
-  },
-  {
-    name: "backup",
-    apiKey: process.env.BACKUP_API_KEY,
-    model: "claude-3-sonnet",
-    apiUrl: "https://openrouter.ai/api/v1"
-  }
-  // Add more providers...
-];
-```
-
-### Supported Providers
-
-| Provider                     | API Base URL                                               | Model Examples                     |
-| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
-| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
-| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet`      |
-| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
-| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
-| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
-| Any OpenAI-Compatible Server | `http://address/` (your URL)                               | Any model supported by your server |
-| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
-
-**Get API Keys:**
-
-* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
-* **Grok**: [console.x.ai](https://console.x.ai/)
-* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
-* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
-* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
-
----
-
 ## 📊 Comparison with Direct OpenAI API
 
 ### Using Direct OpenAI API
@@ -503,9 +500,7 @@ const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
 
 ---
 
-## 🛠️ Development
-
-### Project Structure
+## Project Structure
 
 ```bash
 Unified-AI-Router/
