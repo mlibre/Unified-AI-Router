@@ -15,26 +15,26 @@
   * [2. Quick Configuration](#2-quick-configuration)
   * [3. Start Using the Server](#3-start-using-the-server)
   * [4. Library Usage](#4-library-usage)
-* [🚀 Server Endpoints](#-server-endpoints)
-* [Library Usage](#library-usage)
+* [🚀 Running Server](#-running-server)
+  * [Tool Calling Example](#tool-calling-example)
+* [📋 Supported Providers](#-supported-providers)
+* [📚 Library Usage](#-library-usage)
   * [Basic Chat Completion](#basic-chat-completion)
   * [Streaming Responses](#streaming-responses)
   * [Tool Calling](#tool-calling)
   * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
-* [Configuration](#configuration)
+* [⚙️ Configuration](#️-configuration)
   * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
-  * [Supported Providers](#supported-providers)
-  * [Custom Circuit Breaker Settings](#custom-circuit-breaker-settings)
 * [💡 Examples](#-examples)
-  * [Complete Chat Application](#complete-chat-application)
+* [💡 Complete Chat Application](#-complete-chat-application)
 * [🏗️ Architecture Overview](#️-architecture-overview)
 * [🚀 Deployment](#-deployment)
-  * [Render.com Deployment](#rendercom-deployment)
-  * [Environment Variables](#environment-variables)
+  * [🏗️ Render.com Deployment](#️-rendercom-deployment)
+* [⚙️ Environment Variables](#️-environment-variables)
 * [📊 Comparison with Direct OpenAI API](#-comparison-with-direct-openai-api)
   * [Using Direct OpenAI API](#using-direct-openai-api)
   * [Using Unified AI Router](#using-unified-ai-router)
-* [Project Structure](#project-structure)
+* [🏗️ Project Structure](#️-project-structure)
 * [🧪 Testing](#-testing)
   * [Running the Test Suite](#running-the-test-suite)
 * [📄 License](#-license)
@@ -139,11 +139,11 @@ console.log(response.content);
 
 ---
 
-## 🚀 Server Endpoints
+## 🚀 Running Server
 
-**The server is the primary way to use Unified AI Router** - it provides a complete OpenAI-compatible API with all the reliability features built-in.
+The server provides a OpenAI-compatible API with all the reliability features built-in.
 
-Start the server for immediate OpenAI API compatibility:
+Start the server
 
 ```bash
 # Configure environment
@@ -164,7 +164,101 @@ The server provides these endpoints at `http://localhost:3000`:
 | `GET /health`               | Health check endpoint                        |
 | `GET /v1/providers/status`  | Provider status and health                   |
 
-## Library Usage
+### Tool Calling Example
+
+The server supports function calling with streaming responses:
+
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-2.5-pro",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "how is the weather in mashhad, tehran. use tools"
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "multiply",
+          "description": "Multiply two numbers",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "number",
+                "description": "First number"
+              },
+              "b": {
+                "type": "number",
+                "description": "Second number"
+              }
+            },
+            "required": ["a", "b"],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get the current weather forecast for a given city.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string",
+                "description": "The name of the city (e.g., Tehran) to get the weather for."
+              }
+            },
+            "required": ["city"],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    ],
+    "temperature": 0.7,
+    "stream": true
+  }'
+```
+
+---
+
+## 📋 Supported Providers
+
+| Provider                     | API Base URL                                               | Model Examples                     |
+| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
+| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
+| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet`      |
+| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
+| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
+| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
+| Any OpenAI-Compatible Server | `http://address/` (your URL)                               | Any model supported by your server |
+| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
+
+**Get API Keys:**
+
+* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
+* **Grok**: [console.x.ai](https://console.x.ai/)
+* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
+* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
+* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
+
+---
+
+## 📚 Library Usage
 
 ### Basic Chat Completion
 
@@ -255,62 +349,9 @@ const providers = [
 ];
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 ### Provider Configuration (`provider.js`)
-
-```javascript
-module.exports = [
-  {
-    name: "primary",
-    apiKey: process.env.PRIMARY_API_KEY,
-    model: "gpt-4",
-    apiUrl: "https://api.openai.com/v1",
-    circuitOptions: {
-      timeout: 30000,           // 30 second timeout
-      errorThresholdPercentage: 50, // Open after 50% failures
-      resetTimeout: 300000      // Try again after 5 minutes
-    }
-  },
-  {
-    name: "backup",
-    apiKey: process.env.BACKUP_API_KEY,
-    model: "claude-3-sonnet",
-    apiUrl: "https://openrouter.ai/api/v1"
-  },
-  {
-    name: "openai-compatible-proxy",
-    apiKey: process.env.PROXY_API_KEY, // Optional: depends on your proxy
-    model: "gpt-3.5-turbo",
-    apiUrl: "http://localhost:4000/v1" // Your OpenAI-compatible proxy URL
-  }
-  // Add more providers...
-];
-```
-
-### Supported Providers
-
-| Provider                     | API Base URL                                               | Model Examples                     |
-| ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
-| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
-| OpenRouter                   | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet`      |
-| Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
-| Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
-| Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |
-| Any OpenAI-Compatible Server | `http://address/` (your URL)                               | Any model supported by your server |
-| Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     |
-
-**Get API Keys:**
-
-* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
-* **Grok**: [console.x.ai](https://console.x.ai/)
-* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
-* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
-* **Any OpenAI-Compatible Server**: LiteLLM, custom proxies, or any OpenAI-compatible endpoint
-
-### Custom Circuit Breaker Settings
 
 ```javascript
 const providers = [
@@ -332,7 +373,7 @@ const providers = [
 
 ## 💡 Examples
 
-### Complete Chat Application
+## 💡 Complete Chat Application
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -414,7 +455,7 @@ Unified AI Router follows a **fail-fast, quick-recovery** architecture:
 
 ## 🚀 Deployment
 
-### Render.com Deployment
+### 🏗️ Render.com Deployment
 
 1. **Dashboard Method:**
 
@@ -438,7 +479,7 @@ Unified AI Router follows a **fail-fast, quick-recovery** architecture:
    curl https://your-app.onrender.com/models
    ```
 
-### Environment Variables
+## ⚙️ Environment Variables
 
 Required API keys (add only what you need):
 
@@ -501,7 +542,7 @@ const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
 
 ---
 
-## Project Structure
+## 🏗️ Project Structure
 
 ```bash
 Unified-AI-Router/
