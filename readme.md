@@ -4,12 +4,45 @@
 <div align="center">
 
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mlibre/Unified-AI-Router/main?label=Unified%20AI%20Router)  
-**The Reliable Way to Build AI Applications**  
-*Multi-provider AI routing with automatic fallback, circuit breakers, and OpenAI compatibility*
-
-[🚀 Quick Start](#-quick-start) • [📖 Documentation](https://mlibre.github.io/Unified-AI-Router/) • [💬 Examples](#-examples)
+**The OpenAI-Compatible API Server for Reliable AI Applications**  
+*Production-ready Express server with multi-provider AI routing, automatic fallback, and circuit breakers*
 
 </div>
+
+* [🎯 Why Unified AI Router?](#-why-unified-ai-router)
+* [⚡ Quick Start](#-quick-start)
+  * [1. Installation](#1-installation)
+  * [2. Quick Configuration](#2-quick-configuration)
+  * [3. Start Using the Server](#3-start-using-the-server)
+  * [4. Library Usage](#4-library-usage)
+* [🚀 Server Endpoints](#-server-endpoints)
+  * [Library Usage](#library-usage)
+    * [Basic Chat Completion](#basic-chat-completion)
+    * [Streaming Responses](#streaming-responses)
+    * [Tool Calling](#tool-calling)
+    * [Multiple API Keys for Load Balancing](#multiple-api-keys-for-load-balancing)
+  * [Advanced Configuration](#advanced-configuration)
+    * [Custom Circuit Breaker Settings](#custom-circuit-breaker-settings)
+    * [Provider Status Checking](#provider-status-checking)
+* [💡 Examples](#-examples)
+  * [Complete Chat Application](#complete-chat-application)
+  * [Production Deployment Example](#production-deployment-example)
+* [🏗️ Architecture Overview](#️-architecture-overview)
+* [🚀 Deployment](#-deployment)
+  * [Render.com Deployment](#rendercom-deployment)
+  * [Environment Variables](#environment-variables)
+* [🔧 Configuration](#-configuration)
+  * [Provider Configuration (`provider.js`)](#provider-configuration-providerjs)
+  * [Supported Providers](#supported-providers)
+* [📊 Comparison with Direct OpenAI API](#-comparison-with-direct-openai-api)
+  * [Using Direct OpenAI API](#using-direct-openai-api)
+  * [Using Unified AI Router](#using-unified-ai-router)
+* [🛠️ Development](#️-development)
+  * [Project Structure](#project-structure)
+* [🧪 Testing](#-testing)
+  * [Running the Test Suite](#running-the-test-suite)
+* [📄 License](#-license)
+* [🔗 Links](#-links)
 
 ---
 
@@ -17,12 +50,12 @@
 
 Building reliable AI applications shouldn't require choosing between providers or managing complex fallback logic. **Unified AI Router** eliminates the complexity of multi-provider AI integration by providing:
 
-- **🔄 Automatic Failover**: If one provider fails, seamlessly switches to the next
-- **🛡️ Circuit Breaker Protection**: Prevents cascading failures across your infrastructure
-- **⚡ OpenAI Compatibility**: Drop-in replacement for any OpenAI-compatible client
-- **🌐 Multi-Provider Support**: Works with 10+ AI providers
-- **📡 Streaming & Tools**: Full support for streaming responses and tool calling
-- **🎯 Zero Configuration**: Get started in under 5 minutes
+* **🔄 Automatic Failover**: If one provider fails, seamlessly switches to the next
+* **🛡️ Circuit Breaker Protection**: Prevents cascading failures across your infrastructure
+* **⚡ OpenAI Compatibility**: Drop-in replacement for any OpenAI-compatible client
+* **🌐 Multi-Provider Support**: Works with 10+ AI providers
+* **📡 Streaming & Tools**: Full support for streaming responses and tool calling
+* **🎯 Zero Configuration**: Get started in under 5 minutes
 
 **Perfect for**: Production AI applications, chatbots, content generation, code assistants, and any system requiring reliable AI access.
 
@@ -54,9 +87,29 @@ cp .env.example .env
 # OPENAI_API_KEY=sk-...
 # GEMINI_API_KEY=...
 # OPENROUTER_API_KEY=...
+
+# Configure providers (edit provider.js)
+# The server uses provider.js to define which providers to try and in what order
 ```
 
-### 3. Code Example
+### 3. Start Using the Server
+
+```bash
+# Start the server (after configuring .env and provider.js)
+npm start
+
+# Test it works
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "model": "WILL_BE_MANGED_BY_PROVIDERJS"
+  }'
+```
+
+### 4. Library Usage
+
+If you prefer using the library directly in your code:
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -87,13 +140,11 @@ const response = await llm.chatCompletion([
 console.log(response.content);
 ```
 
-**🎉 That's it!** Your code now has automatic fallback between OpenAI and OpenRouter. If OpenAI fails, it automatically tries OpenRouter.
-
 ---
 
-## 📖 Usage
+## 🚀 Server Endpoints
 
-### OpenAI-Compatible Server
+**The server is the primary way to use Unified AI Router** - it provides a complete OpenAI-compatible API with all the reliability features built-in.
 
 Start the server for immediate OpenAI API compatibility:
 
@@ -116,24 +167,9 @@ The server provides these endpoints at `http://localhost:3000`:
 | `GET /health`               | Health check endpoint                        |
 | `GET /v1/providers/status`  | Provider status and health                   |
 
-**Example usage:**
+## Library Usage
 
-```bash
-curl -X POST http://localhost:3000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {"role": "system", "content": "You are a helpful assistant."},
-      {"role": "user", "content": "Explain quantum computing briefly."}
-    ],
-    "model": "gpt-4",
-    "temperature": 0.7
-  }'
-```
-
-### Library Usage
-
-#### Basic Chat Completion
+### Basic Chat Completion
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -163,7 +199,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.content);
 ```
 
-#### Streaming Responses
+### Streaming Responses
 
 ```javascript
 const stream = await llm.chatCompletion(messages, {
@@ -178,7 +214,7 @@ for await (const chunk of stream) {
 }
 ```
 
-#### Tool Calling
+### Tool Calling
 
 ```javascript
 const tools = [
@@ -205,7 +241,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.tool_calls);
 ```
 
-#### Multiple API Keys for Load Balancing
+### Multiple API Keys for Load Balancing
 
 ```javascript
 const providers = [
@@ -222,9 +258,9 @@ const providers = [
 ];
 ```
 
-### Advanced Configuration
+## Advanced Configuration
 
-#### Custom Circuit Breaker Settings
+### Custom Circuit Breaker Settings
 
 ```javascript
 const providers = [
@@ -242,7 +278,7 @@ const providers = [
 ];
 ```
 
-#### Provider Status Checking
+### Provider Status Checking
 
 ```javascript
 // Check health of all configured providers
@@ -302,104 +338,35 @@ const reply = await chat.chat("What's the weather like today?");
 console.log(reply);
 ```
 
-### Production Deployment Example
-
-```javascript
-// production-router.js
-const AIRouter = require("unified-ai-router");
-
-// Production-optimized provider configuration
-const productionProviders = [
-  // High-priority, reliable providers first
-  {
-    name: "openai-primary",
-    apiKey: process.env.OPENAI_API_KEY,
-    model: "gpt-4",
-    apiUrl: "https://api.openai.com/v1",
-    circuitOptions: {
-      timeout: 30000,
-      errorThresholdPercentage: 20,
-      resetTimeout: 180000
-    }
-  },
-  // Backup providers
-  {
-    name: "openrouter-primary", 
-    apiKey: process.env.OPENROUTER_API_KEY,
-    model: "anthropic/claude-3.5-sonnet",
-    apiUrl: "https://openrouter.ai/api/v1"
-  },
-  // Emergency fallback
-  {
-    name: "openrouter-fallback",
-    apiKey: process.env.BACKUP_OPENROUTER_KEY,
-    model: "meta-llama/llama-3.1-8b-instruct:free",
-    apiUrl: "https://openrouter.ai/api/v1"
-  }
-];
-
-class ProductionAIRouter {
-  constructor() {
-    this.llm = new AIRouter(productionProviders);
-    this.requestCount = 0;
-  }
-
-  async chat(messages, options = {}) {
-    this.requestCount++;
-    
-    // Add request logging for monitoring
-    console.log(`Request #${this.requestCount}: ${messages.length} messages`);
-    
-    try {
-      const startTime = Date.now();
-      const response = await this.llm.chatCompletion(messages, options);
-      const duration = Date.now() - startTime;
-      
-      console.log(`Response completed in ${duration}ms`);
-      return response;
-    } catch (error) {
-      console.error("All providers failed:", error);
-      throw new Error("AI service temporarily unavailable");
-    }
-  }
-
-  async getStatus() {
-    return await this.llm.checkProvidersStatus();
-  }
-}
-
-module.exports = ProductionAIRouter;
-```
-
 ---
 
 ## 🏗️ Architecture Overview
 
 Unified AI Router follows a **fail-fast, quick-recovery** architecture:
 
-```
+```text
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Your App      │───▶│   AIRouter       │───▶│  Provider 1     │
-│                 │    │   (Main Logic)   │    │  (OpenAI/etc)   │
+│   Your App      │───▶│  OpenAI Server   │───▶│     AIRouter     │
+│   (Any Client)  │    │   (Main Entry)   │    │   (Library)     │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌──────────────────┐
-                       │   Circuit        │
-                       │   Breakers       │
-                       └──────────────────┘
-                                │
-                                ▼
-                       ┌──────────────────┐    ┌─────────────────┐
-                       │   Fallback       │───▶│  Provider 2     │
-                       │   Logic          │    │  (Backup)       │
-                       └──────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌──────────────────┐    ┌─────────────────┐
-                       │   Provider N     │    │  Provider N     │
-                       │   (Final Try)    │    │  (Last Resort)  │
-                       └──────────────────┘    └─────────────────┘
+                                                        │
+                                                        ▼
+                                               ┌──────────────────┐
+                                               │   Circuit        │
+                                               │   Breakers       │
+                                               └──────────────────┘
+                                                        │
+                                                        ▼
+                                               ┌──────────────────┐    ┌─────────────────┐
+                                               │   Fallback       │───▶│  Provider 1     │
+                                               │   Logic          │    │  (OpenAI/etc)   │
+                                               └──────────────────┘    └─────────────────┘
+                                                        │
+                                                        ▼
+                                               ┌──────────────────┐    ┌─────────────────┐
+                                               │   Provider N     │    │  Provider N     │
+                                               │   (Final Try)    │    │  (Last Resort)  │
+                                               └──────────────────┘    └─────────────────┘
 ```
 
 ---
@@ -493,12 +460,12 @@ module.exports = [
 
 **Get API Keys:**
 
-- **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-- **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
-- **Grok**: [console.x.ai](https://console.x.ai/)
-- **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-- **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
-- **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
+* **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+* **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
+* **Grok**: [console.x.ai](https://console.x.ai/)
+* **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+* **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
+* **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
 
 ---
 
@@ -550,15 +517,15 @@ const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
 
 ```
 Unified-AI-Router/
+├── openai-server.js     # 🚀 OpenAI-compatible server (MAIN COMPONENT)
 ├── main.js              # Core AIRouter library
 ├── provider.js          # Provider configurations
-├── openai-server.js     # OpenAI-compatible server
 ├── package.json         # Dependencies and scripts
 ├── .env.example         # Environment template
 ├── tests/               # Test suite
+│   ├── openai-server-stream.js     # Server streaming tests
+│   ├── openai-server-non-stream.js # Server non-streaming tests
 │   ├── chat.js          # Library tests
-│   ├── openai-server-non-stream.js
-│   ├── openai-server-stream.js
 │   └── tools.js         # Tool calling tests
 └── docs/                # VitePress documentation
     ├── index.md
@@ -572,11 +539,11 @@ Unified-AI-Router/
 
 The project includes comprehensive tests covering:
 
-- **Library Functionality**: Core AIRouter class testing
-- **Server Endpoints**: OpenAI-compatible API testing
-- **Streaming Support**: Real-time response handling
-- **Tool Calling**: Function calling capabilities
-- **Error Handling**: Failure scenarios and fallbacks
+* **Library Functionality**: Core AIRouter class testing
+* **Server Endpoints**: OpenAI-compatible API testing
+* **Streaming Support**: Real-time response handling
+* **Tool Calling**: Function calling capabilities
+* **Error Handling**: Failure scenarios and fallbacks
 
 ### Running the Test Suite
 
@@ -603,10 +570,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Documentation**: [https://mlibre.github.io/Unified-AI-Router/](https://mlibre.github.io/Unified-AI-Router/)
-- **Repository**: [https://github.com/mlibre/Unified-AI-Router](https://github.com/mlibre/Unified-AI-Router)
-- **Issues**: [https://github.com/mlibre/Unified-AI-Router/issues](https://github.com/mlibre/Unified-AI-Router/issues)
-- **NPM Package**: [https://www.npmjs.com/package/unified-ai-router](https://www.npmjs.com/package/unified-ai-router)
+* **Documentation**: [https://mlibre.github.io/Unified-AI-Router/](https://mlibre.github.io/Unified-AI-Router/)
+* **Repository**: [https://github.com/mlibre/Unified-AI-Router](https://github.com/mlibre/Unified-AI-Router)
+* **Issues**: [https://github.com/mlibre/Unified-AI-Router/issues](https://github.com/mlibre/Unified-AI-Router/issues)
+* **NPM Package**: [https://www.npmjs.com/package/unified-ai-router](https://www.npmjs.com/package/unified-ai-router)
 
 ---
 
