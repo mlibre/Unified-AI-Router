@@ -1,82 +1,139 @@
-# Unified AI Router
 
-Unified AI Router is a comprehensive toolkit for AI applications, featuring:
+# 🚀 Unified AI Router
 
-- An **OpenAI-compatible** server for seamless API integration
-- A **Unified Interface** for multiple LLM providers with **Automatic Fallback**
+<div align="center">
 
-It supports all the OpenAI-compatible servers, including major providers like OpenAI, Google, Grok, Litellm, Vllm, Ollama and more, ensuring reliability and flexibility.
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mlibre/Unified-AI-Router/main?label=Unified%20AI%20Router)  
+**The Reliable Way to Build AI Applications**  
+*Multi-provider AI routing with automatic fallback, circuit breakers, and OpenAI compatibility*
 
-- [🚀 Features](#-features)
-- [🛠️ Installation](#️-installation)
-- [📖 Usage](#-usage)
-  - [📚 Basic Library Usage](#-basic-library-usage)
-  - [🔌 OpenAI-Compatible Server](#-openai-compatible-server)
-  - [🧪 Testing](#-testing)
-  - [🌐 Deploying to Render.com](#-deploying-to-rendercom)
-- [🔧 Supported Providers](#-supported-providers)
-- [🔑 API Keys](#-api-keys)
-- [📁 Project Structure](#-project-structure)
-- [📄 License](#-license)
+[🚀 Quick Start](#-quick-start) • [📖 Documentation](https://mlibre.github.io/Unified-AI-Router/) • [💬 Examples](#-examples)
 
-## 🚀 Features
+</div>
 
-- **Multi-Provider Support**: Works with OpenAI, Google, Grok, OpenRouter, Z.ai, Qroq, Cohere, Cerebras, LLM7 and etc
-- **Automatic Fallback**: If one provider fails for **any reason**, automatically tries the next
-- **Circuit Breaker**: Built-in fault tolerance with automatic circuit breaking for each provider to prevent cascading failures
-- **OpenAI-Compatible Server**: Drop-in replacement for the OpenAI API, enabling easy integration with existing tools and clients
-- **Simple API**: Easy-to-use interface for all supported providers
-- **Streaming and Non-Streaming Support**: Handles both streaming and non-streaming responses
-- **Tool Calling**: Full support for tools in LLM interactions
+---
 
-## 🛠️ Installation
+## 🎯 Why Unified AI Router?
+
+Building reliable AI applications shouldn't require choosing between providers or managing complex fallback logic. **Unified AI Router** eliminates the complexity of multi-provider AI integration by providing:
+
+- **🔄 Automatic Failover**: If one provider fails, seamlessly switches to the next
+- **🛡️ Circuit Breaker Protection**: Prevents cascading failures across your infrastructure
+- **⚡ OpenAI Compatibility**: Drop-in replacement for any OpenAI-compatible client
+- **🌐 Multi-Provider Support**: Works with 10+ AI providers
+- **📡 Streaming & Tools**: Full support for streaming responses and tool calling
+- **🎯 Zero Configuration**: Get started in under 5 minutes
+
+**Perfect for**: Production AI applications, chatbots, content generation, code assistants, and any system requiring reliable AI access.
+
+---
+
+## ⚡ Quick Start
+
+Get your first AI response in under 5 minutes:
+
+### 1. Installation
 
 ```bash
-npm i unified-ai-router
-# OR
-git clone https://github.com/mlibre/Unified-AI-Router
+# Using npm
+npm install unified-ai-router
+
+# Or from source
+git clone https://github.com/mlibre/Unified-AI-Router.git
 cd Unified-AI-Router
-npm i
+npm install
 ```
+
+### 2. Quick Configuration
+
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit .env and add at least one API key:
+# OPENAI_API_KEY=sk-...
+# GEMINI_API_KEY=...
+# OPENROUTER_API_KEY=...
+```
+
+### 3. Code Example
+
+```javascript
+const AIRouter = require("unified-ai-router");
+
+// Configure providers (tries in order)
+const providers = [
+  {
+    name: "openai",
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1"
+  },
+  {
+    name: "openrouter", 
+    apiKey: process.env.OPENROUTER_API_KEY,
+    model: "anthropic/claude-3.5-sonnet",
+    apiUrl: "https://openrouter.ai/api/v1"
+  }
+];
+
+const llm = new AIRouter(providers);
+
+// Your first AI request!
+const response = await llm.chatCompletion([
+  { role: "user", content: "Hello! Say something helpful about AI." }
+]);
+
+console.log(response.content);
+```
+
+**🎉 That's it!** Your code now has automatic fallback between OpenAI and OpenRouter. If OpenAI fails, it automatically tries OpenRouter.
+
+---
 
 ## 📖 Usage
 
-### 🔌 OpenAI-Compatible Server
+### OpenAI-Compatible Server
 
-The OpenAI-compatible server provides a drop-in replacement for the OpenAI API. It routes requests through the unified router with fallback logic, ensuring high availability.  
-The server uses the provider configurations defined in [provider.js](provider.js) file, and requires API keys set in a `.env` file.
-
-1. Prepare  `.env`:
-
-  ```bash
-  cp .env.example .env
-  nano .env
-  ```
-
-1. Configure your providers in `provider.js`. Add new provider or modify existing ones with the appropriate `name`, `apiKey`, `model`, and `apiUrl` for the providers you want to use.
-
-  ```bash
-  nano provider.js
-  ```
-
-To start the server locally, run:
+Start the server for immediate OpenAI API compatibility:
 
 ```bash
+# Configure environment
+cp .env.example .env
+# Add your API keys to .env
+
+# Start the server
 npm start
 ```
 
-The server listens at `http://localhost:3000/` and supports the following OpenAI-compatible endpoints:
+The server provides these endpoints at `http://localhost:3000`:
 
-- `POST /v1/chat/completions` - Chat completions (streaming and non-streaming)
-- `POST /chat/completions` - Chat completions (streaming and non-streaming)
-- `GET /v1/models` - List available models
-- `GET /models` - List available models
-- `GET /health` - Health check
-- `GET /v1/providers/status` - Check the status of all configured providers
+| Endpoint                    | Description                                  |
+| --------------------------- | -------------------------------------------- |
+| `POST /v1/chat/completions` | Chat completions (streaming & non-streaming) |
+| `POST /chat/completions`    | Alternative chat completions path            |
+| `GET /v1/models`            | List available models                        |
+| `GET /health`               | Health check endpoint                        |
+| `GET /v1/providers/status`  | Provider status and health                   |
 
-### 📚 Library Usage
+**Example usage:**
 
-This is the core AIRouter library - a JavaScript class that provides a unified interface for multiple LLM providers.
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "Explain quantum computing briefly."}
+    ],
+    "model": "gpt-4",
+    "temperature": 0.7
+  }'
+```
+
+### Library Usage
+
+#### Basic Chat Completion
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -88,119 +145,475 @@ const providers = [
     apiKey: process.env.OPENAI_API_KEY,
     model: "gpt-4",
     apiUrl: "https://api.openai.com/v1"
-  },
-  {
-    name: "google",
-    apiKey: process.env.GEMINI_API_KEY,
-    model: "gemini-2.5-pro",
-    apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/"
   }
 ];
 
 const llm = new AIRouter(providers);
 
 const messages = [
-  { role: "system", content: "You are a helpful assistant." },
-  { role: "user", content: "Explain quantum computing in simple terms." }
+  { role: "system", content: "You are a helpful coding assistant." },
+  { role: "user", content: "Write a function to reverse a string in JavaScript." }
 ];
 
 const response = await llm.chatCompletion(messages, {
-  temperature: 0.7
+  temperature: 0.7,
+  max_tokens: 500
 });
 
-console.log(response);
+console.log(response.content);
 ```
 
-You can also provide an array of API keys for a single provider definition.
+#### Streaming Responses
+
+```javascript
+const stream = await llm.chatCompletion(messages, {
+  temperature: 0.7,
+  stream: true  // Enable streaming
+});
+
+for await (const chunk of stream) {
+  if (chunk.content) {
+    process.stdout.write(chunk.content);
+  }
+}
+```
+
+#### Tool Calling
+
+```javascript
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get current weather for a location",
+      parameters: {
+        type: "object",
+        properties: {
+          location: { type: "string", description: "City name" }
+        }
+      }
+    }
+  }
+];
+
+const response = await llm.chatCompletion(messages, {
+  tools: tools,
+  tool_choice: "auto"
+});
+
+console.log(response.tool_calls);
+```
+
+#### Multiple API Keys for Load Balancing
 
 ```javascript
 const providers = [
   {
     name: "openai",
-    apiKey: [process.env.OPENAI_API_KEY_1, process.env.OPENAI_API_KEY_2],
+    apiKey: [  // Array of API keys
+      process.env.OPENAI_API_KEY_1,
+      process.env.OPENAI_API_KEY_2,
+      process.env.OPENAI_API_KEY_3
+    ],
     model: "gpt-4",
     apiUrl: "https://api.openai.com/v1"
   }
 ];
 ```
 
-### 🧪 Testing
+### Advanced Configuration
 
-The project includes tests for the core library and the OpenAI-compatible server.
+#### Custom Circuit Breaker Settings
 
-```bash
-# Test chat completion
-node tests/chat.js
-
-# Test OpenAI server non-streaming
-node tests/openai-server-non-stream.js
-
-# Test OpenAI server streaming
-node tests/openai-server-stream.js
-
-# Test tool usage
-node tests/tools.js
+```javascript
+const providers = [
+  {
+    name: "openai",
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1",
+    circuitOptions: {
+      timeout: 60000,        // 60 second timeout
+      errorThresholdPercentage: 30, // Open circuit after 30% failures
+      resetTimeout: 300000   // Try again after 5 minutes
+    }
+  }
+];
 ```
 
-### 🌐 Deploying to Render.com
+#### Provider Status Checking
 
-Ensure `provider.js` is configured with API keys in `.env` (as above). Push to GitHub, then:
+```javascript
+// Check health of all configured providers
+const status = await llm.checkProvidersStatus();
+console.log(status);
+// Output: [{ name: "openai", status: "ok", apiKey: "sk-...abcd" }, ...]
+```
 
-1. **Dashboard**:
-   - Create Web Service on [Render.com](https://render.com), connect repo.
-   - Build Command: `npm install`
-   - Start Command: `npm start`
-   - Add env vars (e.g., `OPENAI_API_KEY=sk-...`).
-   - Deploy.
+---
 
-2. **CLI**:
+## 💡 Examples
+
+### Complete Chat Application
+
+```javascript
+const AIRouter = require("unified-ai-router");
+require("dotenv").config();
+
+class ChatApp {
+  constructor() {
+    const providers = require("./provider"); // Your provider config
+    this.llm = new AIRouter(providers);
+    this.conversationHistory = [];
+  }
+
+  async chat(userMessage) {
+    this.conversationHistory.push({
+      role: "user",
+      content: userMessage
+    });
+
+    try {
+      const response = await this.llm.chatCompletion(
+        this.conversationHistory,
+        {
+          temperature: 0.8,
+          max_tokens: 1000
+        }
+      );
+
+      this.conversationHistory.push({
+        role: "assistant",
+        content: response.content
+      });
+
+      return response.content;
+    } catch (error) {
+      console.error("All providers failed:", error.message);
+      return "I'm sorry, I'm having trouble connecting to AI services right now.";
+    }
+  }
+}
+
+// Usage
+const chat = new ChatApp();
+const reply = await chat.chat("What's the weather like today?");
+console.log(reply);
+```
+
+### Production Deployment Example
+
+```javascript
+// production-router.js
+const AIRouter = require("unified-ai-router");
+
+// Production-optimized provider configuration
+const productionProviders = [
+  // High-priority, reliable providers first
+  {
+    name: "openai-primary",
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1",
+    circuitOptions: {
+      timeout: 30000,
+      errorThresholdPercentage: 20,
+      resetTimeout: 180000
+    }
+  },
+  // Backup providers
+  {
+    name: "openrouter-primary", 
+    apiKey: process.env.OPENROUTER_API_KEY,
+    model: "anthropic/claude-3.5-sonnet",
+    apiUrl: "https://openrouter.ai/api/v1"
+  },
+  // Emergency fallback
+  {
+    name: "openrouter-fallback",
+    apiKey: process.env.BACKUP_OPENROUTER_KEY,
+    model: "meta-llama/llama-3.1-8b-instruct:free",
+    apiUrl: "https://openrouter.ai/api/v1"
+  }
+];
+
+class ProductionAIRouter {
+  constructor() {
+    this.llm = new AIRouter(productionProviders);
+    this.requestCount = 0;
+  }
+
+  async chat(messages, options = {}) {
+    this.requestCount++;
+    
+    // Add request logging for monitoring
+    console.log(`Request #${this.requestCount}: ${messages.length} messages`);
+    
+    try {
+      const startTime = Date.now();
+      const response = await this.llm.chatCompletion(messages, options);
+      const duration = Date.now() - startTime;
+      
+      console.log(`Response completed in ${duration}ms`);
+      return response;
+    } catch (error) {
+      console.error("All providers failed:", error);
+      throw new Error("AI service temporarily unavailable");
+    }
+  }
+
+  async getStatus() {
+    return await this.llm.checkProvidersStatus();
+  }
+}
+
+module.exports = ProductionAIRouter;
+```
+
+---
+
+## 🏗️ Architecture Overview
+
+Unified AI Router follows a **fail-fast, quick-recovery** architecture:
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Your App      │───▶│   AIRouter       │───▶│  Provider 1     │
+│                 │    │   (Main Logic)   │    │  (OpenAI/etc)   │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                │
+                                ▼
+                       ┌──────────────────┐
+                       │   Circuit        │
+                       │   Breakers       │
+                       └──────────────────┘
+                                │
+                                ▼
+                       ┌──────────────────┐    ┌─────────────────┐
+                       │   Fallback       │───▶│  Provider 2     │
+                       │   Logic          │    │  (Backup)       │
+                       └──────────────────┘    └─────────────────┘
+                                │
+                                ▼
+                       ┌──────────────────┐    ┌─────────────────┐
+                       │   Provider N     │    │  Provider N     │
+                       │   (Final Try)    │    │  (Last Resort)  │
+                       └──────────────────┘    └─────────────────┘
+```
+
+---
+
+## 🚀 Deployment
+
+### Render.com Deployment
+
+1. **Dashboard Method:**
 
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
-   render login
-   render services
-   render deploys create srv-d3f7iqmmcj7s73e67feg --commit HEAD --confirm --output text
+   # Push to GitHub first
+   git push origin main
+   
+   # Then on Render.com:
+   # 1. Create Web Service
+   # 2. Connect repository
+   # 3. Set Build Command: npm install
+   # 4. Set Start Command: npm start
+   # 5. Add environment variables (API keys)
+   # 6. Deploy
    ```
 
-3. **Verify**:
-   - Access `https://your-service.onrender.com/models`.
+2. **Verify Deployment:**
 
-See [Render docs](https://render.com/docs) for details.
+   ```bash
+   curl https://your-app.onrender.com/health
+   curl https://your-app.onrender.com/models
+   ```
 
-## 🔧 Supported Providers
+### Environment Variables
 
-- OpenAI
-- Google Gemini
-- Grok
-- OpenRouter
-- Z.ai
-- Qroq
-- Cohere
-- Cerebras
-- LLM7
-- Any Other OpenAI Compatible Server
+Required API keys (add only what you need):
 
-## 🔑 API Keys
+```bash
+# Primary providers
+OPENAI_API_KEY=sk-...
+GEMINI_API_KEY=...
+OPENROUTER_API_KEY=...
 
-Get your API keys from the following providers:
+# Backup providers  
+QROQ_API_KEY=...
+CEREBRAS_API_KEY=...
+COHERE_API_KEY=...
+
+# Load balancing (multiple keys for same provider)
+OPENAI_API_KEY_1=sk-...
+OPENAI_API_KEY_2=sk-...
+OPENAI_API_KEY_3=sk-...
+```
+
+---
+
+## 🔧 Configuration
+
+### Provider Configuration (`provider.js`)
+
+```javascript
+module.exports = [
+  {
+    name: "primary",
+    apiKey: process.env.PRIMARY_API_KEY,
+    model: "gpt-4",
+    apiUrl: "https://api.openai.com/v1",
+    circuitOptions: {
+      timeout: 30000,           // 30 second timeout
+      errorThresholdPercentage: 50, // Open after 50% failures
+      resetTimeout: 300000      // Try again after 5 minutes
+    }
+  },
+  {
+    name: "backup",
+    apiKey: process.env.BACKUP_API_KEY,
+    model: "claude-3-sonnet",
+    apiUrl: "https://openrouter.ai/api/v1"
+  }
+  // Add more providers...
+];
+```
+
+### Supported Providers
+
+| Provider      | API Base URL                                               | Model Examples                |
+| ------------- | ---------------------------------------------------------- | ----------------------------- |
+| OpenAI        | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`      |
+| OpenRouter    | `https://openrouter.ai/api/v1`                             | `anthropic/claude-3.5-sonnet` |
+| Groq          | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`     |
+| Google Gemini | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`              |
+| Cohere        | `https://api.cohere.ai/v1`                                 | `command-r-plus`              |
+| Cerebras      | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                |
+
+**Get API Keys:**
 
 - **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-- **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-- **Grok**: [console.x.ai](https://console.x.ai/)
 - **OpenRouter**: [openrouter.ai/keys](https://openrouter.ai/keys)
-- **Z.ai**: [api.z.ai](https://api.z.ai)
-- **Qroq**: [console.groq.com/keys](https://console.groq.com/keys)
+- **Grok**: [console.x.ai](https://console.x.ai/)
+- **Google Gemini**: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
 - **Cohere**: [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)
 - **Cerebras**: [cloud.cerebras.ai](https://cloud.cerebras.ai)
-- **LLM7**: [token.llm7.io](https://token.llm7.io/)
 
-## 📁 Project Structure
+---
 
-- `main.js` - Core AIRouter library implementing the unified interface and fallback logic
-- `provider.js` - Configuration for supported AI providers
-- `openai-server.js` - OpenAI-compatible API server
-- `tests/` - Comprehensive tests for the library, server, and tools
+## 📊 Comparison with Direct OpenAI API
+
+### Using Direct OpenAI API
+
+```javascript
+const OpenAI = require("openai");
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+const response = await client.chat.completions.create({
+  model: "gpt-4",
+  messages: [{ role: "user", content: "Hello" }]
+});
+
+// ❌ No fallback - fails if OpenAI is down
+// ❌ No circuit breaker - failures cascade
+// ❌ No multi-provider support
+```
+
+### Using Unified AI Router
+
+```javascript
+const AIRouter = require("unified-ai-router");
+
+const providers = [
+  { name: "openai", apiKey: process.env.OPENAI_API_KEY, model: "gpt-4" },
+  { name: "backup", apiKey: process.env.BACKUP_KEY, model: "claude-3" }
+];
+
+const llm = new AIRouter(providers);
+const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
+
+// ✅ Automatic fallback if OpenAI fails
+// ✅ Circuit breaker protection
+// ✅ Multi-provider load balancing
+// ✅ Same API interface as OpenAI
+// ✅ Production-ready reliability
+```
+
+---
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+Unified-AI-Router/
+├── main.js              # Core AIRouter library
+├── provider.js          # Provider configurations
+├── openai-server.js     # OpenAI-compatible server
+├── package.json         # Dependencies and scripts
+├── .env.example         # Environment template
+├── tests/               # Test suite
+│   ├── chat.js          # Library tests
+│   ├── openai-server-non-stream.js
+│   ├── openai-server-stream.js
+│   └── tools.js         # Tool calling tests
+└── docs/                # VitePress documentation
+    ├── index.md
+    ├── quickstart.md
+    └── configuration.md
+```
+
+---
+
+## 🧪 Testing
+
+The project includes comprehensive tests covering:
+
+- **Library Functionality**: Core AIRouter class testing
+- **Server Endpoints**: OpenAI-compatible API testing
+- **Streaming Support**: Real-time response handling
+- **Tool Calling**: Function calling capabilities
+- **Error Handling**: Failure scenarios and fallbacks
+
+### Running the Test Suite
+
+```bash
+# Install dependencies
+npm install
+
+# Run individual tests
+node tests/chat.js                    # Basic chat functionality
+node tests/openai-server-non-stream.js # Server non-streaming
+node tests/openai-server-stream.js     # Server streaming
+node tests/tools.js                    # Tool calling
+
+# Expected output: AI responses and success logs
+```
+
+---
 
 ## 📄 License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🔗 Links
+
+- **Documentation**: [https://mlibre.github.io/Unified-AI-Router/](https://mlibre.github.io/Unified-AI-Router/)
+- **Repository**: [https://github.com/mlibre/Unified-AI-Router](https://github.com/mlibre/Unified-AI-Router)
+- **Issues**: [https://github.com/mlibre/Unified-AI-Router/issues](https://github.com/mlibre/Unified-AI-Router/issues)
+- **NPM Package**: [https://www.npmjs.com/package/unified-ai-router](https://www.npmjs.com/package/unified-ai-router)
+
+---
+
+<div align="center">
+
+**[⬆ Back to Top](#-unified-ai-router)**
+
+Made with ❤️ by [mlibre](https://github.com/mlibre)
+
+</div>
