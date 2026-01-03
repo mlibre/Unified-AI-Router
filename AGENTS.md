@@ -8,9 +8,9 @@ Code, logic, and architecture **MUST** remain lightweight. Dependencies **MUST**
 
 ## II. Simple and Minimalist Implementation
 
-Code **MUST** be simple, clear, and readable. Prefer straightforward, maintainable solutions over complex ones.  
-Keep the codebase minimal: avoid clever or tricky one-liners in favor of clarity.
-Keep the codebase and documentations clean: avoid code duplication.
+Code **MUST** be simple, clear, and readable—prefer straightforward, maintainable solutions over complex ones.  
+Keep the codebase minimal: avoid clever or tricky one-liners in favor of clarity.  
+Keep code and documentation clean: avoid duplication.
 
 ## III. Developer-Centric Documentation
 
@@ -18,7 +18,7 @@ All documentation **MUST** be developer-focused, with clear, concise technical e
 
 ## IV. Change Management
 
-If changes are made, update version in `package.json`, and documentation (Markdown files) to reflect them.
+When changes are made, update the version in `package.json` and revise documentation (Markdown files) to reflect them.
 
 ## V. Comprehensive Change Analysis
 

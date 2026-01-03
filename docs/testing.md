@@ -1,12 +1,12 @@
-# Testing
+# 🧪 Testing
 
 Comprehensive testing guide for Unified AI Router.
 
-## Test Overview
+## 📋 Test Overview
 
 The project includes tests for both the AIRouter library and the OpenAI-compatible server endpoints.
 
-## Running Tests
+## 🚀 Running Tests
 
 ### Prerequisites
 
@@ -19,14 +19,14 @@ cp .env.example .env
 # Add your API keys to .env
 ```
 
-### Start the Server
+### 🖥️ Start the Server
 
 ```bash
 # Start server in background
 npm start &
 ```
 
-### Chat Completions Tests
+### 💬 Chat Completions Tests
 
 ```bash
 # Basic chat functionality (streaming)
@@ -42,7 +42,7 @@ node tests/chat/server-stream.js
 node tests/chat/tool-calling.js
 ```
 
-### Responses API Tests
+### 🗣️ Responses API Tests
 
 ```bash
 # Basic responses API via server
