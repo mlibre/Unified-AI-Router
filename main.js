@@ -81,8 +81,11 @@ class AIRouter
 
 			breaker.fallback( () =>
 			{
-				throw new Error( `Circuit open for ${provider.name}` );
+				console.log( "Fallback called for provider:", provider.name );
+				console.log( "this.providers before reorder:", this.providers.map( p => { return p.name }) );
 				this._reorderProvidersOnFailure( provider );
+				console.log( "this.providers after reorder:", this.providers.map( p => { return p.name }) );
+				throw new Error( `Circuit open for ${provider.name}` );
 			});
 
 			provider.breaker = breaker;
@@ -153,7 +156,6 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
-				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -185,7 +187,6 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
-				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -264,7 +265,6 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
-				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -296,7 +296,6 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
-				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -334,7 +333,6 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed to list models for ${provider.name}: ${error.message}` );
-				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		return models;
