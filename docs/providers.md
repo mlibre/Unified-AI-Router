@@ -158,7 +158,7 @@ Configure reliability settings per provider:
 }
 ```
 
-## Provider Status
+## 📊 Provider Status
 
 Check provider health:
 
