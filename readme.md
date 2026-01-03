@@ -23,7 +23,7 @@
   * [🛠️ Tool Calling Example](#️-tool-calling-example)
   * [💬 Simple Chat Example](#-simple-chat-example)
   * [🗣️ Responses API Example](#️-responses-api-example)
-* [📚 Library Usage](#-library-usage)
+* [📚 SDK Examples](#-sdk-examples)
   * [💬 Simple Chat Completion](#-simple-chat-completion)
   * [🌊 Chat Completion Streaming](#-chat-completion-streaming)
   * [🛠️ Chat Completion Tool Calling](#️-chat-completion-tool-calling)
