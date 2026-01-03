@@ -108,7 +108,7 @@ const response = await llm.responses(
 console.log(response.output_text);
 ```
 
-### Streaming
+### 🌊 Streaming
 
 ```javascript
 const stream = await llm.responses(
@@ -125,7 +125,7 @@ for await (const chunk of stream) {
 }
 ```
 
-### Multi-turn Conversations
+### 🔄 Multi-turn Conversations
 
 ```javascript
 // Initialize conversation
@@ -145,7 +145,7 @@ response = await llm.responses(input);
 console.log(response.output_text);
 ```
 
-## Load Balancing
+## 🔀 Load Balancing
 
 ```javascript
 const providers = [
@@ -161,17 +161,3 @@ const providers = [
   }
 ];
 ```
-
-## Error Handling
-
-```javascript
-try {
-  const response = await llm.chatCompletion(messages);
-  console.log(response.content);
-} catch (error) {
-  if (error.message.includes("All providers failed")) {
-    console.error("All AI providers are currently unavailable");
-  } else {
-    console.error("Request failed:", error.message);
-  }
-}
