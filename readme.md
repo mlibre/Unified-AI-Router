@@ -230,7 +230,7 @@ The server provides these endpoints at `http://localhost:3000`:
 | `POST /chat/completions`    | Alternative chat completions path            |
 | `GET /v1/models`            | List available models                        |
 | `GET /health`               | Health check endpoint                        |
-| `GET /v1/providers/status`  | Provider status and health                   |
+| `GET /providers/status`     | Provider status and health                   |
 
 ### 🌐 Web Chatbot Interface
 

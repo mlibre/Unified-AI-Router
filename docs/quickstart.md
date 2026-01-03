@@ -61,7 +61,7 @@ curl -X POST http://localhost:3000/v1/responses \
 ## Next
 
 - Configure more providers in [`provider.js`](/configuration#providers)
-- Check provider status: `GET /v1/providers/status`
+- Check provider status: `GET /providers/status`
 - See [Testing Guide](/testing) for comprehensive testing
 - Check out [SDK Usage](/sdk-usage) for library integration
 - See [Testing Guide](/testing) for comprehensive testing

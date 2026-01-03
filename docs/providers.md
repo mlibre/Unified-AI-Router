@@ -163,7 +163,7 @@ Configure reliability settings per provider:
 Check provider health:
 
 ```bash
-curl http://localhost:3000/v1/providers/status
+curl http://localhost:3000/providers/status
 ```
 
 Response includes:
