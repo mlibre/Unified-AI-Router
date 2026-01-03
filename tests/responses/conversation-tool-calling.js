@@ -111,6 +111,36 @@ async function executeTool ( toolCall )
 	}
 }
 
+// Helper to normalize assistant messages to simple string content
+function normalizeMessages ( items )
+{
+	return items.map( item =>
+	{
+		if ( item.type === "message" && item.role === "assistant" )
+		{
+			// Extract text from content array and convert to simple string
+			if ( Array.isArray( item.content ) && item.content.length > 0 )
+			{
+				const textContent = item.content
+				.filter( c => { return c.type === "output_text" && c.text })
+				.map( c => { return c.text })
+				.join( "\n" );
+
+				if ( textContent.trim() )
+				{
+					return {
+						role: "assistant",
+						content: textContent
+					};
+				}
+			}
+			// Skip empty assistant messages
+			return null;
+		}
+		return item;
+	}).filter( item => { return item !== null });
+}
+
 // Process tool calls and return updated conversation
 async function processToolCalls ( response, currentInput )
 {
@@ -120,7 +150,7 @@ async function processToolCalls ( response, currentInput )
 	{
 		const updatedInput = [
 			...currentInput,
-			...response.output
+			...normalizeMessages( response.output )
 		];
 		return { input: updatedInput, hasToolCalls: false };
 	}
@@ -137,7 +167,7 @@ async function processToolCalls ( response, currentInput )
 
 	const inputWithTools = [
 		...currentInput,
-		...response.output,
+		...normalizeMessages( response.output ),
 		...toolResults.map( tr =>
 		{
 			return {
@@ -158,7 +188,7 @@ async function processToolCalls ( response, currentInput )
 
 	const updatedInput = [
 		...inputWithTools,
-		...finalResponse.output
+		...normalizeMessages( finalResponse.output )
 	];
 
 	return { input: updatedInput, hasToolCalls: true, toolResults };
