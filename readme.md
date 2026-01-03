@@ -24,11 +24,11 @@
   * [💬 Simple Chat Example](#-simple-chat-example)
   * [🗣️ Responses API Example](#️-responses-api-example)
 * [📚 Library Usage](#-library-usage)
-  * [💬 Basic Chat Completion](#-basic-chat-completion)
+  * [💬 Simple Chat Completion](#-simple-chat-completion)
   * [🌊 Chat Completion Streaming](#-chat-completion-streaming)
-  * [🗣️ Responses API](#️-responses-api)
+  * [🛠️ Chat Completion Tool Calling](#️-chat-completion-tool-calling)
+  * [🗣️ Simple Responses API](#️-simple-responses-api)
   * [🌊 Responses API Streaming](#-responses-api-streaming)
-  * [🛠️ Tool Calling](#️-tool-calling)
   * [🔀 Multiple API Keys for Load Balancing](#-multiple-api-keys-for-load-balancing)
 * [📋 Supported Providers](#-supported-providers)
 * [🏗️ Architecture Overview](#️-architecture-overview)
@@ -491,7 +491,7 @@ data: [DONE]
 
 ## 📚 Library Usage
 
-### 💬 Basic Chat Completion
+### 💬 Simple Chat Completion
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -536,7 +536,34 @@ for await (const chunk of stream) {
 }
 ```
 
-### 🗣️ Responses API
+### 🛠️ Chat Completion Tool Calling
+
+```javascript
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get current weather for a location",
+      parameters: {
+        type: "object",
+        properties: {
+          location: { type: "string", description: "City name" }
+        }
+      }
+    }
+  }
+];
+
+const response = await llm.chatCompletion(messages, {
+  tools: tools,
+  tool_choice: "auto"
+});
+
+console.log(response.tool_calls);
+```
+
+### 🗣️ Simple Responses API
 
 ```javascript
 // Basic Responses API usage
@@ -566,33 +593,6 @@ for await (const chunk of stream) {
     process.stdout.write(chunk.delta);
   }
 }
-```
-
-### 🛠️ Tool Calling
-
-```javascript
-const tools = [
-  {
-    type: "function",
-    function: {
-      name: "get_weather",
-      description: "Get current weather for a location",
-      parameters: {
-        type: "object",
-        properties: {
-          location: { type: "string", description: "City name" }
-        }
-      }
-    }
-  }
-];
-
-const response = await llm.chatCompletion(messages, {
-  tools: tools,
-  tool_choice: "auto"
-});
-
-console.log(response.tool_calls);
 ```
 
 ### 🔀 Multiple API Keys for Load Balancing
