@@ -1,6 +1,6 @@
-# Core Principles
+# Core Rules
 
-The following principles MUST be followed always:
+The following principles and rules **MUST** always be followed, under all circumstances:
 
 ## I. Lightweight Architecture
 
