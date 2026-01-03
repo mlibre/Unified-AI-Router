@@ -25,7 +25,7 @@ module.exports = [
   {
     name: "openrouter",
     apiKey: process.env.OPENROUTER_API_KEY,
-    model: "xiaomi/mimo-v2-flash:free",
+    model: "mistralai/devstral-2512:free",
     apiUrl: "https://openrouter.ai/api/v1"
   },
   {
@@ -67,8 +67,7 @@ Override per provider:
 {
   name: "openrouter",
   apiKey: [process.env.OPENROUTER_API_KEY, process.env.OPENROUTER_API_KEY_2],
-  model: "xiaomi/mimo-v2-flash:free",
+  model: "mistralai/devstral-2512:free",
   apiUrl: "https://openrouter.ai/api/v1"
 }
 ```
-
