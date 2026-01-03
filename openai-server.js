@@ -11,6 +11,7 @@ const providers = require( "./provider" )
 const aiRouter = new AIRouter( providers );
 
 const app = express();
+const path = require( "path" );
 app.use( cors() );
 app.use( express.json({ limit: "50mb" }) );
 
@@ -138,6 +139,11 @@ app.get( "/models", handleGetModels );
 
 app.get( "/health", ( req, res ) => { return res.json({ status: "ok" }) });
 
+app.get( "/", ( req, res ) =>
+{
+	res.sendFile( path.join( __dirname, "chatbot.html" ) );
+});
+
 app.get( "/providers/status", async ( req, res ) =>
 {
 	try
@@ -156,6 +162,7 @@ const PORT = process.env.PORT || 3000;
 app.listen( PORT, () =>
 {
 	logger.info( `🚀 OpenAI-compatible API listening at http://localhost:${PORT}/v1/chat/completions and /v1/responses` );
+	logger.info( `🌐 Chatbot interface available at http://localhost:${PORT}/` );
 
 	setTimeout( () =>
 	{
