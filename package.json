@@ -1,6 +1,6 @@
 {
   "name": "unified-ai-router",
-  "version": "3.7.11",
+  "version": "3.7.12",
   "description": "A unified interface and openai-compatible server for multiple LLM providers with automatic fallback. Supports providers like Openrouter, Grok, and more, ensuring reliability and flexibility for your AI applications.",
   "license": "ISC",
   "author": "mlibre",

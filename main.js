@@ -76,7 +76,7 @@ class AIRouter
 			});
 			breaker.on( "failure", ( err ) =>
 			{
-				logger.error({ provider: provider.name, error: err.message }, "Breaker failure" );
+				logger.error({ provider: provider.name, error: err.message, metadata: err?.error?.metadata }, "Breaker failure" );
 			});
 
 			breaker.fallback( () =>

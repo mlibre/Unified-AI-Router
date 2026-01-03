@@ -164,25 +164,33 @@ app.get( "/providers/status", async ( req, res ) =>
 const PORT = process.env.PORT || 3000;
 app.listen( PORT, ( e ) =>
 {
-	logger.info( `🚀 OpenAI-compatible API listening at http://localhost:${PORT}/v1/chat/completions and /v1/responses` );
-	logger.info( `🌐 Chatbot interface available at http://localhost:${PORT}/` );
-
-	setTimeout( () =>
+	if ( e )
 	{
-		const url = `http://localhost:${PORT}/health`;
-		http.get( url, ( res ) =>
+		logger.error( `Failed to start server: ${e.message}` );
+		process.exit( 1 );
+	}
+	else
+	{
+		logger.info( `🚀 OpenAI-compatible API listening at http://localhost:${PORT}/v1/chat/completions and /v1/responses` );
+		logger.info( `🌐 Chatbot interface available at http://localhost:${PORT}/` );
+
+		setTimeout( () =>
 		{
-			if ( res.statusCode === 200 )
+			const url = `http://localhost:${PORT}/health`;
+			http.get( url, ( res ) =>
 			{
-				logger.info( "Keep-alive ping successful." );
-			}
-			else
+				if ( res.statusCode === 200 )
+				{
+					logger.info( "Keep-alive ping successful." );
+				}
+				else
+				{
+					logger.error( `Keep-alive ping failed with status code: ${res.statusCode}` );
+				}
+			}).on( "error", ( err ) =>
 			{
-				logger.error( `Keep-alive ping failed with status code: ${res.statusCode}` );
-			}
-		}).on( "error", ( err ) =>
-		{
-			logger.error( "Error sending keep-alive ping:", err.message );
-		});
-	}, 14 * 60 * 1000 ); // 14 minutes
+				logger.error( "Error sending keep-alive ping:", err.message );
+			});
+		}, 14 * 60 * 1000 ); // 14 minutes
+	}
 });
