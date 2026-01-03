@@ -75,15 +75,30 @@ Override per provider:
 
 ## Testing
 
+### Chat Completions Tests
+
 ```bash
-# Non-streaming
-node tests/openai-server-non-stream.js
+# Basic chat completion
+node tests/chat/chat.js
 
-# Streaming  
-node tests/openai-server-stream.js
+# OpenAI server non-streaming
+node tests/chat/server-non-stream.js
 
-# Library
-node tests/chat.js
+# OpenAI server streaming
+node tests/chat/server-stream.js
+
+# Chat tool calling
+node tests/chat/tool-calling.js
+```
+
+### Responses API Tests
+
+```bash
+# Basic responses API
+node tests/responses/responses.js
+
+# Responses API tool calling
+node tests/responses/tool-calling.js
 ```
 
 ## Troubleshooting

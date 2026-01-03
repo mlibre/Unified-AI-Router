@@ -748,10 +748,14 @@ Unified-AI-Router/
 ├── package.json         # Dependencies and scripts
 ├── .env.example         # Environment template
 ├── tests/               # Test suite
-│   ├── openai-server-stream.js     # Server streaming tests
-│   ├── openai-server-non-stream.js # Server non-streaming tests
-│   ├── chat.js          # Library tests
-│   └── tools.js         # Tool calling tests
+│   ├── chat/            # Chat completions tests
+│   │   ├── chat.js                  # Basic chat functionality
+│   │   ├── server-non-stream.js     # Server non-streaming tests
+│   │   ├── server-stream.js         # Server streaming tests
+│   │   └── tool-calling.js          # Chat tool calling tests
+│   └── responses/       # Responses API tests
+│       ├── responses.js             # Basic responses API
+│       └── tool-calling.js          # Responses API tool calling
 └── docs/                # VitePress documentation
     ├── index.md
     ├── quickstart.md
@@ -777,10 +781,16 @@ The project includes comprehensive tests covering:
 npm install
 
 # Run individual tests
-node tests/chat.js                    # Basic chat functionality
-node tests/openai-server-non-stream.js # Server non-streaming
-node tests/openai-server-stream.js     # Server streaming
-node tests/tools.js                    # Tool calling
+
+# Chat Completions Tests
+node tests/chat/chat.js                # Basic chat functionality
+node tests/chat/server-non-stream.js   # Server non-streaming
+node tests/chat/server-stream.js       # Server streaming
+node tests/chat/tool-calling.js        # Chat tool calling
+
+# Responses API Tests
+node tests/responses/responses.js      # Basic responses API
+node tests/responses/tool-calling.js   # Responses API tool calling
 
 # Expected output: AI responses and success logs
 ```
