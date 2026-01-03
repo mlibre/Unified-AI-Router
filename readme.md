@@ -19,8 +19,8 @@
 * [⚙️ Configuration](#️-configuration)
   * [🔧 Environment Configuration (`.env`)](#-environment-configuration-env)
   * [🏗️ Provider Configuration (`provider.js`)](#️-provider-configuration-providerjs)
-* [🚀 Running Server](#-running-server)
-  * [� Simple Chat Example](#-simple-chat-example)
+* [🚀 OpenAI-Compatible Server](#-openai-compatible-server)
+  * [💬 Simple Chat Example](#-simple-chat-example)
   * [🛠️ Tool Calling Example](#️-tool-calling-example)
   * [🗣️ Responses API Example](#️-responses-api-example)
 * [📚 SDK Examples](#-sdk-examples)
@@ -209,7 +209,7 @@ module.exports = [
 
 ---
 
-## 🚀 Running Server
+## 🚀 OpenAI-Compatible Server
 
 The server provides a OpenAI-compatible API with all the reliability features built-in.
 
