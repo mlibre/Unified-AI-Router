@@ -55,7 +55,7 @@ curl -X POST http://localhost:3000/v1/responses \
 ```bash
 curl -X POST http://localhost:3000/v1/responses \
   -H "Content-Type: application/json" \
-  -d '{"input": "Say hello in 3 words", "model":"gpt-3.5-turbo", "stream": true}'
+  -d '{"input": "Say hello in 3 words", "model":"any-model", "stream": true}'
 ```
 
 ## Next

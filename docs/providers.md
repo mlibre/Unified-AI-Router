@@ -14,7 +14,7 @@ The current deployment includes:
 
 | Provider                     | API Base URL                                               | Model Examples                     | API Key Link                                                             |
 | ---------------------------- | ---------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------ |
-| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           | [platform.openai.com/api-keys](https://platform.openai.com/api-keys)     |
+| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`                            | [platform.openai.com/api-keys](https://platform.openai.com/api-keys)     |
 | Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          | [console.groq.com](https://console.groq.com)                             |
 | Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   | [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) |
 | Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   | [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)   |

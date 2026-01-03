@@ -732,7 +732,7 @@ const providers = [
 | Provider                     | API Base URL                                               | Model Examples                     |
 | ---------------------------- | ---------------------------------------------------------- | ---------------------------------- |
 | OpenRouter                   | `https://openrouter.ai/api/v1`                             | `mistralai/devstral-2512:free`     |
-| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`, `gpt-3.5-turbo`           |
+| OpenAI                       | `https://api.openai.com/v1`                                | `gpt-4`                            |
 | Groq                         | `https://api.groq.com/openai/v1`                           | `llama-3.1-70b-versatile`          |
 | Google Gemini                | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-2.5-pro`                   |
 | Cohere                       | `https://api.cohere.ai/v1`                                 | `command-r-plus`                   |

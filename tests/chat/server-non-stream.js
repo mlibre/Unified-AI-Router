@@ -11,7 +11,7 @@ void async function main ()
 				{ role: "system", content: "You are a helpful assistant." },
 				{ role: "user", content: "Hello, say something short." }
 			],
-			model: "gpt-3.5-turbo",
+			model: "no-need",
 			temperature: 0.7
 		};
 		const nonStreamRes = await axios.post( `http://localhost:${PORT}/v1/chat/completions`, nonStreamPayload );
