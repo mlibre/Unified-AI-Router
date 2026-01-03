@@ -104,9 +104,6 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 ### 📚 4. SDK Usage
 
-<details>
-<summary><strong>Click to view basic library setup example</strong></summary>
-
 ```javascript
 const AIRouter = require("unified-ai-router");
 
@@ -134,8 +131,6 @@ const response = await llm.chatCompletion([
 
 console.log(response.content);
 ```
-
-</details>
 
 ---
 
