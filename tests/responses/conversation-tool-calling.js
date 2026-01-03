@@ -115,119 +115,119 @@ async function executeTool ( toolCall )
 	}
 }
 
-// Main conversation test
+// Main conversation test using responses API
 async function testConversationToolCalling ()
 {
-	console.log( "=== Starting Conversation-to-Tool-Calling Test ===" );
+	console.log( "=== Starting Conversation-to-Tool-Calling Test (Responses API) ===" );
 
 	try
 	{
 		// Turn 1: Initial request - user asks for help with calculations and weather
 		console.log( "\n📝 Turn 1: Initial request for calculations and weather" );
 
-		let messages = [
-			{
-				role: "system",
-				content: "You are a helpful assistant with access to tools for calculations, weather forecasts, and tip calculations. Use tools when helpful to provide accurate information."
-			},
+		let input = [
 			{
 				role: "user",
 				content: "Hi! I need help with a few things. First, what's 15% tip on a $85 bill? Also, what's the weather like in Tehran and Mashhad?"
 			}
 		];
 
-		let response = await llm.chatCompletion( messages, {
+		let response = await llm.responses( input, {
 			temperature: 0.3,
 			tools
 		});
 
-		console.log( "🤖 Assistant:", response.content );
+		console.log( "🤖 Assistant:", response.output_text || response.content );
+		console.log( "Response ID:", response.id );
 
 		// Handle tool calls if any
 		let toolResults = [];
-		if ( response.tool_calls && response.tool_calls.length > 0 )
+		if ( response.output && response.output.tool_calls && response.output.tool_calls.length > 0 )
 		{
-			console.log( `🔧 Executing ${response.tool_calls.length} tool call(s)...` );
+			console.log( `🔧 Executing ${response.output.tool_calls.length} tool call(s)...` );
 
-			for ( const toolCall of response.tool_calls )
+			for ( const toolCall of response.output.tool_calls )
 			{
 				const toolResult = await executeTool( toolCall );
 				toolResults.push( toolResult );
 			}
 
-			// Add assistant message with tool calls and tool results to conversation
-			messages.push({
-				role: "assistant",
-				content: response.content,
-				tool_calls: response.tool_calls
-			});
-
-			messages.push( ...toolResults.map( tr =>
-			{
-				return {
-					role: "tool",
-					content: tr.content,
-					tool_call_id: tr.tool_call_id,
-					name: tr.name
-				}
-			}) );
+			// Prepare input for next turn with tool results
+			input = [
+				...input,
+				{
+					role: "assistant",
+					content: response.output_text || response.content,
+					tool_calls: response.output.tool_calls
+				},
+				...toolResults.map( tr =>
+				{
+					return {
+						role: "tool",
+						content: tr.content,
+						tool_call_id: tr.tool_call_id,
+						name: tr.name
+					}
+				})
+			];
 
 			// Get final response with tool results
-			const finalResponse = await llm.chatCompletion( messages, {
+			const finalResponse = await llm.responses( input, {
 				temperature: 0.3,
 				tools
 			});
 
-			console.log( "🤖 Final Assistant:", finalResponse.content );
+			console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
 
-			// Update messages for next turn
-			messages.push({
+			// Update conversation with final response
+			input.push({
 				role: "assistant",
-				content: finalResponse.content
+				content: finalResponse.output_text || finalResponse.content
 			});
 		}
 		else
 		{
-			messages.push({
+			// Update conversation with response
+			input.push({
 				role: "assistant",
-				content: response.content
+				content: response.output_text || response.content
 			});
 		}
 
 		// Turn 2: Follow-up question referencing previous context
 		console.log( "\n📝 Turn 2: Follow-up question about calculations" );
 
-		messages.push({
+		input.push({
 			role: "user",
 			content: "Thanks! Those calculations were helpful. Now, what if I wanted to calculate a 20% tip on the same $85 bill instead?"
 		});
 
-		response = await llm.chatCompletion( messages, {
+		response = await llm.responses( input, {
 			temperature: 0.3,
 			tools
 		});
 
-		console.log( "🤖 Assistant:", response.content );
+		console.log( "🤖 Assistant:", response.output_text || response.content );
 
 		// Handle tool calls for turn 2
 		toolResults = [];
-		if ( response.tool_calls && response.tool_calls.length > 0 )
+		if ( response.output && response.output.tool_calls && response.output.tool_calls.length > 0 )
 		{
-			console.log( `🔧 Executing ${response.tool_calls.length} tool call(s)...` );
+			console.log( `🔧 Executing ${response.output.tool_calls.length} tool call(s)...` );
 
-			for ( const toolCall of response.tool_calls )
+			for ( const toolCall of response.output.tool_calls )
 			{
 				const toolResult = await executeTool( toolCall );
 				toolResults.push( toolResult );
 			}
 
-			messages.push({
+			input.push({
 				role: "assistant",
-				content: response.content,
-				tool_calls: response.tool_calls
+				content: response.output_text || response.content,
+				tool_calls: response.output.tool_calls
 			});
 
-			messages.push( ...toolResults.map( tr =>
+			input.push( ...toolResults.map( tr =>
 			{
 				return {
 					role: "tool",
@@ -237,41 +237,46 @@ async function testConversationToolCalling ()
 				}
 			}) );
 
-			const finalResponse = await llm.chatCompletion( messages, {
+			const finalResponse = await llm.responses( input, {
 				temperature: 0.3,
 				tools
 			});
 
-			console.log( "🤖 Final Assistant:", finalResponse.content );
+			console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
+
+			input.push({
+				role: "assistant",
+				content: finalResponse.output_text || finalResponse.content
+			});
 		}
 		else
 		{
-			messages.push({
+			input.push({
 				role: "assistant",
-				content: response.content
+				content: response.output_text || response.content
 			});
 		}
 
 		// Turn 3: Another follow-up with different tools
 		console.log( "\n📝 Turn 3: Weather comparison request" );
 
-		messages.push({
+		input.push({
 			role: "user",
 			content: "Perfect! Now I'm planning to visit Isfahan next week. Can you compare the weather between Tehran and Isfahan? Also, what if I needed to split that $85 bill with 5 friends - how much would each person pay including the 20% tip?"
 		});
 
-		response = await llm.chatCompletion( messages, {
+		response = await llm.responses( input, {
 			temperature: 0.3,
 			tools
 		});
 
-		console.log( "🤖 Assistant:", response.content );
+		console.log( "🤖 Assistant:", response.output_text || response.content );
 
 		console.log( "\n🎉 Conversation-to-Tool-Calling Test Completed Successfully!" );
-		console.log( "✅ Multi-turn conversation maintained" );
+		console.log( "✅ Multi-turn conversation maintained using Responses API" );
 		console.log( "✅ Tool calling in conversation context" );
-		console.log( "✅ Context preservation across turns" );
-		console.log( "✅ Mixed tool usage (calculations, weather, tip splitting)" );
+		console.log( "✅ Context preservation by sending complete conversation object" );
+		console.log( "✅ Mixed tool usage (weather and tip calculations)" );
 
 	}
 	catch ( error )
@@ -286,5 +291,5 @@ async function testConversationToolCalling ()
 }
 
 // Run the test
-console.log( "Starting Conversation-to-Tool-Calling Test..." );
+console.log( "Starting Conversation-to-Tool-Calling Test (Responses API)..." );
 testConversationToolCalling();
