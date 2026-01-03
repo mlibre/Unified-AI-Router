@@ -5,7 +5,7 @@ const testResponsesAPIToolCalling = async () =>
 {
 	const url = "http://localhost:3000/v1/responses";
 	const data = {
-		"model": "gemini-2.5-pro",
+		"model": "no_need",
 		"input": "how is the weather in mashhad, tehran. use tools",
 		"tools": [
 			{

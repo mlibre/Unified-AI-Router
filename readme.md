@@ -21,9 +21,9 @@
   * [🏗️ Provider Configuration (`provider.js`)](#️-provider-configuration-providerjs)
 * [🚀 OpenAI-Compatible Server](#-openai-compatible-server)
   * [🌐 Web Chatbot Interface](#-web-chatbot-interface)
-  * [💬 Simple Chat Example](#-simple-chat-example)
-  * [🛠️ Tool Calling Example](#️-tool-calling-example)
-  * [🗣️ Responses API Example](#️-responses-api-example)
+  * [💬 Chat Request](#-chat-request)
+  * [🛠️ Chat Tool Calling Request](#️-chat-tool-calling-request)
+  * [🗣️ Responses API Request](#️-responses-api-request)
 * [📚 SDK Examples](#-sdk-examples)
   * [💬 Simple Chat Completion](#-simple-chat-completion)
   * [🌊 Chat Completion Streaming](#-chat-completion-streaming)
@@ -239,7 +239,7 @@ The server includes a responsive web chatbot interface accessible at: `http://lo
 
 Features include mobile responsiveness, dark/light themes, conversation history, settings panel, and auto-fallback using the same reliability system as the API.
 
-### 💬 Simple Chat Example
+### 💬 Chat Request
 
 <details>
 <summary><strong>Click to view simple chat example</strong></summary>
@@ -315,7 +315,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 </details>
 
-### 🛠️ Tool Calling Example
+### 🛠️ Chat Tool Calling Request
 
 <details>
 <summary><strong>Click to view tool calling example</strong></summary>
@@ -432,7 +432,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 
 </details>
 
-### 🗣️ Responses API Example
+### 🗣️ Responses API Request
 
 <details>
 <summary><strong>Click to view responses API example</strong></summary>

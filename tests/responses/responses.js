@@ -5,7 +5,7 @@ const testResponsesAPI = async () =>
 {
 	const url = "http://localhost:3000/v1/responses";
 	const data = {
-		model: "openai/o4-mini",
+		model: "any-model",
 		input: "Hello, this is a test of the Responses API!"
 	};
 
