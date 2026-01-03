@@ -37,7 +37,7 @@ Deploy Unified AI Router to various platforms.
    curl https://your-app.onrender.com/models
    ```
 
-### Verify Deployment
+### ✅ Verify Deployment
 
 ```bash
 # Health check
@@ -51,6 +51,8 @@ curl -X POST https://your-app.onrender.com/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"messages":[{"role":"user","content":"Hello!"}],"model":"any"}'
 ```
+
+## 🚄 Railway
 
 1. **Install Railway CLI:**
 
@@ -78,9 +80,9 @@ curl -X POST https://your-app.onrender.com/v1/chat/completions \
    railway up
    ```
 
-## Environment Configuration
+## ⚙️ Environment Configuration
 
-### Production .env
+### 🌍 Production .env
 
 ```bash
 # Required API Keys
@@ -97,7 +99,7 @@ CIRCUIT_ERROR_THRESHOLD=50
 CIRCUIT_RESET_TIMEOUT=300000
 ```
 
-### Security Considerations
+### 🔒 Security Considerations
 
 1. **Never commit .env files to git**
 2. **Use platform-specific environment variable management**
@@ -105,9 +107,9 @@ CIRCUIT_RESET_TIMEOUT=300000
 4. **Monitor API usage and costs**
 5. **Implement rate limiting if needed**
 
-## Monitoring
+## 📊 Monitoring
 
-### Health Checks
+### 🏥 Health Checks
 
 ```bash
 # Basic health check
@@ -139,7 +141,7 @@ heroku logs --tail
 docker logs -f container-name
 ```
 
-## Performance Tips
+## ⚡ Performance Tips
 
 1. **Use multiple API keys** for load balancing
 2. **Configure appropriate timeouts** based on provider speeds
