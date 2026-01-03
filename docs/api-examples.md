@@ -20,7 +20,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   }'
 ```
 
-### Streaming Response
+### 🌊 Streaming Response
 
 ```bash
 curl -X POST http://localhost:3000/v1/chat/completions \
@@ -33,7 +33,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   --no-buffer
 ```
 
-### Tool Calling
+### 🛠️ Tool Calling
 
 ```bash
 curl -X POST http://localhost:3000/v1/chat/completions \
@@ -62,7 +62,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   }'
 ```
 
-## Responses API
+## 🗣️ Responses API
 
 ### Basic Request
 
@@ -76,7 +76,7 @@ curl -X POST http://localhost:3000/v1/responses \
   }'
 ```
 
-### Streaming Response
+### 🌊 Streaming Response
 
 ```bash
 curl -X POST http://localhost:3000/v1/responses \
@@ -89,7 +89,7 @@ curl -X POST http://localhost:3000/v1/responses \
   --no-buffer
 ```
 
-### Tool Calling
+### 🛠️ Tool Calling
 
 ```bash
 curl -X POST http://localhost:3000/v1/responses \

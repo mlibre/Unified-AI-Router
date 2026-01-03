@@ -1,14 +1,14 @@
-# SDK Usage
+# 📚 SDK Usage
 
 Use the AIRouter library directly in your Node.js applications.
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install unified-ai-router
 ```
 
-## Basic Setup
+## ⚙️ Basic Setup
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -32,7 +32,7 @@ const providers = [
 const llm = new AIRouter(providers);
 ```
 
-## Chat Completions
+## 💬 Chat Completions
 
 ### Basic Usage
 
@@ -50,7 +50,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.content);
 ```
 
-### Streaming
+### 🌊 Streaming
 
 ```javascript
 const stream = await llm.chatCompletion(messages, {
@@ -65,7 +65,7 @@ for await (const chunk of stream) {
 }
 ```
 
-### Tool Calling
+### 🛠️ Tool Calling
 
 ```javascript
 const tools = [
@@ -92,7 +92,7 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.tool_calls);
 ```
 
-## Responses API
+## 🗣️ Responses API
 
 ### Basic Usage
 
