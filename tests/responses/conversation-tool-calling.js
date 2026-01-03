@@ -94,7 +94,6 @@ async function executeTool ( toolCall )
 		const result = await toolFn( args );
 		console.log( `✅ Tool "${toolCall.name}" executed:`, result );
 
-		// Return in official OpenAI format for function_call_output
 		return {
 			call_id: toolCall.call_id,
 			output: typeof result === "object" ? JSON.stringify( result ) : result.toString(),
@@ -112,6 +111,68 @@ async function executeTool ( toolCall )
 	}
 }
 
+// Process tool calls and return updated conversation
+async function processToolCalls ( response, currentInput )
+{
+	const functionCalls = response.output.filter( item => { return item.type === "function_call" });
+
+	if ( functionCalls.length === 0 )
+	{
+		// No tool calls, just add the response to conversation
+		currentInput.push({
+			role: "assistant",
+			content: response.output_text || response.content
+		});
+		return { input: currentInput, hasToolCalls: false };
+	}
+
+	console.log( `🔧 Executing ${functionCalls.length} tool call(s)...` );
+
+	// Execute all tool calls
+	const toolResults = [];
+	for ( const toolCall of functionCalls )
+	{
+		const toolResult = await executeTool( toolCall );
+		toolResults.push( toolResult );
+	}
+
+	// Create input with tool results in official format
+	const inputWithTools = [
+		...currentInput,
+		{
+			role: "assistant",
+			content: response.output_text || ""
+		},
+		...toolResults.map( tr =>
+		{
+			return {
+				type: "function_call_output",
+				call_id: tr.call_id,
+				output: tr.output
+			}
+		})
+	];
+
+	// Get final response with tool results
+	const finalResponse = await llm.responses( inputWithTools, {
+		temperature: 0.3,
+		tools
+	});
+
+	console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
+
+	// Update conversation with final response
+	const updatedInput = [
+		...inputWithTools,
+		{
+			role: "assistant",
+			content: finalResponse.output_text || finalResponse.content
+		}
+	];
+
+	return { input: updatedInput, hasToolCalls: true, toolResults };
+}
+
 // Main conversation test using responses API following official documentation
 async function testConversationToolCalling ()
 {
@@ -119,15 +180,16 @@ async function testConversationToolCalling ()
 
 	try
 	{
+		// Initialize conversation
+		let input = [];
+
 		// Turn 1: Initial request - user asks for help with calculations and weather
 		console.log( "\n📝 Turn 1: Initial request for calculations and weather" );
 
-		let input = [
-			{
-				role: "user",
-				content: "Hi! I need help with a few things. First, what's 15% tip on a $85 bill? Also, what's the weather like in Tehran and Mashhad?"
-			}
-		];
+		input.push({
+			role: "user",
+			content: "Hi! I need help with a few things. First, what's 15% tip on a $85 bill? Also, what's the weather like in Tehran and Mashhad?"
+		});
 
 		let response = await llm.responses( input, {
 			temperature: 0.3,
@@ -137,64 +199,9 @@ async function testConversationToolCalling ()
 		console.log( "🤖 Assistant:", response.output_text || response.content );
 		console.log( "Response ID:", response.id );
 
-		// Handle tool calls if any - following official documentation
-		const functionCalls = response.output.filter( item => { return item.type === "function_call" });
-
-		if ( functionCalls.length > 0 )
-		{
-			console.log( `🔧 Executing ${functionCalls.length} tool call(s)...` );
-
-			// Execute tool calls
-			const toolResults = [];
-			for ( const toolCall of functionCalls )
-			{
-				const toolResult = await executeTool( toolCall );
-				toolResults.push( toolResult );
-			}
-
-			// Prepare input for next turn with tool results - using official format
-			const inputWithTools = [
-				...input,
-				{
-					role: "assistant",
-					content: response.output_text || ""
-				},
-				// Add tool results in official format - NOT as role: "tool"
-				...toolResults.map( tr =>
-				{
-					return {
-						type: "function_call_output",
-						call_id: tr.call_id,
-						output: tr.output
-					}
-				})
-			];
-
-			// Get final response with tool results
-			const finalResponse = await llm.responses( inputWithTools, {
-				temperature: 0.3,
-				tools
-			});
-
-			console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
-
-			// Update conversation with final response for next turn
-			input = [
-				...inputWithTools,
-				{
-					role: "assistant",
-					content: finalResponse.output_text || finalResponse.content
-				}
-			];
-		}
-		else
-		{
-			// Update conversation with response
-			input.push({
-				role: "assistant",
-				content: response.output_text || response.content
-			});
-		}
+		// Process tool calls for turn 1
+		const turn1Result = await processToolCalls( response, input );
+		input = turn1Result.input;
 
 		// Turn 2: Follow-up question referencing previous context
 		console.log( "\n📝 Turn 2: Follow-up question about calculations" );
@@ -211,60 +218,9 @@ async function testConversationToolCalling ()
 
 		console.log( "🤖 Assistant:", response.output_text || response.content );
 
-		// Handle tool calls for turn 2
-		const functionCalls2 = response.output.filter( item => { return item.type === "function_call" });
-
-		if ( functionCalls2.length > 0 )
-		{
-			console.log( `🔧 Executing ${functionCalls2.length} tool call(s)...` );
-
-			const toolResults = [];
-			for ( const toolCall of functionCalls2 )
-			{
-				const toolResult = await executeTool( toolCall );
-				toolResults.push( toolResult );
-			}
-
-			// Prepare input with tool results in official format
-			const inputWithTools = [
-				...input,
-				{
-					role: "assistant",
-					content: response.output_text || ""
-				},
-				...toolResults.map( tr =>
-				{
-					return {
-						type: "function_call_output",
-						call_id: tr.call_id,
-						output: tr.output
-					}
-				})
-			];
-
-			const finalResponse = await llm.responses( inputWithTools, {
-				temperature: 0.3,
-				tools
-			});
-
-			console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
-
-			// Update conversation with final response
-			input = [
-				...inputWithTools,
-				{
-					role: "assistant",
-					content: finalResponse.output_text || finalResponse.content
-				}
-			];
-		}
-		else
-		{
-			input.push({
-				role: "assistant",
-				content: response.output_text || response.content
-			});
-		}
+		// Process tool calls for turn 2
+		const turn2Result = await processToolCalls( response, input );
+		input = turn2Result.input;
 
 		// Turn 3: Another follow-up with different tools
 		console.log( "\n📝 Turn 3: Weather comparison request" );
@@ -281,44 +237,8 @@ async function testConversationToolCalling ()
 
 		console.log( "🤖 Assistant:", response.output_text || response.content );
 
-		// Handle tool calls for turn 3
-		const functionCalls3 = response.output.filter( item => { return item.type === "function_call" });
-
-		if ( functionCalls3.length > 0 )
-		{
-			console.log( `🔧 Executing ${functionCalls3.length} tool call(s)...` );
-
-			const toolResults = [];
-			for ( const toolCall of functionCalls3 )
-			{
-				const toolResult = await executeTool( toolCall );
-				toolResults.push( toolResult );
-			}
-
-			// Prepare input with tool results in official format
-			const inputWithTools = [
-				...input,
-				{
-					role: "assistant",
-					content: response.output_text || ""
-				},
-				...toolResults.map( tr =>
-				{
-					return {
-						type: "function_call_output",
-						call_id: tr.call_id,
-						output: tr.output
-					}
-				})
-			];
-
-			const finalResponse = await llm.responses( inputWithTools, {
-				temperature: 0.3,
-				tools
-			});
-
-			console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
-		}
+		// Process tool calls for turn 3
+		await processToolCalls( response, input );
 
 		console.log( "\n🎉 Conversation-to-Tool-Calling Test Completed Successfully!" );
 		console.log( "✅ Multi-turn conversation maintained using Responses API" );
@@ -326,6 +246,7 @@ async function testConversationToolCalling ()
 		console.log( "✅ Context preservation by sending complete conversation object" );
 		console.log( "✅ Mixed tool usage (weather and tip calculations)" );
 		console.log( "✅ Following official OpenAI function calling format" );
+		console.log( "✅ Clean, maintainable code structure" );
 
 	}
 	catch ( error )
