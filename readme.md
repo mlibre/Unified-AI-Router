@@ -875,8 +875,10 @@ Unified-AI-Router/
 │   │   ├── server-stream.js         # Server streaming tests
 │   │   └── tool-calling.js          # Chat tool calling tests
 │   └── responses/       # Responses API tests
-│       ├── responses.js             # Basic responses API
-│       └── tool-calling.js          # Responses API tool calling
+│       ├── server-responses.js             # Basic responses API
+│       ├── conversation-tool-calling.js    # Conversation tool calling
+│       ├── server-conversation-basic.js    # Multi-turn conversation
+│       └── server-tool-calling.js          # Responses API tool calling
 └── docs/                # VitePress documentation
     ├── index.md
     ├── quickstart.md
@@ -910,10 +912,11 @@ node tests/chat/server-stream.js       # Server streaming
 node tests/chat/tool-calling.js        # Chat tool calling
 
 # Responses API Tests
-node tests/responses/responses.js      # Basic responses API
-node tests/responses/tool-calling.js   # Responses API tool calling
+node tests/responses/server-responses.js           # Basic responses API
+node tests/responses/conversation-tool-calling.js  # Conversation tool calling
+node tests/responses/server-conversation-basic.js  # Multi-turn conversation
+node tests/responses/server-tool-calling.js        # Responses API tool calling
 
-# Expected output: AI responses and success logs
 ```
 
 ---
