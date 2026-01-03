@@ -141,7 +141,7 @@ app.get( "/health", ( req, res ) => { return res.json({ status: "ok" }) });
 
 app.get( "/", ( req, res ) =>
 {
-	res.sendFile( path.join( __dirname, "chatbot.html" ) );
+	res.sendFile( path.join( __dirname, "chatbot", "chatbot.html" ) );
 });
 
 app.get( "/providers/status", async ( req, res ) =>
