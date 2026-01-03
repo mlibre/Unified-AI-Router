@@ -233,9 +233,6 @@ The server provides these endpoints at `http://localhost:3000`:
 | `GET /health`               | Health check endpoint                        |
 | `GET /v1/providers/status`  | Provider status and health                   |
 
-<details>
-<summary><strong>Click to view server examples</strong></summary>
-
 ### 🌐 Web Chatbot Interface
 
 The server includes a responsive web chatbot interface accessible at: `http://localhost:3000/`
@@ -244,24 +241,29 @@ Features include mobile responsiveness, dark/light themes, conversation history,
 
 ### 💬 Simple Chat Example
 
+<details>
+<summary><strong>Click to view simple chat example</strong></summary>
+
 **Request:**
 
-```json
-{
-  "model": "any-model",
-  "messages": [
-    {
-      "role": "system",
-      "content": "You are a helpful assistant."
-    },
-    {
-      "role": "user",
-      "content": "hey"
-    }
-  ],
-  "temperature": 0.7,
-  "stream": false
-}
+```bash
+curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "any-model",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "hey"
+      }
+    ],
+    "temperature": 0.7,
+    "stream": false
+  }'
 ```
 
 **Response:**
@@ -311,7 +313,12 @@ Features include mobile responsiveness, dark/light themes, conversation history,
 }
 ```
 
+</details>
+
 ### 🛠️ Tool Calling Example
+
+<details>
+<summary><strong>Click to view tool calling example</strong></summary>
 
 The server supports function calling with streaming responses:
 
@@ -423,9 +430,16 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 }
 ```
 
+</details>
+
 ### 🗣️ Responses API Example
 
+<details>
+<summary><strong>Click to view responses API example</strong></summary>
+
 The server also supports OpenAI's Responses API with the same reliability features:
+
+**Non-Streaming Response:**
 
 ```bash
 curl -X POST http://localhost:3000/v1/responses \
@@ -478,7 +492,7 @@ curl -X POST http://localhost:3000/v1/responses \
 }
 ```
 
-**Streaming Responses API:**
+**Streaming Response:**
 
 ```bash
 curl -X POST http://localhost:3000/v1/responses \
