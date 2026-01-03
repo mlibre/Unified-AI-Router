@@ -18,7 +18,7 @@ All documentation **MUST** be developer-focused, with clear, concise technical e
 
 ## IV. Change Management
 
-If changes are made, update `package.json` and documentation (Markdown files) to reflect them.
+If changes are made, update version in `package.json`, and documentation (Markdown files) to reflect them.
 
 ## V. Comprehensive Change Analysis
 

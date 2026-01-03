@@ -154,7 +154,6 @@ cp .env.example .env
 # Edit .env and add your API keys:
 # OPENAI_API_KEY=sk-your-openai-key-here
 # OPENROUTER_API_KEY=your-openrouter-key-here
-# GEMINI_API_KEY=your-gemini-key-here
 # PORT=3000 # Optional: server port (default: 3000)
 ```
 

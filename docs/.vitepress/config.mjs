@@ -16,14 +16,34 @@ export default defineConfig({
 		nav: [
 			{ text: "Home", link: "/" },
 			{ text: "Quickstart", link: "/quickstart" },
-			{ text: "Configuration", link: "/configuration" }
+			{ text: "Configuration", link: "/configuration" },
+			{ text: "SDK Usage", link: "/sdk-usage" },
+			{ text: "API Examples", link: "/api-examples" },
+			{ text: "Providers", link: "/providers" },
+			{ text: "Testing", link: "/testing" },
+			{ text: "Deployment", link: "/deployment" }
 		],
 		sidebar: [
 			{
-				text: "Guide",
+				text: "Getting Started",
 				items: [
 					{ text: "Quickstart", link: "/quickstart" },
 					{ text: "Configuration", link: "/configuration" }
+				]
+			},
+			{
+				text: "Usage",
+				items: [
+					{ text: "SDK Usage", link: "/sdk-usage" },
+					{ text: "API Examples", link: "/api-examples" },
+					{ text: "Providers", link: "/providers" }
+				]
+			},
+			{
+				text: "Testing & Deployment",
+				items: [
+					{ text: "Testing Guide", link: "/testing" },
+					{ text: "Deployment Guide", link: "/deployment" }
 				]
 			}
 		],

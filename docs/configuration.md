@@ -14,7 +14,6 @@ Common keys:
 
 - `OPENAI_API_KEY` - OpenAI
 - `OPENROUTER_API_KEY` - OpenRouter  
-- `GEMINI_API_KEY` - Google Gemini
 - `PORT` - Server port (default: 3000)
 
 ## Providers
@@ -73,36 +72,3 @@ Override per provider:
 }
 ```
 
-## Testing
-
-### Chat Completions Tests
-
-```bash
-# Basic chat completion
-node tests/chat/chat.js
-
-# OpenAI server non-streaming
-node tests/chat/server-non-stream.js
-
-# OpenAI server streaming
-node tests/chat/server-stream.js
-
-# Chat tool calling
-node tests/chat/tool-calling.js
-```
-
-### Responses API Tests
-
-```bash
-# Basic responses API
-node tests/responses/responses.js
-
-# Responses API tool calling
-node tests/responses/tool-calling.js
-```
-
-## Troubleshooting
-
-- `Skipping provider ... due to missing API key` - Check `.env`
-- `Model <name> not found` - Verify model name matches provider
-- `All providers failed` - Check network/API quotas in logs
