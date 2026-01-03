@@ -108,17 +108,17 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 const AIRouter = require("unified-ai-router");
 
 const providers = [
+    {
+    name: "openrouter", 
+    apiKey: process.env.OPENROUTER_API_KEY,
+    model: "mistralai/devstral-2512:free",
+    apiUrl: "https://openrouter.ai/api/v1"
+  },
   {
     name: "openai",
     apiKey: process.env.OPENAI_API_KEY,
     model: "gpt-4",
     apiUrl: "https://api.openai.com/v1"
-  },
-  {
-    name: "openrouter", 
-    apiKey: process.env.OPENROUTER_API_KEY,
-    model: "mistralai/devstral-2512:free",
-    apiUrl: "https://openrouter.ai/api/v1"
   }
 ];
 
