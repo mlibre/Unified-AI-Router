@@ -137,6 +137,9 @@ app.post( "/chat/completions", handleChatCompletion );
 app.get( "/v1/models", handleGetModels );
 app.get( "/models", handleGetModels );
 
+// Serve chatbot static files
+app.use( express.static( path.join( __dirname, "chatbot" ) ) );
+
 app.get( "/health", ( req, res ) => { return res.json({ status: "ok" }) });
 
 app.get( "/", ( req, res ) =>
