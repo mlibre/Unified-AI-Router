@@ -156,13 +156,13 @@ app.get( "/providers/status", async ( req, res ) =>
 	}
 	catch ( error )
 	{
-		logger.error( `Error in /v1/providers/status: ${error.message}` );
+		logger.error( `Error in /providers/status: ${error.message}` );
 		res.status( 500 ).json({ error: { message: error.message } });
 	}
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen( PORT, () =>
+app.listen( PORT, ( e ) =>
 {
 	logger.info( `🚀 OpenAI-compatible API listening at http://localhost:${PORT}/v1/chat/completions and /v1/responses` );
 	logger.info( `🌐 Chatbot interface available at http://localhost:${PORT}/` );
