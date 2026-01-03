@@ -81,10 +81,7 @@ class AIRouter
 
 			breaker.fallback( () =>
 			{
-				console.log( "Fallback called for provider:", provider.name );
-				console.log( "this.providers before reorder:", this.providers.map( p => { return p.name }) );
 				this._reorderProvidersOnFailure( provider );
-				console.log( "this.providers after reorder:", this.providers.map( p => { return p.name }) );
 				throw new Error( `Circuit open for ${provider.name}` );
 			});
 
