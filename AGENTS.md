@@ -10,7 +10,7 @@ Code, logic, and architecture **MUST** remain lightweight. Dependencies **MUST**
 
 Code **MUST** be simple, clear, and readable. Prefer straightforward, maintainable solutions over complex ones.  
 Keep the codebase minimal: avoid clever or tricky one-liners in favor of clarity.
-Keep the codebase clean: avoid code duplication.
+Keep the codebase and documentations clean: avoid code duplication.
 
 ## III. Developer-Centric Documentation
 

@@ -1,8 +1,8 @@
-# Supported Providers
+# 🌍 Supported Providers
 
 Configure multiple AI providers for automatic fallback and load balancing.
 
-## Available Providers
+## 📋 Available Providers
 
 | Provider                     | API Base URL                                               | Model Examples                     | API Key Link                                                             |
 | ---------------------------- | ---------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------ |
@@ -14,7 +14,7 @@ Configure multiple AI providers for automatic fallback and load balancing.
 | Cerebras                     | `https://api.cerebras.ai/v1`                               | `llama3.1-70b`                     | [cloud.cerebras.ai](https://cloud.cerebras.ai)                           |
 | Any OpenAI-Compatible Server | `http://server-url/`                                       | Any model supported by your server | Custom                                                                   |
 
-## Configuration Examples
+## ⚙️ Configuration Examples
 
 ### OpenAI
 
@@ -93,7 +93,7 @@ Configure multiple AI providers for automatic fallback and load balancing.
 }
 ```
 
-## Provider Priority
+## 🎯 Provider Priority
 
 Providers are tried in order until one succeeds:
 
@@ -123,7 +123,7 @@ module.exports = [
 ];
 ```
 
-## Load Balancing
+## 🔀 Load Balancing
 
 Use multiple API keys for the same provider:
 
@@ -140,7 +140,7 @@ Use multiple API keys for the same provider:
 }
 ```
 
-## Circuit Breaker Settings
+## 🛡️ Circuit Breaker Settings
 
 Configure reliability settings per provider:
 
