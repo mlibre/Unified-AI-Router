@@ -182,7 +182,7 @@ module.exports = [
   },
   {
     name: "openai-compatible-server",
-    apiKey: process.env.SERVER_API_KEY, // Optional: depends on the server
+    apiKey: [process.env.SERVER_API_KEY_1, process.env.SERVER_API_KEY_2],
     model: "name",
     apiUrl: "http://localhost:4000/v1" 
   }

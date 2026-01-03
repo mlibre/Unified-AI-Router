@@ -82,9 +82,26 @@ class AIRouter
 			breaker.fallback( () =>
 			{
 				throw new Error( `Circuit open for ${provider.name}` );
+				this._reorderProvidersOnFailure( provider );
 			});
 
 			provider.breaker = breaker;
+		}
+	}
+
+	/**
+	 * Reorder providers by moving a failed provider to the end of the list
+	 * @param {Object} failedProvider - The provider that failed
+	 */
+	_reorderProvidersOnFailure ( failedProvider )
+	{
+		const currentIndex = this.providers.indexOf( failedProvider );
+		if ( currentIndex !== -1 && currentIndex !== this.providers.length - 1 )
+		{
+			// Remove from current position and add to end
+			this.providers.splice( currentIndex, 1 );
+			this.providers.push( failedProvider );
+			logger.info( `Moved failed provider ${failedProvider.name} to end of list` );
 		}
 	}
 
@@ -136,6 +153,7 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
+				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -167,6 +185,7 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
+				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -245,6 +264,7 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
+				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -276,6 +296,7 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed with ${provider.name}: ${error.message}` );
+				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		throw new Error( "All providers failed" );
@@ -313,6 +334,7 @@ class AIRouter
 			catch ( error )
 			{
 				logger.error( `Failed to list models for ${provider.name}: ${error.message}` );
+				this._reorderProvidersOnFailure( provider );
 			}
 		}
 		return models;

@@ -30,7 +30,7 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_26,
 			process.env.OPENROUTER_API_KEY_27
 		],
-		model: "mistralai/devstral-2512:free",
+		model: "xiaomi/mimo-v2-flash:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	},
 	// {

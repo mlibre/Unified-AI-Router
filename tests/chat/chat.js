@@ -1,7 +1,7 @@
-const AIRouter = require( "../main" );
+const AIRouter = require( "../../main" );
 require( "dotenv" ).config({ quiet: true });
 
-const providers = require( "../provider" )
+const providers = require( "../../provider" )
 const llm = new AIRouter( providers );
 
 async function getResponse ()

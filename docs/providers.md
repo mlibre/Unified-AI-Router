@@ -100,9 +100,9 @@ The current deployment includes:
 }
 ```
 
-## 🎯 Provider Priority
+## 🎯 Provider Priority and Failover
 
-Providers are tried in order until one succeeds:
+Providers are tried in order until one succeeds. When a provider fails (due to network errors, API limits, or circuit breaker activation), it is automatically moved to the end of the provider list. This ensures that unhealthy providers stay down and healthy providers are tried first in subsequent requests.
 
 ```javascript
 module.exports = [
@@ -129,6 +129,15 @@ module.exports = [
   }
 ];
 ```
+
+### Automatic Failover Behavior
+
+1. **First Request**: Providers are tried in the order defined above
+2. **On Failure**: If `openrouter` fails, it's moved to the end of the list
+3. **Next Request**: The order becomes `openai`, `gemini`, `openrouter`
+4. **Continuous Adaptation**: Failed providers remain at the end until they succeed again
+
+This mechanism works alongside circuit breakers to provide robust fallback behavior.
 
 ## 🔀 Load Balancing
 
