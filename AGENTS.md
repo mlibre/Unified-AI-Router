@@ -23,3 +23,11 @@ When changes are made, update the version in `package.json` and revise documenta
 ## V. Comprehensive Change Analysis
 
 When implementing or fixing code, always verify correctness by analyzing related files and dependencies.
+
+## VI. Docs-Code Consistency
+
+Documentation and code **MUST** stay in sync:
+
+- Update docs whenever code changes and vice versa if docs are updated.
+- Docs must match real behaviors.
+- Any mismatch between docs and code should be addressed.
