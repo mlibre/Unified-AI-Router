@@ -15,7 +15,7 @@
   * [📦 1. Installation](#-1-installation)
   * [⚙️ 2. Quick Configuration](#️-2-quick-configuration)
   * [🚀 3. Start Using the Server](#-3-start-using-the-server)
-  * [📚 4. Library Usage](#-4-library-usage)
+  * [📚 4. SDK Usage](#-4-sdk-usage)
 * [⚙️ Configuration](#️-configuration)
   * [🔧 Environment Configuration (`.env`)](#-environment-configuration-env)
   * [🏗️ Provider Configuration (`provider.js`)](#️-provider-configuration-providerjs)
@@ -29,6 +29,7 @@
   * [🛠️ Chat Completion Tool Calling](#️-chat-completion-tool-calling)
   * [🗣️ Simple Responses API](#️-simple-responses-api)
   * [🌊 Responses API Streaming](#-responses-api-streaming)
+  * [🛠️ Responses API Tool Calling](#️-responses-api-tool-calling)
   * [🔀 Multiple API Keys for Load Balancing](#-multiple-api-keys-for-load-balancing)
 * [📋 Supported Providers](#-supported-providers)
 * [🏗️ Architecture Overview](#️-architecture-overview)
@@ -100,9 +101,10 @@ curl -X POST http://localhost:3000/v1/chat/completions \
   }'
 ```
 
-### 📚 4. Library Usage
+### 📚 4. SDK Usage
 
-If you prefer using the library directly in your code:
+<details>
+<summary><strong>Click to view basic library setup example</strong></summary>
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -132,6 +134,8 @@ const response = await llm.chatCompletion([
 console.log(response.content);
 ```
 
+</details>
+
 ---
 
 ## ⚙️ Configuration
@@ -156,6 +160,9 @@ cp .env.example .env
 ### 🏗️ Provider Configuration (`provider.js`)
 
 The `provider.js` file defines which AI providers to use and in what order. The server will try providers sequentially until one succeeds.
+
+<details>
+<summary><strong>Click to view provider configuration examples</strong></summary>
 
 **Basic provider configuration:**
 
@@ -198,6 +205,8 @@ module.exports = [
 
 **Provider priority**: Providers are tried in order - if the first fails, it automatically tries the next.
 
+</details>
+
 ---
 
 ## 🚀 Running Server
@@ -221,6 +230,9 @@ The server provides these endpoints at `http://localhost:3000`:
 | `GET /v1/models`            | List available models                        |
 | `GET /health`               | Health check endpoint                        |
 | `GET /v1/providers/status`  | Provider status and health                   |
+
+<details>
+<summary><strong>Click to view server examples</strong></summary>
 
 ### 🛠️ Tool Calling Example
 
@@ -487,9 +499,14 @@ data: {"type":"response.completed","response":{...}}
 data: [DONE]
 ```
 
+</details>
+
 ---
 
-## 📚 Library Usage
+## 📚 SDK Examples
+
+<details>
+<summary><strong>Click to view all library usage examples</strong></summary>
 
 ### 💬 Simple Chat Completion
 
@@ -595,6 +612,51 @@ for await (const chunk of stream) {
 }
 ```
 
+### 🛠️ Responses API Tool Calling
+
+```javascript
+const tools = [
+  {
+    type: "function",
+    name: "multiply",
+    description: "Multiply two numbers",
+    parameters: {
+      type: "object",
+      properties: {
+        a: { type: "number", description: "First number" },
+        b: { type: "number", description: "Second number" }
+      },
+      required: ["a", "b"],
+      additionalProperties: false
+    }
+  },
+  {
+    type: "function",
+    name: "get_weather",
+    description: "Get the current weather forecast for a given city.",
+    parameters: {
+      type: "object",
+      properties: {
+        city: { type: "string", description: "The name of the city to get the weather for." }
+      },
+      required: ["city"],
+      additionalProperties: false
+    }
+  }
+];
+
+const response = await llm.responses(
+  "How is the weather in Mashhad and Tehran? Use tools.",
+  {
+    tools: tools,
+    temperature: 0.7
+  }
+);
+
+console.log(response.output_text);
+console.log(response.tool_calls);
+```
+
 ### 🔀 Multiple API Keys for Load Balancing
 
 ```javascript
@@ -611,6 +673,8 @@ const providers = [
   }
 ];
 ```
+
+</details>
 
 ## 📋 Supported Providers
 
@@ -698,6 +762,9 @@ Unified AI Router follows a **fail-fast, quick-recovery** architecture:
 
 ## 📊 Comparison with Direct OpenAI API
 
+<details>
+<summary><strong>Click to view comparison examples</strong></summary>
+
 ### 🎯 Using Direct OpenAI API
 
 ```javascript
@@ -735,6 +802,8 @@ const response = await llm.chatCompletion([{ role: "user", content: "Hello" }]);
 // ✅ Same API interface as OpenAI
 // ✅ Production-ready reliability
 ```
+
+</details>
 
 ---
 
