@@ -45,72 +45,66 @@ async function calculateTip ({ amount, percentage })
 const tools = [
 	{
 		type: "function",
-		function: {
-			name: "get_weather",
-			description: "Get the current weather forecast for a given city",
-			parameters: {
-				type: "object",
-				properties: {
-					city: { type: "string", description: "The name of the city to get weather for" }
-				},
-				required: ["city"],
-				additionalProperties: false
+		name: "get_weather",
+		description: "Get the current weather forecast for a given city",
+		parameters: {
+			type: "object",
+			properties: {
+				city: { type: "string", description: "The name of the city to get weather for" }
 			},
-			strict: true
+			required: ["city"],
+			additionalProperties: false
 		}
 	},
 	{
 		type: "function",
-		function: {
-			name: "calculate_tip",
-			description: "Calculate tip amount and total for a bill",
-			parameters: {
-				type: "object",
-				properties: {
-					amount: { type: "number", description: "The bill amount" },
-					percentage: { type: "number", description: "Tip percentage (e.g., 15 for 15%)" }
-				},
-				required: ["amount", "percentage"],
-				additionalProperties: false
+		name: "calculate_tip",
+		description: "Calculate tip amount and total for a bill",
+		parameters: {
+			type: "object",
+			properties: {
+				amount: { type: "number", description: "The bill amount" },
+				percentage: { type: "number", description: "Tip percentage (e.g., 15 for 15%)" }
 			},
-			strict: true
+			required: ["amount", "percentage"],
+			additionalProperties: false
 		}
 	}
 ];
 
 const toolMap = {
-	get_weather,
-	calculate_tip
+	get_weather: getWeather,
+	calculate_tip: calculateTip
 };
 
 // Execute tool calls
 async function executeTool ( toolCall )
 {
-	const toolFn = toolMap[ toolCall.function.name ];
+	const toolFn = toolMap[ toolCall.name ];
 	if ( !toolFn )
 	{
-		throw new Error( `Unknown tool: ${toolCall.function.name}` );
+		throw new Error( `Unknown tool: ${toolCall.name}` );
 	}
 
 	try
 	{
-		const args = JSON.parse( toolCall.function.arguments );
+		const args = JSON.parse( toolCall.arguments );
 		const result = await toolFn( args );
-		console.log( `✅ Tool "${toolCall.function.name}" executed:`, result );
+		console.log( `✅ Tool "${toolCall.name}" executed:`, result );
 
 		return {
-			tool_call_id: toolCall.id,
+			tool_call_id: toolCall.call_id,
 			content: typeof result === "object" ? JSON.stringify( result ) : result,
-			name: toolCall.function.name
+			name: toolCall.name
 		};
 	}
 	catch ( toolError )
 	{
-		console.error( `❌ Error executing tool "${toolCall.function.name}":`, toolError.message );
+		console.error( `❌ Error executing tool "${toolCall.name}":`, toolError.message );
 		return {
-			tool_call_id: toolCall.id,
+			tool_call_id: toolCall.call_id,
 			content: `Error: ${toolError.message}`,
-			name: toolCall.function.name
+			name: toolCall.name
 		};
 	}
 }
@@ -142,11 +136,13 @@ async function testConversationToolCalling ()
 
 		// Handle tool calls if any
 		let toolResults = [];
-		if ( response.output && response.output.tool_calls && response.output.tool_calls.length > 0 )
-		{
-			console.log( `🔧 Executing ${response.output.tool_calls.length} tool call(s)...` );
+		const functionCalls = response.output.filter( item => { return item.type === "function_call" });
 
-			for ( const toolCall of response.output.tool_calls )
+		if ( functionCalls.length > 0 )
+		{
+			console.log( `🔧 Executing ${functionCalls.length} tool call(s)...` );
+
+			for ( const toolCall of functionCalls )
 			{
 				const toolResult = await executeTool( toolCall );
 				toolResults.push( toolResult );
@@ -157,8 +153,7 @@ async function testConversationToolCalling ()
 				...input,
 				{
 					role: "assistant",
-					content: response.output_text || response.content,
-					tool_calls: response.output.tool_calls
+					content: response.output_text || ""
 				},
 				...toolResults.map( tr =>
 				{
@@ -211,11 +206,13 @@ async function testConversationToolCalling ()
 
 		// Handle tool calls for turn 2
 		toolResults = [];
-		if ( response.output && response.output.tool_calls && response.output.tool_calls.length > 0 )
-		{
-			console.log( `🔧 Executing ${response.output.tool_calls.length} tool call(s)...` );
+		const functionCalls2 = response.output.filter( item => { return item.type === "function_call" });
 
-			for ( const toolCall of response.output.tool_calls )
+		if ( functionCalls2.length > 0 )
+		{
+			console.log( `🔧 Executing ${functionCalls2.length} tool call(s)...` );
+
+			for ( const toolCall of functionCalls2 )
 			{
 				const toolResult = await executeTool( toolCall );
 				toolResults.push( toolResult );
@@ -223,8 +220,7 @@ async function testConversationToolCalling ()
 
 			input.push({
 				role: "assistant",
-				content: response.output_text || response.content,
-				tool_calls: response.output.tool_calls
+				content: response.output_text || ""
 			});
 
 			input.push( ...toolResults.map( tr =>
