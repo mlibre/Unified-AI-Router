@@ -505,10 +505,10 @@ data: [DONE]
 
 ## 📚 SDK Examples
 
-<details>
-<summary><strong>Click to view all library usage examples</strong></summary>
-
 ### 💬 Simple Chat Completion
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 const AIRouter = require("unified-ai-router");
@@ -538,7 +538,12 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.content);
 ```
 
+</details>
+
 ### 🌊 Chat Completion Streaming
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 const stream = await llm.chatCompletion(messages, {
@@ -553,7 +558,12 @@ for await (const chunk of stream) {
 }
 ```
 
+</details>
+
 ### 🛠️ Chat Completion Tool Calling
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 const tools = [
@@ -580,7 +590,12 @@ const response = await llm.chatCompletion(messages, {
 console.log(response.tool_calls);
 ```
 
+</details>
+
 ### 🗣️ Simple Responses API
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 // Basic Responses API usage
@@ -595,7 +610,12 @@ const response = await llm.responses(
 console.log(response.output_text);
 ```
 
+</details>
+
 ### 🌊 Responses API Streaming
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 const stream = await llm.responses(
@@ -612,7 +632,12 @@ for await (const chunk of stream) {
 }
 ```
 
+</details>
+
 ### 🛠️ Responses API Tool Calling
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 const tools = [
@@ -657,7 +682,12 @@ console.log(response.output_text);
 console.log(response.tool_calls);
 ```
 
+</details>
+
 ### 🔀 Multiple API Keys for Load Balancing
+
+<details>
+<summary><strong>Click to view example</strong></summary>
 
 ```javascript
 const providers = [
