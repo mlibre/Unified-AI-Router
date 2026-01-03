@@ -118,12 +118,11 @@ async function processToolCalls ( response, currentInput )
 
 	if ( functionCalls.length === 0 )
 	{
-		// No tool calls, just add the response to conversation
-		currentInput.push({
-			role: "assistant",
-			content: response.output_text || response.content
-		});
-		return { input: currentInput, hasToolCalls: false };
+		const updatedInput = [
+			...currentInput,
+			...response.output
+		];
+		return { input: updatedInput, hasToolCalls: false };
 	}
 
 	console.log( `🔧 Executing ${functionCalls.length} tool call(s)...` );
@@ -136,13 +135,9 @@ async function processToolCalls ( response, currentInput )
 		toolResults.push( toolResult );
 	}
 
-	// Create input with tool results in official format
 	const inputWithTools = [
 		...currentInput,
-		{
-			role: "assistant",
-			content: response.output_text || ""
-		},
+		...response.output,
 		...toolResults.map( tr =>
 		{
 			return {
@@ -161,13 +156,9 @@ async function processToolCalls ( response, currentInput )
 
 	console.log( "🤖 Final Assistant:", finalResponse.output_text || finalResponse.content );
 
-	// Update conversation with final response
 	const updatedInput = [
 		...inputWithTools,
-		{
-			role: "assistant",
-			content: finalResponse.output_text || finalResponse.content
-		}
+		...finalResponse.output
 	];
 
 	return { input: updatedInput, hasToolCalls: true, toolResults };
