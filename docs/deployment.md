@@ -116,7 +116,7 @@ CIRCUIT_RESET_TIMEOUT=300000
 curl http://localhost:3000/health
 
 # Provider status
-curl http://localhost:3000/v1/providers/status
+curl http://localhost:3000/providers/status
 ```
 
 ### Logging

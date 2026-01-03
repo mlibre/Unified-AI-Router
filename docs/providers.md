@@ -149,7 +149,13 @@ Use multiple API keys for the same provider:
 
 ## 🛡️ Circuit Breaker Settings
 
-Configure reliability settings per provider:
+Configure reliability settings per provider. Default settings:
+
+- **timeout**: 300000ms (5 minutes)
+- **errorThresholdPercentage**: 50%
+- **resetTimeout**: 9000000ms (15 minutes)
+
+Override defaults per provider:
 
 ```javascript
 {
@@ -158,9 +164,9 @@ Configure reliability settings per provider:
   model: "gpt-4",
   apiUrl: "https://api.openai.com/v1",
   circuitOptions: {
-    timeout: 30000,              // 30 second timeout
-    errorThresholdPercentage: 50, // Open after 50% failures
-    resetTimeout: 300000         // Try again after 5 minutes
+    timeout: 30000,              // 30 second timeout (override default)
+    errorThresholdPercentage: 50, // Open after 50% failures (matches default)
+    resetTimeout: 300000         // Try again after 5 minutes (override default)
   }
 }
 ```
