@@ -119,7 +119,10 @@ class AIRouter
 		const { stream, tools, ...restOptions } = options;
 		const isStreaming = stream;
 
-		for ( const provider of this.providers )
+		// Create a snapshot of providers to avoid issues with array modification during iteration
+		const providersSnapshot = [...this.providers];
+
+		for ( const provider of providersSnapshot )
 		{
 			try
 			{
@@ -163,7 +166,10 @@ class AIRouter
 		const { stream, tools, ...restOptions } = options;
 		const isStreaming = stream;
 
-		for ( const provider of this.providers )
+		// Create a snapshot of providers to avoid issues with array modification during iteration
+		const providersSnapshot = [...this.providers];
+
+		for ( const provider of providersSnapshot )
 		{
 			try
 			{
@@ -194,7 +200,10 @@ class AIRouter
 		const { stream, tools, ...restOptions } = options;
 		const isStreaming = stream;
 
-		for ( const provider of this.providers )
+		// Create a snapshot of providers to avoid issues with array modification during iteration
+		const providersSnapshot = [...this.providers];
+
+		for ( const provider of providersSnapshot )
 		{
 			try
 			{
@@ -272,7 +281,10 @@ class AIRouter
 		const { stream, tools, ...restOptions } = options;
 		const isStreaming = stream;
 
-		for ( const provider of this.providers )
+		// Create a snapshot of providers to avoid issues with array modification during iteration
+		const providersSnapshot = [...this.providers];
+
+		for ( const provider of providersSnapshot )
 		{
 			try
 			{
@@ -301,7 +313,10 @@ class AIRouter
 	async getModels ()
 	{
 		const models = [];
-		for ( const provider of this.providers )
+		// Create a snapshot of providers to avoid issues with array modification during iteration
+		const providersSnapshot = [...this.providers];
+
+		for ( const provider of providersSnapshot )
 		{
 			try
 			{
