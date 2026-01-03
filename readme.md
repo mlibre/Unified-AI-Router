@@ -120,7 +120,7 @@ const providers = [
   {
     name: "openrouter", 
     apiKey: process.env.OPENROUTER_API_KEY,
-    model: "xiaomi/mimo-v2-flash:free",
+    model: "mistralai/devstral-2512:free",
     apiUrl: "https://openrouter.ai/api/v1"
   }
 ];
@@ -171,7 +171,7 @@ module.exports = [
   {
     name: "openrouter",
     apiKey: process.env.OPENROUTER_API_KEY,
-    model: "xiaomi/mimo-v2-flash:free",
+    model: "mistralai/devstral-2512:free",
     apiUrl: "https://openrouter.ai/api/v1"
   },
   {
