@@ -20,6 +20,7 @@
   * [🔧 Environment Configuration (`.env`)](#-environment-configuration-env)
   * [🏗️ Provider Configuration (`provider.js`)](#️-provider-configuration-providerjs)
 * [🚀 OpenAI-Compatible Server](#-openai-compatible-server)
+  * [🌐 Web Chatbot Interface](#-web-chatbot-interface)
   * [💬 Simple Chat Example](#-simple-chat-example)
   * [🛠️ Tool Calling Example](#️-tool-calling-example)
   * [🗣️ Responses API Example](#️-responses-api-example)
@@ -223,6 +224,7 @@ The server provides these endpoints at `http://localhost:3000`:
 
 | Endpoint                    | Description                                  |
 | --------------------------- | -------------------------------------------- |
+| `GET /`                     | Web chatbot interface                        |
 | `POST /v1/responses`        | Responses API                                |
 | `POST /responses`           | Alternative responses API path               |
 | `POST /v1/chat/completions` | Chat completions (streaming & non-streaming) |
@@ -233,6 +235,12 @@ The server provides these endpoints at `http://localhost:3000`:
 
 <details>
 <summary><strong>Click to view server examples</strong></summary>
+
+### 🌐 Web Chatbot Interface
+
+The server includes a responsive web chatbot interface accessible at: `http://localhost:3000/`
+
+Features include mobile responsiveness, dark/light themes, conversation history, settings panel, and auto-fallback using the same reliability system as the API.
 
 ### 💬 Simple Chat Example
 

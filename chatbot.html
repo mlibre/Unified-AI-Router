@@ -528,6 +528,11 @@
 			const text = textarea.value.trim();
 			if (!text || isTyping) return;
 
+			// Auto-create conversation if none exists
+			if (!currentConversation) {
+				createNewChat();
+			}
+
 			// Add user message
 			addMessage(text, 'user');
 
