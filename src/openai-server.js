@@ -235,11 +235,7 @@ app.get( "/admin", requireAdminSession, ( req, res ) =>
 
 app.get( "/admin/provider", requireAdminSession, ( req, res ) =>
 {
-	const providerPath = path.resolve( "src", "./provider.js" );
-
-	const content = fs.readFileSync( providerPath, "utf-8" )
-	res.type( "text/plain" );
-	res.send( content );
+	res.json( require( "./provider" ) );
 });
 
 app.post( "/admin/provider", requireAdminSession, ( req, res ) =>
