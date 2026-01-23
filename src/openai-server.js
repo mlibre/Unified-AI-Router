@@ -1,6 +1,7 @@
 const http = require( "http" );
 const fs = require( "fs" );
 const path = require( "path" );
+const crypto = require( "crypto" );
 const express = require( "express" );
 const cors = require( "cors" );
 const pino = require( "pino" );
@@ -8,17 +9,33 @@ const pretty = require( "pino-pretty" );
 const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, pinoStream );
 require( "dotenv" ).config({ quiet: true });
-const adminAuth = require( "./admin-auth" );
 const AIRouter = require( "./main" );
 const providers = require( "./provider" )
 const aiRouter = new AIRouter( providers );
 
 const adminEnabled =	process.env.ADMIN_USERNAME &&	process.env.ADMIN_PASSWORD;
 const PORT = process.env.PORT || 3000;
+const sessions = new Map();
 
-const app = express();
-app.use( cors() );
-app.use( express.json({ limit: "50mb" }) );
+const chatbotIndex = path.join( __dirname, "chatbot", "chatbot.html" );
+const chatbotStaticDir = path.join( __dirname, "chatbot" );
+
+function createSession ( username )
+{
+	const token = crypto.randomBytes( 24 ).toString( "hex" );
+	sessions.set( token, { username, created: Date.now() });
+	return token;
+}
+
+function requireAdminSession ( req, res, next )
+{
+	const token = req.cookies?.admin_session;
+	if ( !token || !sessions.has( token ) )
+	{
+		return res.sendFile( path.join( __dirname, "admin", "login.html" ) );
+	}
+	next();
+}
 
 const handleResponses = async ( req, res ) =>
 {
@@ -132,6 +149,17 @@ const handleGetModels = async ( req, res ) =>
 	}
 };
 
+const app = express();
+app.use( cors() );
+app.use( express.json({ limit: "50mb" }) );
+
+app.use( ( req, res, next ) =>
+{
+	const cookie = req.headers.cookie || "";
+	req.cookies = Object.fromEntries( cookie.split( ";" ).map( v => { return v.trim().split( "=" ) }) );
+	next();
+});
+
 app.post( "/v1/responses", handleResponses );
 app.post( "/responses", handleResponses );
 
@@ -157,49 +185,66 @@ app.get( "/providers/status", async ( req, res ) =>
 	}
 });
 
-// Serve chatbot UI. If admin is enabled, protect chatbot with basic auth.
-const chatbotIndex = path.join( __dirname, "chatbot", "chatbot.html" );
-const chatbotStaticDir = path.join( __dirname, "chatbot" );
-
-if ( adminEnabled )
+app.post( "/admin/login", ( req, res ) =>
 {
-	app.get( "/", adminAuth, ( req, res ) =>
-	{
-		res.sendFile( chatbotIndex );
-	});
+	const { username, password } = req.body;
 
-	// Protect all static chatbot assets
-	app.use( "/", adminAuth, express.static( chatbotStaticDir ) );
-}
-else
+	if (
+		username === process.env.ADMIN_USERNAME &&
+		password === process.env.ADMIN_PASSWORD
+	)
+	{
+		const token = createSession( username );
+		res.setHeader(
+			"Set-Cookie",
+			`admin_session=${token}; HttpOnly; Path=/; SameSite=Strict`
+		);
+		return res.json({ ok: true });
+	}
+
+	res.status( 401 ).json({ error: "Invalid credentials" });
+});
+
+app.post( "/admin/logout", requireAdminSession, ( req, res ) =>
 {
-	app.get( "/", ( req, res ) =>
-	{
-		res.sendFile( chatbotIndex );
-	});
+	sessions.delete( req.cookies.admin_session );
+	res.setHeader( "Set-Cookie", "admin_session=; Max-Age=0; Path=/" );
+	res.json({ ok: true });
+});
 
-	app.use( express.static( chatbotStaticDir ) );
-}
-
-if ( adminEnabled )
+app.get( "/", ( req, res ) =>
 {
-	app.get( "/admin", adminAuth, ( req, res ) =>
+	if ( !adminEnabled )
 	{
-		res.sendFile( path.join( __dirname, "admin", "admin.html" ) );
-	});
+		return res.sendFile( chatbotIndex );
+	}
 
-	app.get( "/admin/provider", adminAuth, ( req, res ) =>
+	const token = req.cookies?.admin_session;
+	if ( !token || !sessions.has( token ) )
 	{
-		res.json( require( "./provider" ) );
-	});
+		return res.sendFile( path.join( __dirname, "admin", "login.html" ) );
+	}
 
-	app.post( "/admin/provider", adminAuth, ( req, res ) =>
-	{
-		const content = `module.exports = ${JSON.stringify( req.body, null, 2 )};\n`;
-		fs.writeFileSync( path.join( __dirname, "provider.js" ), content );
-		res.json({ status: "saved" });
-	});
-}
+	res.sendFile( chatbotIndex );
+});
+
+app.get( "/admin", requireAdminSession, ( req, res ) =>
+{
+	res.sendFile( path.join( __dirname, "admin", "admin.html" ) );
+});
+
+app.get( "/admin/provider", requireAdminSession, ( req, res ) =>
+{
+	res.json( require( "./provider" ) );
+});
+
+app.post( "/admin/provider", requireAdminSession, ( req, res ) =>
+{
+	const content =
+`module.exports = ${JSON.stringify( req.body, null, 2 )};\n`;
+	fs.writeFileSync( path.join( __dirname, "provider.js" ), content );
+	res.json({ status: "saved" });
+});
 
 app.listen( PORT, ( e ) =>
 {

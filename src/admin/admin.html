@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin Dashboard</title>
+	<style>
+		body {
+			font-family: system-ui, sans-serif;
+			background: #0f172a;
+			color: #e5e7eb;
+			padding: 2rem;
+		}
+
+		.container {
+			max-width: 900px;
+			margin: auto;
+		}
+
+		textarea {
+			width: 100%;
+			height: 60vh;
+			background: #020617;
+			color: #e5e7eb;
+			border-radius: 8px;
+			border: 1px solid #1e293b;
+			padding: 1rem;
+			font-family: monospace;
+			font-size: 14px;
+		}
+
+		button {
+			padding: 0.6rem 1.2rem;
+			border-radius: 6px;
+			border: none;
+			cursor: pointer;
+		}
+
+		.save {
+			background: #22c55e;
+			color: #022c22;
+		}
+
+		.logout {
+			background: #ef4444;
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>Admin Dashboard</h1>
+		<p>Edit providers configuration</p>
+
+		<textarea id="editor"></textarea>
+
+		<div style="margin-top:1rem; display:flex; gap:1rem;">
+			<button class="save" onclick="save()">Save</button>
+			<button class="logout" onclick="logout()">Logout</button>
+		</div>
+	</div>
+
+	<script>
+		async function load() {
+			const res = await fetch("/admin/provider");
+			const data = await res.json();
+			document.getElementById("editor").value =
+				JSON.stringify(data, null, 2);
+		}
+
+		async function save() {
+			const json = JSON.parse(editor.value);
+			await fetch("/admin/provider", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(json)
+			});
+			alert("Saved");
+		}
+
+		async function logout() {
+			await fetch("/admin/logout", { method: "POST" });
+			location.href = "/";
+		}
+
+		load();
+	</script>
+</body>
+
+</html>
