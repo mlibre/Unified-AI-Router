@@ -1,4 +1,6 @@
 const http = require( "http" );
+const fs = require( "fs" );
+const path = require( "path" );
 const express = require( "express" );
 const cors = require( "cors" );
 const pino = require( "pino" );
@@ -6,15 +8,17 @@ const pretty = require( "pino-pretty" );
 const pinoStream = pretty({ colorize: true, ignore: "pid,hostname" });
 const logger = pino({ base: false }, pinoStream );
 require( "dotenv" ).config({ quiet: true });
+const adminAuth = require( "./admin-auth" );
 const AIRouter = require( "./main" );
 const providers = require( "./provider" )
 const aiRouter = new AIRouter( providers );
 
+const adminEnabled =	process.env.ADMIN_USERNAME &&	process.env.ADMIN_PASSWORD;
+const PORT = process.env.PORT || 3000;
+
 const app = express();
-const path = require( "path" );
 app.use( cors() );
 app.use( express.json({ limit: "50mb" }) );
-
 
 const handleResponses = async ( req, res ) =>
 {
@@ -160,7 +164,27 @@ app.get( "/", ( req, res ) =>
 
 app.use( express.static( path.join( __dirname, "chatbot" ) ) );
 
-const PORT = process.env.PORT || 3000;
+if ( adminEnabled )
+{
+	app.get( "/admin", adminAuth, ( req, res ) =>
+	{
+		res.sendFile( path.join( __dirname, "admin", "admin.html" ) );
+	});
+
+	app.get( "/admin/provider", adminAuth, ( req, res ) =>
+	{
+		res.json( require( "./provider" ) );
+	});
+
+	app.post( "/admin/provider", adminAuth, ( req, res ) =>
+	{
+		const content = `module.exports = ${JSON.stringify( req.body, null, 2 )};\n`;
+		fs.writeFileSync( path.join( __dirname, "provider.js" ), content );
+		res.json({ status: "saved" });
+	});
+}
+
+
 app.listen( PORT, ( e ) =>
 {
 	if ( e )
