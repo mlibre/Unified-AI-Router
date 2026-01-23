@@ -157,12 +157,29 @@ app.get( "/providers/status", async ( req, res ) =>
 	}
 });
 
-app.get( "/", ( req, res ) =>
-{
-	res.sendFile( path.join( __dirname, "chatbot", "chatbot.html" ) );
-});
+// Serve chatbot UI. If admin is enabled, protect chatbot with basic auth.
+const chatbotIndex = path.join( __dirname, "chatbot", "chatbot.html" );
+const chatbotStaticDir = path.join( __dirname, "chatbot" );
 
-app.use( express.static( path.join( __dirname, "chatbot" ) ) );
+if ( adminEnabled )
+{
+	app.get( "/", adminAuth, ( req, res ) =>
+	{
+		res.sendFile( chatbotIndex );
+	});
+
+	// Protect all static chatbot assets
+	app.use( "/", adminAuth, express.static( chatbotStaticDir ) );
+}
+else
+{
+	app.get( "/", ( req, res ) =>
+	{
+		res.sendFile( chatbotIndex );
+	});
+
+	app.use( express.static( chatbotStaticDir ) );
+}
 
 if ( adminEnabled )
 {
@@ -183,7 +200,6 @@ if ( adminEnabled )
 		res.json({ status: "saved" });
 	});
 }
-
 
 app.listen( PORT, ( e ) =>
 {
