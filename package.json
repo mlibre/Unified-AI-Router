@@ -17,7 +17,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node openai-server.js",
-    "repomix": "repomix . --ignore '.gitignore,**/favicons/,./tests,docs/public,docs/.vitepress/cache,docs/.vitepress/dist,/node_modules/,/.git/,**/*.png,/.ttf,**/.woff2,dist/,build/,/package-lock.json,/yarn.lock,.github/'",
+    "repomix": "repomix . --ignore 'provider.js.example,readme.md,chatbot/marked.umd.js,docs/,eslint.config.cjs,.gitignore,**/favicons/,./tests,docs/public,docs/.vitepress/cache,docs/.vitepress/dist,/node_modules/,/.git/,**/*.png,/.ttf,**/.woff2,dist/,build/,/package-lock.json,/yarn.lock,.github/'",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
