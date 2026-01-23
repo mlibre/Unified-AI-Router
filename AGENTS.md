@@ -22,7 +22,7 @@ When changes are made, update the version in `package.json` and revise documenta
 
 ## V. Comprehensive Change Analysis
 
-When implementing or fixing code, always verify correctness by analyzing related files and dependencies.
+When implementing or fixing code, always verify correctness by analyzing related files and dependencies. But never write or run tests.
 
 ## VI. Docs-Code Consistency
 

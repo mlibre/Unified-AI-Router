@@ -137,15 +137,7 @@ app.post( "/chat/completions", handleChatCompletion );
 app.get( "/v1/models", handleGetModels );
 app.get( "/models", handleGetModels );
 
-// Serve chatbot static files
-app.use( express.static( path.join( __dirname, "chatbot" ) ) );
-
 app.get( "/health", ( req, res ) => { return res.json({ status: "ok" }) });
-
-app.get( "/", ( req, res ) =>
-{
-	res.sendFile( path.join( __dirname, "chatbot", "chatbot.html" ) );
-});
 
 app.get( "/providers/status", async ( req, res ) =>
 {
@@ -160,6 +152,13 @@ app.get( "/providers/status", async ( req, res ) =>
 		res.status( 500 ).json({ error: { message: error.message } });
 	}
 });
+
+app.get( "/", ( req, res ) =>
+{
+	res.sendFile( path.join( __dirname, "chatbot", "chatbot.html" ) );
+});
+
+app.use( express.static( path.join( __dirname, "chatbot" ) ) );
 
 const PORT = process.env.PORT || 3000;
 app.listen( PORT, ( e ) =>

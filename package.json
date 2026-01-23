@@ -17,7 +17,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node openai-server.js",
-    "repomix": "repomix . --ignore 'docs/public,docs/.vitepress/dist,/node_modules/,/.git/,./public/fonts/,public/saan-nuzul.json,public/khamenei-interpretations/,scripts/,public/quran.json,/*.png,/.ttf,**/.woff2,dist/,build/,/package-lock.json,/yarn.lock,.github/'",
+    "repomix": "repomix . --ignore '.gitignore,**/favicons/,./tests,docs/public,docs/.vitepress/cache,docs/.vitepress/dist,/node_modules/,/.git/,**/*.png,/.ttf,**/.woff2,dist/,build/,/package-lock.json,/yarn.lock,.github/'",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
