@@ -150,6 +150,11 @@ cp .env.example .env
 # OPENAI_API_KEY=sk-your-openai-key-here
 # OPENROUTER_API_KEY=your-openrouter-key-here
 # PORT=3000 # Optional: server port (default: 3000)
+
+# Optional: Enable admin panel
+# ADMIN_USERNAME=admin
+# ADMIN_PASSWORD=your_secure_password
+# When `ADMIN_USERNAME` and `ADMIN_PASSWORD` are set, the admin panel is enabled at `/admin`.
 ```
 
 ### 🏗️ Provider Configuration (`provider.js`)
@@ -226,6 +231,7 @@ The server provides these endpoints at `http://localhost:3000`:
 | `GET /v1/models`            | List available models                        |
 | `GET /health`               | Health check endpoint                        |
 | `GET /providers/status`     | Provider status and health                   |
+| `GET /admin`                | Admin panel (requires credentials)           |
 
 ### 🌐 Web Chatbot Interface
 

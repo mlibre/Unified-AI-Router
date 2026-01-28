@@ -71,3 +71,21 @@ Override per provider:
   apiUrl: "https://openrouter.ai/api/v1"
 }
 ```
+
+## Admin Panel
+
+Enable the web-based admin panel by setting credentials in `.env`:
+
+```bash
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your_secure_password
+```
+
+When enabled:
+
+- Access the admin panel at `http://localhost:3000/admin`
+- The root path `/` requires authentication to access the chatbot
+- Edit `provider.js` configuration through the web interface
+- Changes are saved directly to the file and take effect immediately
+
+**Note:** If admin credentials are not set, the chatbot is publicly accessible at `/`.
