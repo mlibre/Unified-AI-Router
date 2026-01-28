@@ -246,6 +246,20 @@ app.post( "/admin/provider", requireAdminSession, ( req, res ) =>
 	res.json({ status: "saved" });
 });
 
+app.get( "/:filename", ( req, res, next ) =>
+{
+	const filePath = path.join( chatbotStaticDir, req.params.filename );
+	const ext = path.extname( filePath ).toLowerCase();
+
+	if ( fs.existsSync( filePath ) && fs.statSync( filePath ).isFile() )
+	{
+		return res.sendFile( filePath );
+	}
+
+	// If not a static file, continue to the next handler
+	next();
+});
+
 app.listen( PORT, ( e ) =>
 {
 	if ( e )
