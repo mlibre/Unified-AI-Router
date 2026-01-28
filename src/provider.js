@@ -30,7 +30,7 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_26,
 			process.env.OPENROUTER_API_KEY_27
 		],
-		model: "xiaomi/mimo-v2-flash:free",
+		model: "arcee-ai/trinity-large-preview:free",
 		apiUrl: "https://openrouter.ai/api/v1",
 	}
 ];
