@@ -17,7 +17,7 @@ cp .env.example .env
 # Edit .env and add OPENROUTER_API_KEY or other provider keys
 ```
 
-Edit `provider.js` to set your providers.
+Edit `src/provider.js` to set your providers.
 
 ## Run
 
@@ -60,7 +60,7 @@ curl -X POST http://localhost:3000/v1/responses \
 
 ## Next
 
-- Configure more providers in [`provider.js`](/configuration#providers)
+- Configure more providers in [`src/provider.js`](/configuration#providers)
 - Check provider status: `GET /providers/status`
 - See [Testing Guide](/testing) for comprehensive testing
 - Check out [SDK Usage](/sdk-usage) for library integration

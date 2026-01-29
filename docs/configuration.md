@@ -18,7 +18,7 @@ Common keys:
 
 ## Providers
 
-Edit `provider.js` - it's an array of providers tried in order:
+Edit `src/provider.js` - it's an array of providers tried in order:
 
 ```js
 module.exports = [
@@ -85,7 +85,7 @@ When enabled:
 
 - Access the admin panel at `http://localhost:3000/admin`
 - The root path `/` requires authentication to access the chatbot
-- Edit `provider.js` configuration through the web interface
+- Edit `src/provider.js` configuration through the web interface
 - Changes are saved directly to the file and take effect immediately
 
 **Note:** If admin credentials are not set, the chatbot is publicly accessible at `/`.

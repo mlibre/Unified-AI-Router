@@ -10,11 +10,12 @@ Code, logic, and architecture **MUST** remain lightweight. Dependencies **MUST**
 
 Code **MUST** be simple, clear, and readable—prefer straightforward, maintainable solutions over complex ones.  
 Keep the codebase minimal: avoid clever or tricky one-liners in favor of clarity.  
-Keep code and documentation clean: avoid duplication.
+Keep the code clean: avoid duplication.
 
 ## III. Developer-Centric Documentation
 
 All documentation **MUST** be developer-focused, with clear, concise technical explanations. Quickstart guides **MUST** enable local setup in under 5 minutes.
+Keep the documentation minimal, and avoid duplication.
 
 ## IV. Change Management
 

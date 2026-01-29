@@ -10,7 +10,7 @@ The current deployment includes:
 | ---------- | ------------------------------ | ------------------------------ | ------------------------------------------------ |
 | OpenRouter | `https://openrouter.ai/api/v1` | `mistralai/devstral-2512:free` | [openrouter.ai/keys](https://openrouter.ai/keys) |
 
-**Additional providers can be enabled by uncommenting and configuring them in `provider.js`:**
+**Additional providers can be enabled by uncommenting and configuring them in `src/provider.js`:**
 
 | Provider                     | API Base URL                                               | Model Examples                     | API Key Link                                                             |
 | ---------------------------- | ---------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------ |
