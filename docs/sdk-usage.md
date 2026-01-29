@@ -125,26 +125,6 @@ for await (const chunk of stream) {
 }
 ```
 
-### 🔄 Multi-turn Conversations
-
-```javascript
-// Initialize conversation
-let input = [
-  { role: "user", content: "I need help with JavaScript." }
-];
-
-let response = await llm.responses(input);
-console.log(response.output_text);
-
-// Continue conversation with context
-input.push(
-  { role: "user", content: "Can you show me a closure example?" }
-);
-
-response = await llm.responses(input);
-console.log(response.output_text);
-```
-
 ## 🔀 Load Balancing
 
 ```javascript
