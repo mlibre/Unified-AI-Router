@@ -111,6 +111,7 @@ const handleChatCompletion = async ( req, res ) =>
 			}
 
 			res.write( "data: [DONE]\n\n" );
+			logger.info( "Chat completion request completed successfully (streaming)" );
 		}
 		catch ( err )
 		{
@@ -126,6 +127,7 @@ const handleChatCompletion = async ( req, res ) =>
 		{
 			const result = await aiRouter.chatCompletionWithResponse( messages, { model, stream, ...rest });
 			res.json( result.data );
+			logger.info( "Chat completion request completed successfully (non-streaming)" );
 		}
 		catch ( err )
 		{
