@@ -30,7 +30,10 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_26,
 			process.env.OPENROUTER_API_KEY_27
 		],
-		model: "arcee-ai/trinity-large-preview:free",
+		model: [
+			"arcee-ai/trinity-large-preview:free",
+			"openrouter/pony-alpha",
+		],
 		apiUrl: "https://openrouter.ai/api/v1",
 	}
 ];

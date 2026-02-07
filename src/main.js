@@ -419,23 +419,42 @@ class AIRouter
 
 		for ( const p of providers )
 		{
-			if ( Array.isArray( p.apiKey ) )
+			const apiKeys = Array.isArray( p.apiKey ) ? p.apiKey.filter( key => { return key }) : p.apiKey ? [p.apiKey] : [] ;
+			const models = Array.isArray( p.model ) ? p.model.filter( model => { return model }) : p.model ? [p.model] : [] ;
+
+			for ( let i = 0; i < apiKeys.length; i++ )
 			{
-				p.apiKey.forEach( ( key, i ) =>
+				const apiKey = apiKeys[i];
+
+				for ( let j = 0; j < models.length; j++ )
 				{
-					if ( key )
+					const model = models[j];
+					const provider = {
+						...p,
+						apiKey,
+						model
+					};
+
+					// Generate unique name based on whether we have multiple keys or models
+					if ( apiKeys.length > 1 && models.length > 1 )
 					{
-						allProviders.push({
-							...p,
-							apiKey: key,
-							name: `${p.name}_${i + 1}`
-						});
+						provider.name = `${p.name}_${i + 1}_${j + 1}`;
 					}
-				});
-			}
-			else if ( p.apiKey )
-			{
-				allProviders.push( p );
+					else if ( apiKeys.length > 1 )
+					{
+						provider.name = `${p.name}_${i + 1}`;
+					}
+					else if ( models.length > 1 )
+					{
+						provider.name = `${p.name}_${j + 1}`;
+					}
+					else
+					{
+						provider.name = p.name;
+					}
+
+					allProviders.push( provider );
+				}
 			}
 		}
 		return allProviders;
