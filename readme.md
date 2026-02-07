@@ -706,10 +706,12 @@ console.log(response.tool_calls);
 
 </details>
 
-### 🔀 Multiple API Keys for Load Balancing
+### 🔀 Multiple API Keys and Models for Load Balancing
 
 <details>
 <summary><strong>Click to view example</strong></summary>
+
+Both API keys and models can be specified as arrays to create multiple provider instances:
 
 ```javascript
 const providers = [
@@ -717,14 +719,19 @@ const providers = [
     name: "openai",
     apiKey: [  // Array of API keys
       process.env.OPENAI_API_KEY_1,
-      process.env.OPENAI_API_KEY_2,
-      process.env.OPENAI_API_KEY_3
+      process.env.OPENAI_API_KEY_2
     ],
-    model: "gpt-4",
+    model: [  // Array of models
+      "model_1",
+      "model_2",
+      "model_3"
+    ],
     apiUrl: "https://api.openai.com/v1"
   }
 ];
 ```
+
+This will create 6 distinct provider instances (2 API keys × 3 models), each with a unique name like `openai_1_1`, `openai_1_2`, `openai_2_1`, etc.
 
 </details>
 

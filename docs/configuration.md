@@ -61,13 +61,15 @@ Override per provider:
 }
 ```
 
-## Multiple API Keys
+## Multiple API Keys and Models
+
+Both API keys and models can be specified as arrays to create multiple provider instances:
 
 ```js
 {
   name: "openrouter",
   apiKey: [process.env.OPENROUTER_API_KEY, process.env.OPENROUTER_API_KEY_2],
-  model: "mistralai/devstral-2512:free",
+  model: ["model_1", "model_2"],
   apiUrl: "https://openrouter.ai/api/v1"
 }
 ```
