@@ -31,7 +31,7 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_27
 		],
 		model: [
-			"openrouter/pony-alpha",
+			"openrouter/aurora-alpha",
 			"openai/gpt-oss-120b:free",
 			"qwen/qwen3-coder:free",
 			"arcee-ai/trinity-large-preview:free",
