@@ -57,5 +57,17 @@ module.exports = [
 			"arcee-ai/trinity-large-preview:free",
 		],
 		apiUrl: "https://openrouter.ai/api/v1",
+	},
+	{
+		name: "gemini",
+		apiKey: [
+			process.env.GEMINI_API_KEY_1,
+		],
+		model: [
+			"gemini-3-pro-preview",
+			"gemini-3-flash-preview",
+			"gemini-2.5-flash"
+		],
+		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
 	}
 ];
