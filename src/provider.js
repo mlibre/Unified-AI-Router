@@ -41,7 +41,14 @@ module.exports = [
 			process.env.OPENROUTER_API_KEY_37,
 			process.env.OPENROUTER_API_KEY_38,
 			process.env.OPENROUTER_API_KEY_39,
-			process.env.OPENROUTER_API_KEY_40
+			process.env.OPENROUTER_API_KEY_40,
+			process.env.OPENROUTER_API_KEY_41,
+			process.env.OPENROUTER_API_KEY_42,
+			process.env.OPENROUTER_API_KEY_43,
+			process.env.OPENROUTER_API_KEY_44,
+			process.env.OPENROUTER_API_KEY_45,
+			process.env.OPENROUTER_API_KEY_46,
+			process.env.OPENROUTER_API_KEY_47
 		],
 		model: [
 			"openrouter/aurora-alpha",
