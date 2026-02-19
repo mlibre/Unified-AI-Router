@@ -39,13 +39,23 @@ module.exports = [
 
 ## Circuit Breakers
 
-Built-in fault tolerance. Default settings:
+Built-in fault tolerance. Three timeout settings:
 
-- **timeout**: 300000ms (5 minutes)
-- **errorThresholdPercentage**: 50%
-- **resetTimeout**: 9000000ms (15 minutes)
+- **requestTimeout**: 180000ms (3 minutes) - OpenAI API request timeout
+- **circuitBreakerTimeout**: 300000ms (5 minutes) - If request takes longer, trigger failure
+- **circuitBreakerResetTimeout**: 900000ms (15 minutes) - Time to wait before recovery attempt
 
-Override per provider:
+Pass options to the AIRouter constructor in `index.js`:
+
+```js
+const aiRouter = new AIRouter(providers, {
+  requestTimeout: 180000,
+  circuitBreakerTimeout: 300000,
+  circuitBreakerResetTimeout: 900000
+});
+```
+
+Override per-provider circuit options:
 
 ```js
 {
