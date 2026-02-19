@@ -75,5 +75,18 @@ module.exports = [
 			"gemini-2.5-flash"
 		],
 		apiUrl: "https://generativelanguage.googleapis.com/v1beta/openai/",
-	}
+	},
+	{
+		name: "cerebras",
+		apiKey: [
+			process.env.CEREBRAS_API_KEY_1,
+			process.env.CEREBRAS_API_KEY_2
+		],
+		model: [
+			"gpt-oss-120b",
+			"qwen-3-235b-a22b-instruct-2507",
+			"zai-glm-4.7"
+		],
+		apiUrl: "https://api.cerebras.ai/v1",
+	},
 ];

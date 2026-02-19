@@ -7,8 +7,15 @@ const logger = pino({ base: false }, pretty({ colorize: true, ignore: "pid,hostn
 
 class AIRouter
 {
-	constructor ( providers )
+	constructor ( providers, options = {})
 	{
+		// Request timeout - max time to wait for an API request to complete
+		this.requestTimeout = options.requestTimeout ?? 180000;
+		// Circuit breaker timeout - If our function takes longer, trigger a failure
+		this.circuitBreakerTimeout = options.circuitBreakerTimeout ?? 300 * 1000;
+		// Circuit breaker reset timeout - time period to wait before attempting to recover
+		this.circuitBreakerResetTimeout = options.circuitBreakerResetTimeout ?? 900000;
+
 		this.providers = this._initializeProviders( providers );
 		this._setupCircuitBreakers();
 	}
@@ -16,9 +23,9 @@ class AIRouter
 	_setupCircuitBreakers ()
 	{
 		const defaultCircuitOptions = {
-			timeout: 300000,
+			timeout: this.circuitBreakerTimeout,
 			errorThresholdPercentage: 50,
-			resetTimeout: 9000000
+			resetTimeout: this.circuitBreakerResetTimeout
 		};
 
 		for ( const provider of this.providers )
@@ -110,7 +117,7 @@ class AIRouter
 		return new OpenAI({
 			apiKey: provider.apiKey,
 			baseURL: provider.apiUrl,
-			timeout: 60000
+			timeout: this.requestTimeout
 		});
 	}
 
