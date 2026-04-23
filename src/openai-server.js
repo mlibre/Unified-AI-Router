@@ -15,6 +15,7 @@ const aiRouter = new AIRouter( providers );
 
 const adminEnabled =	process.env.ADMIN_USERNAME &&	process.env.ADMIN_PASSWORD;
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || "0.0.0.0";
 const sessions = new Map();
 
 const chatbotIndex = path.join( __dirname, "chatbot", "chatbot.html" );
@@ -262,7 +263,7 @@ app.get( "/:filename", ( req, res, next ) =>
 	next();
 });
 
-app.listen( PORT, ( e ) =>
+app.listen( PORT, HOST, ( e ) =>
 {
 	if ( e )
 	{
@@ -271,8 +272,8 @@ app.listen( PORT, ( e ) =>
 	}
 	else
 	{
-		logger.info( `🚀 OpenAI-compatible API listening at http://localhost:${PORT}/v1/chat/completions and /v1/responses` );
-		logger.info( `🌐 Chatbot interface available at http://localhost:${PORT}/` );
+		logger.info( `🚀 OpenAI-compatible API listening at http://${HOST}:${PORT}/v1/chat/completions and /v1/responses` );
+		logger.info( `🌐 Chatbot interface available at http://${HOST}:${PORT}/` );
 
 		setTimeout( () =>
 		{
